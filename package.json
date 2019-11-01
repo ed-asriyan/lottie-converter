@@ -1,0 +1,24 @@
+{
+  "name": "tgs-to-gif",
+  "version": "0.0.1",
+  "description": "Converts animated stickers for Telegram (*.tgs) to animated GIFs",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ed-asriyan/tgs-to-gif.git"
+  },
+  "author": "Ed Asriyan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ed-asriyan/tgs-to-gif/issues"
+  },
+  "homepage": "https://github.com/ed-asriyan/tgs-to-gif#readme",
+  "dependencies": {
+    "puppeteer-lottie": "^1.0.5",
+    "zlib": "^1.0.5"
+  }
+}
