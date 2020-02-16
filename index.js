@@ -13,15 +13,17 @@ const unzip = function(inputPath, outputPath) {
     on('finish', (err) => err ? reject(err) : resolve()));
 };
 
-const convertFiles = async function(files) {
-  const browser = await puppeteer.launch();
+const convertFiles = async function(files, {chromiumPath, useSandbox = true}) {
+  const browser = await puppeteer.launch({
+    executablePath: chromiumPath,
+    args: useSandbox ? undefined : ['--no-sandbox'],
+  });
   for (const path of files) {
     console.log(`Converting ${path}...`);
 
     try {
       const unzippedPath = tempy.file({extension: 'json'});
       await unzip(path, unzippedPath);
-
       await renderLottie({
         path: unzippedPath,
         output: path + '.gif',
@@ -47,4 +49,7 @@ for (let i = 0; i < paths.length; ++i) {
   }
 }
 
-convertFiles(paths);
+convertFiles(paths, {
+  chromiumPath: process.env['CHROMIUM_PATH'],
+  useSandbox: JSON.parse(process.env['USE_SANDBOX'] || 'true'),
+});

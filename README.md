@@ -1,13 +1,26 @@
 # Animated stickers for Telegram (*.tgs) to animated GIFs converter
-## Install
-To use this module, you must install [gifski](https://gif.ski).
+## Using [Docker](https://www.docker.com/)
+1. Build the image:
+    ```bash
+    docker build -t tgs-to-gif .
+    ```
 
-After installing it, install npm dependencies:
-```bash
-npm install
-```
+2. Convert! Pass directory with stickers and run:
+    ```bash
+    docker run --rm -v <path to directory with stickers>:/source tgs-to-gif
+    ```
 
-## Usage
+The result will be saved next to each source sticker file in the same directory.
+
+## Using nodejs and gifski
+### Install
+1. Install [nodejs](https://nodejs.org).
+2. Install [gifski](https://gif.ski).
+3. Install npm dependencies:
+    ```bash
+    npm install
+    ```
+### Convert
 Pass one or several stickers:
 ```bash
 npm start sticker1.tgs sticker2.tgs ... 
