@@ -4,7 +4,7 @@
   "description": "Converts animated stickers for Telegram (*.tgs) to animated GIFs",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node cli.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

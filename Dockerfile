@@ -29,6 +29,7 @@ ADD package-lock.json .
 RUN npm ci
 
 # build the app
+ADD cli.js .
 ADD index.js .
 
 ENV USE_SANDBOX false
