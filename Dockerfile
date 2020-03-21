@@ -35,4 +35,4 @@ ADD index.js .
 ENV USE_SANDBOX false
 ENV CHROMIUM_PATH /usr/bin/chromium-browser
 
-CMD npm start /source
+CMD node cli.js /source

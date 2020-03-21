@@ -20,5 +20,8 @@
   "dependencies": {
     "puppeteer-lottie": "^1.0.5",
     "zlib": "^1.0.5"
+  },
+  "devDependencies": {
+    "argparse": "^1.0.10"
   }
 }

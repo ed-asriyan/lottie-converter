@@ -31,15 +31,31 @@ The result will be saved next to each source sticker file in the same directory.
 ### Convert
 Pass one or several stickers:
 ```bash
-npm start sticker1.tgs sticker2.tgs ... 
+node cli.js sticker1.tgs sticker2.tgs ... 
 ```
 
 or pass a directory:
 ```bash
-npm start /home/ed/Downloads/super_pack/
+node cli.js /home/ed/Downloads/super_pack/
 ```
 
 The result will be saved next to each source sticker file in the same directory.
+
+#### CLI arguments
+```
+$ node cli.js --help
+usage: cli.js [-h] [--height HEIGHT] [--width WIDTH] paths [paths ...]
+
+Animated stickers for Telegram (*.tgs) to animated GIFs converter
+
+Positional arguments:
+  paths            Paths to .tgs files to convert
+
+Optional arguments:
+  -h, --help       Show this help message and exit.
+  --height HEIGHT  Output image height. Default: auto
+  --width WIDTH    Output image width. Default: auto
+```
 
 ## Notices
 You can download .tgs files using [@Stickerdownloadbot](https://t.me/Stickerdownloadbot).
