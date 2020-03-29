@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/ed-asriyan/tgs-to-gif#readme",
   "dependencies": {
-    "puppeteer-lottie": "^1.0.5",
+    "puppeteer-lottie": "^1.0.9",
     "zlib": "^1.0.5"
   },
   "devDependencies": {
