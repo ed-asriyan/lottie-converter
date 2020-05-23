@@ -1,0 +1,6 @@
+[requires]
+argparse/2.1
+zlib/1.2.11
+
+[generators]
+cmake
