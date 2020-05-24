@@ -6,6 +6,7 @@ To easily convert stickers to GIFs you can use Telegram Bot</br></br>👉 https:
 </h3>
 <hr/>
 
+*This version has a bug: 60fps stickers are converted into 30fps GIFs (see [#13](https://github.com/ed-asriyan/tgs-to-gif/issues/13)). You can switch to a test version written in C++ in [master-cpp](https://github.com/ed-asriyan/tgs-to-gif/tree/master-cpp) branch, but generated GIFs may contain [some artifacts](https://github.com/ed-asriyan/tgs-to-gif/issues/13#issuecomment-633244547).*
 
 ## Using [Docker](https://www.docker.com/)
 1. Build the image:
