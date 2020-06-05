@@ -10,7 +10,7 @@ RUN apk update && \
         cmake \
         libstdc++ \
         py-pip && \
-        pip install conan;
+        pip install --ignore-installed conan;
 
 RUN git clone https://github.com/Samsung/rlottie.git && (cd rlottie && cmake CMakeLists.txt && make && make install) && rm -fr rlottie
 
