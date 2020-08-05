@@ -15,3 +15,5 @@ add_executable(
         zstr/fstream.h zstr/zstr.h
 )
 target_link_libraries(tgs_to_gif ${CONAN_LIBS} rlottie)
+target_compile_options(tgs_to_gif 
+                       PUBLIC -fconcepts)
