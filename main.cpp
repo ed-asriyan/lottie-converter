@@ -16,18 +16,15 @@ std::string decompress(std::istream& inputFile) {
 
 
 bool convert(std::string filePath , auto width , auto height , auto alphaThreshold , auto output , auto fps){
-std::ifstream inputFile(filePath);
-		if (!inputFile.is_open()) {
+	std::ifstream inputFile(filePath);
+	if (!inputFile.is_open()) {
 		std::cerr << "Can not open file " << filePath << '.' << std::endl;
 		return -1;
-	 }
-	 const std::string decompressed = decompress(inputFile);
-	 inputFile.close();
-
-	if (!output.length()) {
-		output = filePath + ".gif";
 	}
-
+	const std::string decompressed = decompress(inputFile);
+	inputFile.close();
+	if (!output.length())
+		output = filePath + ".gif";
 	return !render(decompressed, width, height, alphaThreshold, output, fps);
  }
 
@@ -78,28 +75,26 @@ int main(int argc, const char** argv) {
 	const auto alphaThreshold = program.get<int>("--alpha-threshold");
 	auto output = program.get<std::string>("--output");
 	const fs::path path(filePath);
-    std::error_code ec;
+	std::error_code ec;
 
 	if (fs::is_directory(path, ec)){ 
-				  int total=0;
-				  for(auto& p: fs::recursive_directory_iterator(filePath))
-    				{
-       				 if(p.path().extension() == ".tgs"){
-					
-           				total+=int(!convert(std::string(p.path()),width,height,alphaThreshold,output,fps));
-					 
-    					}
-					}
-       			 std::cout << "Total "<<total<<"Converted"<<std::endl;
-      	 }
+		int total=0;
+		for(auto& p: fs::recursive_directory_iterator(filePath))
+       			if(p.path().extension() == ".tgs")
+				total+=int(!convert(std::string(p.path()),width,height,alphaThreshold,output,fps));
+		std::cout << "Total "<<total<<" files converted"<<std::endl;
+		return total>0?0:1;
+	}
     if (ec){
         std::cerr << "Error in is_directory: " << ec.message();
+	return 1;
     	}
     if (fs::is_regular_file(path, ec)){
 		return convert(filePath,width,height,alphaThreshold,output,fps);
 		}
-    if (ec) {
+    if (ec){
         std::cerr << "Error in is_regular_file: " << ec.message();
+	return 1;
     }
 
 }
