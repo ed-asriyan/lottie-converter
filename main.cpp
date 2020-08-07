@@ -80,7 +80,7 @@ int main(int argc, const char** argv) {
 	if (fs::is_directory(path, ec)){ 
 		int total=0;
 		for(auto& p: fs::recursive_directory_iterator(filePath))
-       			if(p.path().extension() == ".tgs")
+			if(p.path().extension() == ".tgs")
 				total+=int(!convert(std::string(p.path()),width,height,alphaThreshold,output,fps));
 		std::cout << "Total "<<total<<" files converted"<<std::endl;
 		return total>0?0:1;
@@ -93,8 +93,8 @@ int main(int argc, const char** argv) {
 		return convert(filePath,width,height,alphaThreshold,output,fps);
 		}
     if (ec){
-        std::cerr << "Error in is_regular_file: " << ec.message();
-	return 1;
+	    std::cerr << "Error in is_regular_file: " << ec.message();
+	    return 1;
     }
 
 }
