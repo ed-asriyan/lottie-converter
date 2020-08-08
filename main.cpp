@@ -4,10 +4,10 @@
 #include <filesystem>
 #include <argparse/argparse.hpp>
 #include <typeinfo>
-
-namespace fs = std::filesystem;
 #include "zstr/zstr.h"
 #include "gif/render.h"
+
+namespace fs = std::filesystem;
 
 std::string decompress(std::istream& inputFile) {
 	zstr::istream zs(inputFile);
@@ -26,7 +26,7 @@ bool convert(std::string filePath , auto width , auto height , auto alphaThresho
 	if (!output.length())
 		output = filePath + ".gif";
 	return !render(decompressed, width, height, alphaThreshold, output, fps);
- }
+}
 
 
 int main(int argc, const char** argv) {
@@ -85,17 +85,20 @@ int main(int argc, const char** argv) {
 		std::cout << "Total "<<total<<" files converted"<<std::endl;
 		return total>0?0:1;
 	}
-    if (ec){
-        std::cerr << "Error in is_directory: " << ec.message();
-	return 1;
-    	}
-    if (fs::is_regular_file(path, ec)){
+
+	if (ec){
+		std::cerr << "Error in is_directory: " << ec.message();
+		return 1;
+	}
+
+	if (fs::is_regular_file(path, ec)){
 		return convert(filePath,width,height,alphaThreshold,output,fps);
-		}
-    if (ec){
-	    std::cerr << "Error in is_regular_file: " << ec.message();
-	    return 1;
-    }
+	}
+
+	if (ec){
+		std::cerr << "Error in is_regular_file: " << ec.message();
+		return 1;
+	}
 
 }
 
