@@ -29,8 +29,4 @@ ENV WIDTH=512
 ENV HEIGHT=512
 ENV FPS=0
 
-CMD find /source -type f -name *.tgs | while read line; do \
-        echo Processing file $line...; \
-        tgs_to_gif --width $WIDTH --height $HEIGHT --fps $FPS $line && \
-        echo Done.; \
-    done;
+CMD tgs_to_gif --width $WIDTH --height $HEIGHT --fps $FPS /source  
