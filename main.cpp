@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <argparse/argparse.hpp>
 #include <typeinfo>
+
 #include "zstr/zstr.h"
 #include "gif/render.h"
 
@@ -14,8 +15,7 @@ std::string decompress(std::istream& inputFile) {
 	return std::string(std::istreambuf_iterator<char>(zs), std::istreambuf_iterator<char>());
 }
 
-
-bool convert(std::string filePath , auto width , auto height , auto alphaThreshold , auto output , auto fps){
+bool convert(std::string filePath, auto width, auto height, auto alphaThreshold, auto output, auto fps) {
 	std::ifstream inputFile(filePath);
 	if (!inputFile.is_open()) {
 		std::cerr << "Can not open file " << filePath << '.' << std::endl;
@@ -23,11 +23,11 @@ bool convert(std::string filePath , auto width , auto height , auto alphaThresho
 	}
 	const std::string decompressed = decompress(inputFile);
 	inputFile.close();
-	if (!output.length())
+	if (!output.length()) {
 		output = filePath + ".gif";
-	return !render(decompressed, width, height, alphaThreshold, output, fps);
+	}
+	return render(decompressed, width, height, alphaThreshold, output, fps);
 }
-
 
 int main(int argc, const char** argv) {
 	argparse::ArgumentParser program("tgs-to-gif");
@@ -75,28 +75,30 @@ int main(int argc, const char** argv) {
 	const auto alphaThreshold = program.get<int>("--alpha-threshold");
 	auto output = program.get<std::string>("--output");
 	const fs::path path(filePath);
+
 	std::error_code ec;
 
-	if (fs::is_directory(path, ec)){ 
-		int total=0;
-		for(auto& p: fs::recursive_directory_iterator(filePath))
-			if(p.path().extension() == ".tgs")
-				total+=int(!convert(std::string(p.path()),width,height,alphaThreshold,output,fps));
-		std::cout << "Total "<<total<<" files converted"<<std::endl;
-		return total>0?0:1;
-	}
-
-	if (ec){
-		std::cerr << "Error in is_directory: " << ec.message();
+	if (fs::is_directory(path, ec)) {
+		int total = 0;
+		for (auto& p: fs::recursive_directory_iterator(filePath))
+			if (p.path().extension() == ".tgs") {
+				total += (int) convert(std::string(p.path()), width, height, alphaThreshold, output, fps);
+			}
+		if (total == 0) {
+			std::cerr << "No .tgs files found" << std::endl;
+		} else if (total == 1) {
+			std::cout << "Total 1 file was converted" << std::endl;
+		} else {
+			std::cout << "Total " << total << " files were converted" << std::endl;
+		}
+		return total > 0 ? 0 : 1;
+	} else if (ec) {
+		std::cerr << "Error while checking weather " << path << "is a directory: " << ec.message();
 		return 1;
-	}
-
-	if (fs::is_regular_file(path, ec)){
-		return convert(filePath,width,height,alphaThreshold,output,fps);
-	}
-
-	if (ec){
-		std::cerr << "Error in is_regular_file: " << ec.message();
+	} else if (fs::is_regular_file(path, ec)) {
+		return convert(filePath, width, height, alphaThreshold, output, fps);
+	} else if (ec) {
+		std::cerr << "Error while checking weather " << path << "is a regular file: " << ec.message();
 		return 1;
 	}
 
