@@ -8,7 +8,8 @@ bool render(
 	const std::string& outputPath,
 	double fps
 ) {
-	auto player = rlottie::Animation::loadFromData(lottieData, "");
+	static unsigned int cacheCounter = 0; // rlottie uses caches for internal optimizations
+	auto player = rlottie::Animation::loadFromData(lottieData, std::to_string(cacheCounter++));
 	if (!player) return false;
 
 	if (fps == 0.0) {
