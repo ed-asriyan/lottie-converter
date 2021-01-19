@@ -5,10 +5,15 @@ const renderLottie = require('puppeteer-lottie');
 const tempy = require('tempy');
 const zlib = require('zlib');
 
-const unzip = function (inputPath, outputPath) {
+const unzip = async function (inputPath, outputPath) {
   const inputStream = fs.createReadStream(inputPath);
   const outputStream = fs.createWriteStream(outputPath);
-  return new Promise((resolve, reject) => inputStream.pipe(zlib.createGunzip()).on('error', (err) => reject(err)).pipe(outputStream).on('finish', (err) => err ? reject(err) : resolve()));
+  try {
+    await new Promise((resolve, reject) => inputStream.pipe(zlib.createGunzip()).on('error', (err) => reject(err)).pipe(outputStream).on('finish', (err) => err ? reject(err) : resolve()));
+  } finally {
+    outputStream.close();
+    inputStream.close();
+  }
 };
 
 const createBrowser = function ({chromiumPath, useSandbox = true}) {
