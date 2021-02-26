@@ -39,17 +39,18 @@ void GifBuilder::argbTorgba(rlottie::Surface& s) {
 			unsigned char g = buffer[i + 1];
 			unsigned char b = buffer[i];
 			if (a != 255) { //un premultiply
-			r = (r * 255) / a;
-			g = (g * 255) / a;
-			b = (b * 255) / a;
+				r = (r * 255) / a;
+				g = (g * 255) / a;
+				b = (b * 255) / a;
 
-			buffer[i] = r;
-			buffer[i + 1] = g;
-			buffer[i + 2] = b;
-		} else {
-			// only swizzle r and b
-			buffer[i] = r;
-			buffer[i + 2] = b;
+				buffer[i] = r;
+				buffer[i + 1] = g;
+				buffer[i + 2] = b;
+			} else {
+				// only swizzle r and b
+				buffer[i] = r;
+				buffer[i + 2] = b;
+			}
 		}
 	}
 }
