@@ -1,0 +1,13 @@
+# https://help.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
+
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    labels:
+      - "dependency"
+    open-pull-requests-limit: 2
+    reviewers:
+      - "ed-asriyan"
