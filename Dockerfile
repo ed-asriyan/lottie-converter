@@ -3,7 +3,7 @@ MAINTAINER Ed Asriyan <ed-asriyan@protonmail.com>
 
 # https://stackoverflow.com/a/30873179
 RUN apk add --no-cache musl-dev
-RUN cargo install --version 0.10.4 gifski
+RUN cargo install --version 1.4.3 gifski
 
 FROM node:alpine
 COPY --from=builder /usr/local/cargo/bin/gifski /usr/local/bin/gifski
