@@ -1,5 +1,4 @@
 const fs = require('fs');
-const path = require('path');
 const puppeteer = require('puppeteer');
 const renderLottie = require('puppeteer-lottie');
 const tempy = require('tempy');
@@ -27,13 +26,15 @@ const convertFile = async function (inputPath, options = {}) {
   const unzippedPath = tempy.file({extension: 'json'});
   await unzip(inputPath, unzippedPath);
 
-  output = options.output || inputPath + '.gif';
+  const output = options.output || inputPath + '.gif';
 
   await renderLottie({
     path: unzippedPath,
     output,
     ...options,
   });
+
+  await new Promise(resolve => fs.unlink(unzippedPath, resolve));
 };
 
 module.exports = {
