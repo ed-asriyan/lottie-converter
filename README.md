@@ -27,7 +27,7 @@ The result will be saved next to each source sticker file in the same directory.
 2. Install [gifski](https://gif.ski).
 3. Install npm dependencies:
     ```bash
-    npm install
+    npm ci
     ```
 ### Convert
 Pass one or several stickers:

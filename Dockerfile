@@ -26,7 +26,8 @@ WORKDIR /app
 
 # install dependencies
 ADD package.json .
-RUN npm i
+ADD package-lock.json .
+RUN npm ci
 
 # build the app
 ADD cli.js .
