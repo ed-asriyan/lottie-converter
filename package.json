@@ -21,6 +21,6 @@
     "puppeteer-lottie": "git+https://git@github.com/ed-asriyan/puppeteer-lottie.git"
   },
   "devDependencies": {
-    "argparse": "^1.0.10"
+    "argparse": "^2.0.1"
   }
 }

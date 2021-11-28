@@ -20,11 +20,11 @@ const main = async function () {
   const parser = new ArgumentParser({
     description: 'Animated stickers for Telegram (*.tgs) to animated GIFs converter',
   });
-  parser.addArgument('--height', {help: 'Output image height. Default: auto', type: Number});
-  parser.addArgument('--width', {help: 'Output image width. Default: auto', type: Number});
-  parser.addArgument('paths', {help: 'Paths to .tgs files to convert', nargs: '+'});
+  parser.add_argument('--height', {help: 'Output image height. Default: auto', type: Number});
+  parser.add_argument('--width', {help: 'Output image width. Default: auto', type: Number});
+  parser.add_argument('paths', {help: 'Paths to .tgs files to convert', nargs: '+'});
 
-  const args = parser.parseArgs();
+  const args = parser.parse_args();
 
   const paths = args.paths;
   for (let i = 0; i < paths.length; ++i) {
