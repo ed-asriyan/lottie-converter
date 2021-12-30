@@ -1,15 +1,15 @@
-const fs = require('fs');
-const path = require('path');
-const {ArgumentParser} = require('argparse');
-
-const {createBrowser, convertFile} = require('./index.js');
+import fs from 'fs';
+import path from 'path';
+import { ArgumentParser } from 'argparse';
+import { toGifFromFile } from './index.js';
+import { createBrowser } from './utils.js';
 
 const convertFiles = async function (filePaths, browser, options) {
   for (const filePath of filePaths) {
     console.log(`Converting ${filePath}...`);
 
     try {
-      await convertFile(filePath, {output: `${filePath}.gif`, browser, ...options});
+      await toGifFromFile(filePath, `${filePath}.gif`, options);
     } catch (e) {
       console.error(e);
     }
@@ -22,6 +22,7 @@ const main = async function () {
   });
   parser.add_argument('--height', {help: 'Output image height. Default: auto', type: Number});
   parser.add_argument('--width', {help: 'Output image width. Default: auto', type: Number});
+  parser.add_argument('--fps', {help: 'Output frame rate. Default: auto', type: Number});
   parser.add_argument('paths', {help: 'Paths to .tgs files to convert', nargs: '+'});
 
   const args = parser.parse_args();
@@ -39,11 +40,8 @@ const main = async function () {
     }
   }
 
-  const browser = await createBrowser({
-    chromiumPath: process.env['CHROMIUM_PATH'],
-    useSandbox: JSON.parse(process.env['USE_SANDBOX'] || 'true'),
-  });
-  await convertFiles(paths, browser, {width: args.width, height: args.height});
+  const browser = await createBrowser();
+  await convertFiles(paths, browser, { width: args.width, height: args.height, fps: args.fps });
   await browser.close();
 };
 

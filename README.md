@@ -45,7 +45,7 @@ The result will be saved next to each source sticker file in the same directory.
 #### CLI arguments
 ```
 $ node cli.js --help
-usage: cli.js [-h] [--height HEIGHT] [--width WIDTH] paths [paths ...]
+usage: cli.js [-h] [--height HEIGHT] [--width WIDTH] [--fps FPS] paths [paths ...]
 
 Animated stickers for Telegram (*.tgs) to animated GIFs converter
 
@@ -53,9 +53,10 @@ Positional arguments:
   paths            Paths to .tgs files to convert
 
 Optional arguments:
-  -h, --help       Show this help message and exit.
+  -h, --help       show this help message and exit
   --height HEIGHT  Output image height. Default: auto
   --width WIDTH    Output image width. Default: auto
+  --fps FPS        Output frame rate. Default: auto
 ```
 
 ## Notices
