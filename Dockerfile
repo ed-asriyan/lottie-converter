@@ -32,6 +32,8 @@ RUN npm ci
 # build the app
 ADD cli.js .
 ADD index.js .
+ADD render.js .
+ADD utils.js .
 
 ENV USE_SANDBOX false
 ENV CHROMIUM_PATH /usr/bin/chromium-browser
