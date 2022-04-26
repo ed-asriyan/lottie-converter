@@ -30,7 +30,7 @@ bool convert(std::string filePath, auto width, auto height, auto alphaThreshold,
 }
 
 int main(int argc, const char** argv) {
-	argparse::ArgumentParser program("tgs-to-gif");
+	argparse::ArgumentParser program(basename(argv[0]));
 
 	program.add_argument("path")
 		.required()
@@ -103,4 +103,3 @@ int main(int argc, const char** argv) {
 	}
 
 }
-
