@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <argparse/argparse.hpp>
 #include <typeinfo>
+#include <libgen.h>
 
 #include "zstr/zstr.h"
 #include "gif/render.h"
