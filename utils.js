@@ -41,7 +41,7 @@ export const saveScreenshots = async function (screenshots) {
     await Promise.all(
         screenshots.map(
             async (screenshot, i) => {
-                const filePath = join(dir, `file-${i}.png`);
+                const filePath = join(dir, `file-${pad(i, 4)}.png`);
                 await writeToFile(screenshot, filePath);
                 files[i] = filePath;
             }
@@ -59,3 +59,8 @@ export const streamToString = function (stream) {
         stream.on('end', () => resolve(Buffer.concat(chunks).toString('utf8')));
     });
 };
+
+export const pad = function (num, size) {
+    const s = `000000000${num}`;
+    return s.slice(s.length - size);
+}

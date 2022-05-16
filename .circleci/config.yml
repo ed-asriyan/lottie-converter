@@ -1,0 +1,9 @@
+version: 2.1
+
+jobs:
+  build:
+    machine: true
+    steps:
+      - checkout
+      - run: docker build -t tgs-to-gif .
+      - run: docker run --rm tgs-to-gif /bin/sh -c "cd /app && npm test"

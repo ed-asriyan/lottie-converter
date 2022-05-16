@@ -26,7 +26,7 @@ const normalizeOptions = function (animationData, options) {
 };
 
 const fromStream = function (converter) {
-  return async (inputStream, outputPath, options) => {
+  return async (inputStream, outputPath, options = {}) => {
     const lottieString = await streamToString(inputStream.pipe(zlib.createGunzip()));
     let browser;
     if (!options.browser) {
@@ -81,14 +81,14 @@ export const convertFile = async function (inputPath, options = {}) {
 export const toWebP = fromStream(async function (animationData, outputPath, options = {}) {
   options.fps = options.fps || animationData.fr;
 
-  const { dir, files } = await saveScreenshots(await render(options.browser, animationData, options));
+  const { dir, pattern } = await saveScreenshots(await render(options.browser, animationData, options));
 
   try {
     await execa.shell([
       process.env.IMG2WEBP_PATH || 'img2webp',
       '-lossy',
       '-d', Math.round(1000 / options.fps),
-      ...files,
+      pattern,
       '-o', `"${outputPath}"`,
     ].join(' '));
   } catch (e) {

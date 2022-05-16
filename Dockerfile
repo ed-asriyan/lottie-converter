@@ -17,7 +17,8 @@ RUN apk add --no-cache \
       harfbuzz \
       ca-certificates \
       ttf-freefont \
-      git
+      git \
+      libwebp-tools
 
 # Tell Puppeteer to skip installing Chrome. We'll be using the installed package.
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
@@ -30,6 +31,7 @@ ADD package-lock.json .
 RUN npm ci
 
 # build the app
+ADD tests tests
 ADD cli.js .
 ADD index.js .
 ADD render.js .
