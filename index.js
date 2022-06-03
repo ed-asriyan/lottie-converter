@@ -70,7 +70,7 @@ export const toGif = fromStream(async function (animationData, outputPath, optio
   } catch (e) {
     throw e;
   } finally {
-    fs.rmdir(dir, { recursive: true }, () => {});
+    fs.rm(dir, { recursive: true }, () => {});
   }
 });
 export const toGifFromFile = fromFile(toGif);
@@ -96,7 +96,7 @@ export const toWebP = fromStream(async function (animationData, outputPath, opti
   } catch (e) {
     throw e;
   } finally {
-    fs.rmdir(dir, { recursive: true }, () => {});
+    fs.rm(dir, { recursive: true }, () => {});
   }
 });
 export const toWebpFromFile = fromFile(toWebP);
