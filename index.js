@@ -28,14 +28,16 @@ const normalizeOptions = function (animationData, options) {
 const fromStream = function (converter) {
   return async (inputStream, outputPath, options = {}) => {
     const lottieString = await streamToString(inputStream.pipe(zlib.createGunzip()));
-    let browser;
-    if (!options.browser) {
-      options.browser = browser = await createBrowser();
+    let browser = options.browser;
+    let isBrowserCreated = false;
+    if (!browser) {
+      browser = await createBrowser();
+      isBrowserCreated = true;
     }
 
     const animationData = JSON.parse(lottieString);
-    const result = await converter(animationData, outputPath, normalizeOptions(animationData, options));
-    if (browser) {
+    const result = await converter(animationData, outputPath, normalizeOptions(animationData, { browser, ...options }));
+    if (isBrowserCreated) {
       await browser.close();
     }
     return result;
