@@ -1,5 +1,5 @@
 import fs from 'fs';
-import execa from 'execa';
+import { execa } from 'execa';
 import zlib from 'zlib';
 import render from './render.js';
 import { createBrowser, saveScreenshots, streamToString } from './utils.js';
@@ -54,19 +54,20 @@ export const toGif = fromStream(async function (animationData, outputPath, optio
   options.quality = options.quality || 80;
   options.fps = options.fps || Math.min(animationData.fr, 50); // most viewers do not support gifs with FPS > 50
 
-  const { dir, pattern } = await saveScreenshots(await render(options.browser, animationData, options));
+  const { dir, files } = await saveScreenshots(await render(options.browser, animationData, options));
 
   try {
-    await execa.shell([
+    await execa(
       process.env.GIFSKI_PATH || 'gifski',
-      '-o', `"${outputPath}"`,
-      '--fps', options.fps,
-      '--quality', options.quality,
-      '--height', options.height,
-      '--width', options.width,
-      '--quiet',
-      pattern,
-    ].join(' '));
+      [
+        '-o', outputPath,
+        '--fps', options.fps,
+        '--quality', options.quality,
+        '--height', options.height,
+        '--width', options.width,
+        '--quiet',
+        ...files,
+    ]);
   } catch (e) {
     throw e;
   } finally {
@@ -83,16 +84,17 @@ export const convertFile = async function (inputPath, options = {}) {
 export const toWebP = fromStream(async function (animationData, outputPath, options = {}) {
   options.fps = options.fps || animationData.fr;
 
-  const { dir, pattern } = await saveScreenshots(await render(options.browser, animationData, options));
+  const { dir, files } = await saveScreenshots(await render(options.browser, animationData, options));
 
   try {
-    await execa.shell([
+    await execa(
       process.env.IMG2WEBP_PATH || 'img2webp',
-      '-lossy',
-      '-d', Math.round(1000 / options.fps),
-      pattern,
-      '-o', `"${outputPath}"`,
-    ].join(' '));
+      [
+        '-lossy',
+        '-d', Math.round(1000 / options.fps),
+        ...files,
+        '-o', outputPath,
+    ]);
   } catch (e) {
     throw e;
   } finally {

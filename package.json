@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/ed-asriyan/tgs-to-gif#readme",
   "dependencies": {
-    "execa": "^1.0.0",
+    "execa": "^6.1.0",
     "lottie-web": "^5.7.0",
     "puppeteer": "^14.2.1",
     "tempy": "^2.0.0",
