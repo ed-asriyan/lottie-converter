@@ -1,6 +1,6 @@
 import fs from 'fs';
 import { join } from 'path';
-import tempy from 'tempy';
+import { temporaryDirectory } from 'tempy';
 import puppeteer from 'puppeteer';
 
 export const createBrowser = function () {
@@ -35,7 +35,7 @@ export const readFromFile = function (filePath) {
 };
 
 export const saveScreenshots = async function (screenshots) {
-    const dir = tempy.directory();
+    const dir = temporaryDirectory();
     const files = screenshots.map(() => null);
 
     await Promise.all(
