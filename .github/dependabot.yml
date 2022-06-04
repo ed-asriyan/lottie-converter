@@ -8,6 +8,9 @@ updates:
       interval: "monthly"
     labels:
       - "dependency"
-    open-pull-requests-limit: 2
+    open-pull-requests-limit: 1
     reviewers:
       - "ed-asriyan"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-patch"]
