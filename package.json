@@ -29,6 +29,10 @@
     "argparse": "^2.0.1",
     "jest": "^28.1.0"
   },
+  "engines": {
+    "node": ">=14",
+    "npm": ">=6.14"
+  },
   "jest": {
     "testTimeout": 180000
   }

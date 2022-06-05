@@ -5,7 +5,7 @@ MAINTAINER Ed Asriyan <ed-asriyan@protonmail.com>
 RUN apk add --no-cache musl-dev
 RUN cargo install --version 1.4.3 gifski
 
-FROM node:alpine
+FROM node:14-alpine
 COPY --from=builder /usr/local/cargo/bin/gifski /usr/local/bin/gifski
 
 # https://github.com/puppeteer/puppeteer/blob/master/docs/troubleshooting.md#running-on-alpine
