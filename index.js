@@ -1,8 +1,11 @@
 import fs from 'fs';
 import { execa } from 'execa';
 import zlib from 'zlib';
+import os from 'os';
 import render from './render.js';
 import { createBrowser, saveScreenshots, streamToString } from './utils.js';
+
+const isWindows = ['win32', 'win64'].includes(os.platform());
 
 const normalizeOptions = function (animationData, options) {
   if (!options.width || !options.height) {
@@ -54,7 +57,7 @@ export const toGif = fromStream(async function (animationData, outputPath, optio
   options.quality = options.quality || 80;
   options.fps = options.fps || Math.min(animationData.fr, 50); // most viewers do not support gifs with FPS > 50
 
-  const { dir, files } = await saveScreenshots(await render(options.browser, animationData, options));
+  const { dir, files, pattern } = await saveScreenshots(await render(options.browser, animationData, options));
 
   try {
     await execa(
@@ -66,7 +69,7 @@ export const toGif = fromStream(async function (animationData, outputPath, optio
         '--height', options.height,
         '--width', options.width,
         '--quiet',
-        ...files,
+        ...(isWindows ? [pattern] : files),
     ]);
   } catch (e) {
     throw e;
@@ -84,7 +87,7 @@ export const convertFile = async function (inputPath, options = {}) {
 export const toWebP = fromStream(async function (animationData, outputPath, options = {}) {
   options.fps = options.fps || animationData.fr;
 
-  const { dir, files } = await saveScreenshots(await render(options.browser, animationData, options));
+  const { dir, files, pattern } = await saveScreenshots(await render(options.browser, animationData, options));
 
   try {
     await execa(
@@ -92,7 +95,7 @@ export const toWebP = fromStream(async function (animationData, outputPath, opti
       [
         '-lossy',
         '-d', Math.round(1000 / options.fps),
-        ...files,
+        ...(isWindows ? [pattern] : files),
         '-o', outputPath,
     ]);
   } catch (e) {
