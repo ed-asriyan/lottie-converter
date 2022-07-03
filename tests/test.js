@@ -1,7 +1,7 @@
 import { readdirSync } from 'fs';
 import { join } from 'path';
-import { temporaryFile } from 'tempy';
 import { toGifFromFile, toWebpFromFile } from '../index.js';
+import { createTemporaryDirectory, removeDirectory } from '../utils.js';
 
 const formatMap = {
     gif: toGifFromFile,
@@ -14,7 +14,9 @@ for (const stickerFile of stickerFiles) {
     describe(stickerFile, function () {
         for (const [format, formatFunc] of Object.entries(formatMap)) {
             test(format, async function () {
-                await formatFunc(join('tests', 'stickers', stickerFile), temporaryFile());
+                const temporaryDirectory = await createTemporaryDirectory();
+                await formatFunc(join('tests', 'stickers', stickerFile), join(temporaryDirectory, `output.${format}`));
+                await removeDirectory(temporaryDirectory);
             });
         }
     });

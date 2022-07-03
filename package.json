@@ -2,7 +2,10 @@
   "name": "tgs-to-gif",
   "version": "1.0.0",
   "description": "Converts animated stickers for Telegram (*.tgs) to animated GIFs",
-  "exports": "./index.js",
+  "exports": [
+    "./index.js",
+    "./utils.js"
+  ],
   "type": "module",
   "scripts": {
     "start": "node cli.js",
@@ -22,7 +25,6 @@
     "execa": "^6.1.0",
     "lottie-web": "^5.9.5",
     "puppeteer": "^14.2.1",
-    "tempy": "^3.0.0",
     "zlib": "^1.0.5"
   },
   "devDependencies": {

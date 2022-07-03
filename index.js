@@ -3,7 +3,7 @@ import { execa } from 'execa';
 import zlib from 'zlib';
 import os from 'os';
 import render from './render.js';
-import { createBrowser, saveScreenshots, streamToString } from './utils.js';
+import { createBrowser, removeDirectory, saveScreenshots, streamToString } from './utils.js';
 
 const isWindows = ['win32', 'win64'].includes(os.platform());
 
@@ -74,7 +74,7 @@ export const toGif = fromStream(async function (animationData, outputPath, optio
   } catch (e) {
     throw e;
   } finally {
-    fs.rm(dir, { recursive: true }, () => {});
+    await removeDirectory(dir);
   }
 });
 export const toGifFromFile = fromFile(toGif);
@@ -101,7 +101,7 @@ export const toWebP = fromStream(async function (animationData, outputPath, opti
   } catch (e) {
     throw e;
   } finally {
-    fs.rm(dir, { recursive: true }, () => {});
+    await removeDirectory(dir);
   }
 });
 export const toWebpFromFile = fromFile(toWebP);
