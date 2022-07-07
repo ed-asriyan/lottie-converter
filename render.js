@@ -1,10 +1,12 @@
+import { createRequire } from 'module';
 import { readFromFile } from './utils.js';
 
 let lottieScript;
 
 const getHtml = async function ({ animationData, background, width, height }) {
     if (!lottieScript) {
-        lottieScript = await readFromFile('./node_modules/lottie-web/build/player/lottie.min.js');
+        const require = createRequire(import.meta.url);
+        lottieScript = await readFromFile(require.resolve('lottie-web').replace('.js', '.min.js'));
     }
 
     return `
