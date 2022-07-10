@@ -23,14 +23,8 @@ The result will be saved next to each source sticker file in the same directory.
 
 ## Building from sources
 1. Install dependencies
-    1. Make sure you have **g++** or **clang**, **make**, **cmake** and **conan** tools installed. Install them if it is not. 
-    2. Install [rlottie](https://github.com/Samsung/rlottie).
-       ```
-       git clone git@github.com:Samsung/rlottie.git && \
-       (cd rlottie && cmake CMakeLists.txt && make && sudo make install) && \
-       rm -fr rlottie 
-       ```
-    3. Install conan dependencies.
+    1. Make sure you have **g++** or **clang**, **make**, **cmake** and **conan** tools installed. Install them if it is not.
+    2. Install conan dependencies.
        ```
        conan install .
        ```

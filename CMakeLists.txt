@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 project(tgs_to_gif)
+include(ExternalProject)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -7,13 +8,37 @@ include(conanbuildinfo.cmake)
 conan_basic_setup()
 
 add_executable(
-        tgs_to_gif
+        ${PROJECT_NAME}
         main.cpp
         gif/gif_builder.cpp gif/gif_builder.h
         gif/gif.cpp gif/gif.h
         gif/render.cpp gif/render.h
         zstr/fstream.h zstr/zstr.h
 )
-target_link_libraries(tgs_to_gif ${CONAN_LIBS} rlottie)
-target_compile_options(tgs_to_gif 
-                       PUBLIC -fconcepts)
+
+ExternalProject_Add(
+        rlottie
+        GIT_REPOSITORY "https://github.com/Samsung/rlottie.git"
+        GIT_TAG "875626965959d8e269ca22175c8e1ad190696c43"
+        ${ARGN}
+        PREFIX "${CMAKE_BINARY_DIR}/lib"
+        CMAKE_ARGS
+        -Wno-dev
+        "-DCMAKE_TOOLCHAIN_FILE:PATH=${CMAKE_TOOLCHAIN_FILE}"
+        "-DCMAKE_USER_MAKE_RULES_OVERRIDE=${CMAKE_USER_MAKE_RULES_OVERRIDE}"
+        "-DCMAKE_C_FLAGS:STRING=${CMAKE_C_FLAGS}"
+        "-DCMAKE_CXX_FLAGS:STRING=${CMAKE_CXX_FLAGS}"
+        "-DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}"
+        "-DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>"
+        "-DLOTTIE_MODULE=OFF"
+        "-DBUILD_SHARED_LIBS=OFF"
+        "-DLIB_INSTALL_DIR=${CMAKE_BINARY_DIR}/lib/rlottie"
+        BUILD_BYPRODUCTS "${CMAKE_BINARY_DIR}/lib/rlottie/librlottie.a"
+)
+set(INCLUDES ${INCLUDES} "${CMAKE_BINARY_DIR}/lib/src/rlottie/inc")
+set(LIBS ${LIBS} pthread "${CMAKE_BINARY_DIR}/lib/src/rlottie-build/librlottie.a")
+add_dependencies(${PROJECT_NAME} rlottie)
+
+include_directories(${INCLUDES})
+target_link_libraries(${PROJECT_NAME} ${CONAN_LIBS} ${LIBS})
+target_compile_options(${PROJECT_NAME} PUBLIC -fconcepts)
