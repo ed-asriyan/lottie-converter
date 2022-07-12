@@ -2,17 +2,16 @@
 #define TGS_TO_GIF_RENDER_H
 
 #include <cmath>
+#include <filesystem>
 #include <string>
+#include <png.h>
 #include <rlottie.h>
 
-#include "gif_builder.h"
-
-bool render(
+void render(
 	const std::string& lottieData,
-	size_t width,
-	size_t height,
-	size_t alphaThreshold,
-	const std::string& outputPath,
+	const size_t width,
+	const size_t height,
+	const std::filesystem::path& output_directory,
 	double fps = 0
 );
 

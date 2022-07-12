@@ -6,61 +6,88 @@ To easily convert stickers to GIFs you can use Telegram Bot</br></br>👉 https:
 </h3>
 <hr/>
 
-_This is a C++ version of tgs-to-gif, generated GIFs may contain [some artifacts](https://github.com/ed-asriyan/tgs-to-gif/issues/13#issuecomment-633244547)._
+## How to use
+There are several ways:
 
-## Using [Docker](https://www.docker.com/)
+### Using [Docker](https://www.docker.com/)
 1. Build the image:
     ```bash
-    docker build -t tgs-to-gif .
+    docker build --platform linux/x86_64 -t tgs-to-gif .
     ```
 
 2. Convert! Pass directory with stickers and run:
     ```bash
-    docker run --rm -v <path to directory with stickers>:/source tgs-to-gif
+    docker run --platform linux/x86_64 --rm -v <path to directory with stickers>:/source tgs-to-gif
     ```
 
 The result will be saved next to each source sticker file in the same directory.
 
-## Building from sources
+### Building from sources
 1. Install dependencies
-    1. Make sure you have **g++** or **clang**, **make**, **cmake** and **conan** tools installed. Install them if it is not.
-    2. Install conan dependencies.
-       ```
+    1. Make sure you have **C++17 compiler**, **make**, **[cmake](https://cmake.org)** and **[conan](https://conan.io)** tools installed; otherwise install them
+    2. Make sure you have **[gifski](https://gif.ski)** installed; otherwise install it
+    3. Install conan dependencies
+       ```terminal
        conan install .
        ```
 2. Build
-    ```
-    cmake CMakeLists.txt && make
-    ```
+   ```terminal
+   cmake CMakeLists.txt && make
+   ```
+   <details>
+       <summary>ARM troubleshooting (including Apple M1)</summary>
+       Run the following command and try again:
+   
+       echo '#if defined(__ARM_NEON__)
+   
+       #include "vdrawhelper.h"
+    
+       void memfill32(uint32_t *dest, uint32_t value, int length)
+       {
+           memset(dest, value, length);
+       }
+   
+       static void color_SourceOver(uint32_t *dest, int length,
+       uint32_t color,
+       uint32_t alpha)
+       {
+           int ialpha, i;
 
-### Convert
-Pass one or several stickers:
-```bash
-./tgs_to_gif sticker.tgs 
-```
-
-or pass a directory:
-```bash
-./tgs_to_gif /home/ed/Downloads/super_pack/
-```
-
-The result will be saved next to each source sticker file in the same directory.
+           if (alpha != 255) color = BYTE_MUL(color, alpha);
+           ialpha = 255 - vAlpha(color);
+           for (i = 0; i < length; ++i) dest[i] = color + BYTE_MUL(dest[i], ialpha);
+       }
+   
+       void RenderFuncTable::neon()
+       {
+           updateColor(BlendMode::Src , color_SourceOver);
+       }
+       #endif
+       ' > lib/src/rlottie/src/vector/vdrawhelper_neon.cpp
+    </details>
+3. Convert!
+   ```terminal
+   ./tgs_to_gif.sh /home/ed/Downloads/sticker.tgs
+   ```
 
 #### CLI arguments
 ```terminal
-$ ./tgs_to_gif --help
-: expected 1 argument(s). 0 provided.
-Usage: tgs-to-gif [options] path 
+$ ./tgs_to_gif.sh --help 
+usage: tgs_to_gif.sh [--help] [--output OUTPUT] [--height HEIGHT] [--width WIDTH] [--fps FPS] path
+
+Animated sticker for Telegram (*.tgs) to animated .gif converter
 
 Positional arguments:
-path        	path to telegram sticker file[Required]
+ path             Path to .tgs file to convert
 
 Optional arguments:
--h --help   	show this help message and exit
--o --output 	path to output GIF file
--w --width  	output image width
--h --height 	output image height
--f --fps    	output animation FPS. If 0 use FPS from tgs animation
+ -h, --help       show this help message and exit
+ --output OUTPUT  Output file path
+ --height HEIGHT  Output image height. Default: 512
+ --width WIDTH    Output image width. Default: 512
+ --fps FPS        Output frame rate. Default: 50
+ --quality FPS    Output quality. Default: 90
+
 ```
 
 ## Notices

@@ -1,0 +1,11 @@
+.git
+.idea
+lib
+bin
+CMakeFiles
+.cmake
+conan.lock
+conanbuildinfo.txt
+conaninfo.txt
+graph_info.json
+Makefile

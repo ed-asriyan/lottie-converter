@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(tgs_to_gif)
+project(tgs_to_png)
 include(ExternalProject)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -9,11 +9,9 @@ conan_basic_setup()
 
 add_executable(
         ${PROJECT_NAME}
-        main.cpp
-        gif/gif_builder.cpp gif/gif_builder.h
-        gif/gif.cpp gif/gif.h
-        gif/render.cpp gif/render.h
-        zstr/fstream.h zstr/zstr.h
+        src/main.cpp
+        src/render.cpp src/render.h
+        src/zstr/fstream.h src/zstr/zstr.h
 )
 
 ExternalProject_Add(
@@ -41,4 +39,4 @@ add_dependencies(${PROJECT_NAME} rlottie)
 
 include_directories(${INCLUDES})
 target_link_libraries(${PROJECT_NAME} ${CONAN_LIBS} ${LIBS})
-target_compile_options(${PROJECT_NAME} PUBLIC -fconcepts)
+target_compile_options(${PROJECT_NAME} PUBLIC)
