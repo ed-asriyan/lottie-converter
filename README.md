@@ -1,4 +1,4 @@
-# Animated stickers for Telegram (*.tgs) to animated GIFs converter [![CircleCI](https://circleci.com/gh/ed-asriyan/tgs-to-gif/tree/master.svg?style=svg)](https://circleci.com/gh/ed-asriyan/tgs-to-gif/tree/master)
+# Animated stickers for Telegram (*.tgs) to animated GIF/WEBP converter [![CircleCI](https://circleci.com/gh/ed-asriyan/tgs-to-gif/tree/master.svg?style=svg)](https://circleci.com/gh/ed-asriyan/tgs-to-gif/tree/master)
 
 <hr/>
 <h3 align="center">
@@ -16,16 +16,22 @@ There are several ways:
     ```
 
 2. Convert! Pass directory with stickers and run:
-    ```bash
-    docker run --platform linux/x86_64 --rm -v <path to directory with stickers>:/source tgs-to-gif
-    ```
-
-The result will be saved next to each source sticker file in the same directory.
+   - Convert to GIF:
+     ```bash
+     docker run -e FORMAT=gif --platform linux/x86_64 --rm -v <path to directory with stickers>:/source tgs-to-gif
+     ```
+   - Convert to WEBP:
+     ```bash
+     docker run -e FORMAT=webp --platform linux/x86_64 --rm -v <path to directory with stickers>:/source tgs-to-gif
+     ```
+   Results will be saved next to each source sticker file in the same directory.
 
 ### Building from sources
 1. Install dependencies
     1. Make sure you have **C++17 compiler**, **make**, **[cmake](https://cmake.org)** and **[conan](https://conan.io)** tools installed; otherwise install them
-    2. Make sure you have **[gifski](https://gif.ski)** installed; otherwise install it
+    2. Make sure you have the tools installed:
+       - **[gifski](https://gif.ski)** if you want to convert to GIF
+       - **[img2webp](https://developers.google.com/speed/webp/docs/img2webp)** if you want to convert to WEBP
     3. Install conan dependencies
        ```terminal
        conan install .
@@ -47,9 +53,7 @@ The result will be saved next to each source sticker file in the same directory.
            memset(dest, value, length);
        }
    
-       static void color_SourceOver(uint32_t *dest, int length,
-       uint32_t color,
-       uint32_t alpha)
+       static void color_SourceOver(uint32_t *dest, int length, uint32_t color, uint32_t alpha)
        {
            int ialpha, i;
 
@@ -66,9 +70,15 @@ The result will be saved next to each source sticker file in the same directory.
        ' > lib/src/rlottie/src/vector/vdrawhelper_neon.cpp
     </details>
 3. Convert!
-   ```terminal
-   ./tgs_to_gif.sh /home/ed/Downloads/sticker.tgs
-   ```
+   - To convert to GIF: 
+     ```terminal
+     ./tgs_to_gif.sh /home/ed/Downloads/sticker.tgs
+     ```
+   - To convert to WEBP: 
+     ```terminal
+     ./tgs_to_webp.sh /home/ed/Downloads/sticker.tgs
+     ```
+   Results will be saved next to each source sticker file in the same directory.
 
 #### CLI arguments
 ```terminal
@@ -87,7 +97,6 @@ Optional arguments:
  --width WIDTH    Output image width. Default: 512
  --fps FPS        Output frame rate. Default: 50
  --quality FPS    Output quality. Default: 90
-
 ```
 
 ## Notices
