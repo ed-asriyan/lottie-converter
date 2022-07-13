@@ -5,10 +5,8 @@ MAINTAINER Ed Asriyan <tgs-to-gif.dockerfile@asriyan.me>
 RUN apk add --no-cache musl-dev
 RUN cargo install --version 1.7.0 gifski
 
-FROM alpine
+FROM alpine as builder-tgs-to-png
 MAINTAINER Ed Asriyan <tgs-to-gif.dockerfile@asriyan.me>
-
-COPY --from=builder-gifski /usr/local/cargo/bin/gifski /usr/local/bin/gifski
 
 RUN apk update && \
     apk --no-cache add \
@@ -18,8 +16,7 @@ RUN apk update && \
         g++ \
         cmake \
         libstdc++ \
-        py-pip \
-        libwebp-tools && \
+        py-pip && \
         pip install --ignore-installed conan
 
 WORKDIR /application
@@ -30,6 +27,14 @@ ADD CMakeLists.txt .
 ADD src src
 
 RUN cmake CMakeLists.txt && make
+
+FROM alpine
+WORKDIR /application
+
+RUN apk --no-cache add libwebp-tools
+
+COPY --from=builder-gifski /usr/local/cargo/bin/gifski /usr/local/bin/gifski
+COPY --from=builder-tgs-to-png /application/bin/tgs_to_png /application/bin/tgs_to_png
 
 ADD tgs_to_png.sh .
 ADD tgs_to_webp.sh .
