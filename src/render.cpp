@@ -92,11 +92,11 @@ void render(
 	const std::filesystem::path& output_directory,
 	double fps
 ) {
-	static unsigned int cacheCounter = 0; // rlottie uses caches for internal optimizations
-	auto player = rlottie::Animation::loadFromData(lottie_data, std::to_string(cacheCounter++));
+	static unsigned int cache_counter = 0; // rlottie uses caches for internal optimizations
+	const auto cache_counter_str = std::to_string(++cache_counter);
+	auto player = rlottie::Animation::loadFromData(lottie_data, cache_counter_str);
 	if (!player) throw std::runtime_error("can not load lottie animation");
 
-	auto buffer = std::unique_ptr<uint32_t[]>(new uint32_t[width * height]);
 	const size_t player_frame_count = player->totalFrame();
 	const double player_fps = player->frameRate();
 	if (fps == 0.0) fps = player_fps;
@@ -104,17 +104,32 @@ void render(
 	const double step = player_fps / fps;
 	const double output_frame_count = fps * duration;
 
-	for (size_t i = 0; i < output_frame_count; ++i) {
-		rlottie::Surface surface(buffer.get(), width, height, width * lp_COLOR_BYTES);
-		player->renderSync(round(i * step), surface);
+	const auto threads_count = std::thread::hardware_concurrency();
+	auto threads = std::vector<std::thread>(threads_count);
+	for (int i = 0; i < threads_count; ++i) {
+		threads.push_back(std::thread([i, output_frame_count, step, width, height, threads_count, &output_directory, &lottie_data, cache_counter_str]() {
+			auto local_player = rlottie::Animation::loadFromData(lottie_data, cache_counter_str);
+			char file_name[8];
+			uint32_t* const buffer = new uint32_t[width * height];
+			for (size_t j = i; j < output_frame_count; j += threads_count) {
+				rlottie::Surface surface(buffer, width, height, width * lp_COLOR_BYTES);
+				local_player->renderSync(round(j * step), surface);
 
-		char file_name[8];
-		sprintf(file_name, "%03zu.png", i);
-		write_png(
-			reinterpret_cast<unsigned char*> (buffer.get()),
-			width,
-			height,
-			output_directory / std::filesystem::path(file_name)
-		);
+				sprintf(file_name, "%03zu.png", j);
+				write_png(
+					(unsigned char *)buffer,
+					width,
+					height,
+					output_directory / std::filesystem::path(file_name)
+				);
+			}
+			delete[] buffer;
+		}));
+	}
+
+	for (auto& thread : threads) {
+		if (thread.joinable()) {
+			thread.join();
+		}
 	}
 }
