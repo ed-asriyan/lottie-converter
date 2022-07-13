@@ -5,6 +5,8 @@
 # $OUTPUT_EXTENSION
 # $QUALITY
 
+SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
+
 function print_help() {
   echo "usage: $(basename "$0") [--help] [--output OUTPUT] [--height HEIGHT] [--width WIDTH] [--fps FPS] path"
   echo
@@ -74,7 +76,9 @@ fi
 PNG_PATH=${OUTPUT}.tmp
 mkdir $PNG_PATH
 
-./bin/tgs_to_png --width $WIDTH --height $HEIGHT --fps $FPS --output $PNG_PATH $TGS_PATH
+$SCRIPT_DIR/bin/tgs_to_png --width $WIDTH --height $HEIGHT --fps $FPS --output $PNG_PATH $TGS_PATH
+
+PNG_FILES=$(find $PNG_PATH -type f -name '*.png' | sort -k1)
 
 function cleanup {
   rm -fr $PNG_PATH
