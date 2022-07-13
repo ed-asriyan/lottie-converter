@@ -44,9 +44,10 @@ ENV WIDTH=512
 ENV HEIGHT=512
 ENV FPS=50
 ENV QUALITY=90
+ENV FORMAT=gif
 
 CMD sh -c "\
     find /source -name '*.tgs' | while IFS=$'\n' read -r FILE; do \
-        echo Converting \${FILE}... && /application/tgs_to_gif.sh --width \$WIDTH --height \$HEIGHT --fps \$FPS --quality \$QUALITY \$FILE && echo Done.; \
+        echo Converting \${FILE}... && /application/tgs_to_\${FORMAT}.sh --width \$WIDTH --height \$HEIGHT --fps \$FPS --quality \$QUALITY \$FILE && echo Done.; \
     done\
 "

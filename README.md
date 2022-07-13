@@ -1,4 +1,4 @@
-# Animated stickers for Telegram (*.tgs) to animated GIFs converter
+# Animated stickers for Telegram (*.tgs) to animated GIFs converter [![CircleCI](https://circleci.com/gh/ed-asriyan/tgs-to-gif/tree/master.svg?style=svg)](https://circleci.com/gh/ed-asriyan/tgs-to-gif/tree/master)
 
 <hr/>
 <h3 align="center">
