@@ -101,3 +101,7 @@ Optional arguments:
 
 ## Notices
 You can download .tgs files using [@Stickerdownloadbot](https://t.me/Stickerdownloadbot).
+
+|<a href="https://www.jetbrains.com/clion/" ><img src="https://resources.jetbrains.com/storage/products/company/brand/logos/CLion.png" alt="CLion logo." style="height: 100px"></a>|
+|--|
+|Project is made with [Jetbrains](https://www.jetbrains.com) support ❤️|
