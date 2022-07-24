@@ -43,5 +43,5 @@ set(LIBS ${LIBS} pthread "${CMAKE_BINARY_DIR}/lib/src/rlottie-build/librlottie.a
 add_dependencies(${PROJECT_NAME} rlottie)
 
 include_directories(${INCLUDES})
-target_link_libraries(${PROJECT_NAME} -static ${CONAN_LIBS} ${LIBS})
+target_link_libraries(${PROJECT_NAME} ${CONAN_LIBS} ${LIBS})
 target_compile_options(${PROJECT_NAME} PUBLIC)
