@@ -1,4 +1,4 @@
-# Animated stickers for Telegram (*.tgs) to animated GIF/WEBP converter [![CircleCI](https://circleci.com/gh/ed-asriyan/tgs-to-gif/tree/master.svg?style=svg)](https://circleci.com/gh/ed-asriyan/tgs-to-gif/tree/master)
+# Animated stickers for Telegram (*.tgs) to GIF/PNG/WEBP converter [![CircleCI](https://circleci.com/gh/ed-asriyan/tgs-to-gif/tree/master.svg?style=svg)](https://circleci.com/gh/ed-asriyan/tgs-to-gif/tree/master)
 
 <hr/>
 <h3 align="center">
@@ -19,6 +19,10 @@ There are several ways:
    - Convert to GIF:
      ```bash
      docker run -e FORMAT=gif --platform linux/x86_64 --rm -v <path to directory with stickers>:/source tgs-to-gif
+     ```
+   - Convert to PNG:
+     ```bash
+     docker run -e FORMAT=png --platform linux/x86_64 --rm -v <path to directory with stickers>:/source tgs-to-gif
      ```
    - Convert to WEBP:
      ```bash
@@ -73,6 +77,10 @@ There are several ways:
    - To convert to GIF: 
      ```terminal
      ./bin/tgs_to_gif.sh /home/ed/Downloads/sticker.tgs
+     ```
+   - To convert to PNG: 
+     ```terminal
+     ./bin/tgs_to_png.sh /home/ed/Downloads/sticker.tgs
      ```
    - To convert to WEBP: 
      ```terminal

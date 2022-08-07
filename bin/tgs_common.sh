@@ -9,7 +9,7 @@
 SCRIPT_DIR=$(dirname "$0")
 
 function print_help() {
-  echo "usage: $SCRIPT_DIR [--help] [--output OUTPUT] [--height HEIGHT] [--width WIDTH] [--fps FPS] path"
+  echo "usage: $SCRIPT_DIR/$(basename "$0") [--help] [--output OUTPUT] [--height HEIGHT] [--width WIDTH] [--fps FPS] path"
   echo
   echo "Animated sticker for Telegram (*.tgs) to animated $OUTPUT_EXTENSION converter"
   echo

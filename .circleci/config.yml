@@ -7,4 +7,5 @@ jobs:
       - checkout
       - run: docker build -t tgs-to-gif .
       - run: docker run --rm -e FORMAT=gif -v $(pwd)/stickers:/source tgs-to-gif
+      - run: docker run --rm -e FORMAT=png -v $(pwd)/stickers:/source tgs-to-gif
       - run: docker run --rm -e FORMAT=webp -v $(pwd)/stickers:/source tgs-to-gif
