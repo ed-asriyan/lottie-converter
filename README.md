@@ -72,18 +72,18 @@ There are several ways:
 3. Convert!
    - To convert to GIF: 
      ```terminal
-     ./tgs_to_gif.sh /home/ed/Downloads/sticker.tgs
+     ./bin/tgs_to_gif.sh /home/ed/Downloads/sticker.tgs
      ```
    - To convert to WEBP: 
      ```terminal
-     ./tgs_to_webp.sh /home/ed/Downloads/sticker.tgs
+     ./bin/tgs_to_webp.sh /home/ed/Downloads/sticker.tgs
      ```
-   Results will be saved next to each source sticker file in the same directory.
+   Results will be saved next to source sticker file in the same directory.
 
 #### CLI arguments
 ```terminal
-$ ./tgs_to_gif.sh --help 
-usage: tgs_to_gif.sh [--help] [--output OUTPUT] [--height HEIGHT] [--width WIDTH] [--fps FPS] path
+$ ./bin/tgs_to_gif.sh --help 
+usage: ./bin/tgs_to_gif.sh [--help] [--output OUTPUT] [--height HEIGHT] [--width WIDTH] [--fps FPS] path
 
 Animated sticker for Telegram (*.tgs) to animated .gif converter
 

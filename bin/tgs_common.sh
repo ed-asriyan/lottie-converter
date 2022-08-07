@@ -1,3 +1,4 @@
+# this is common source file used by tgs_to_gif.sh, tgs_to_webp.sh
 # required bash variables
 # $HEIGHT
 # $WIDTH
@@ -5,10 +6,10 @@
 # $OUTPUT_EXTENSION
 # $QUALITY
 
-SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
+SCRIPT_DIR=$(dirname "$0")
 
 function print_help() {
-  echo "usage: $(basename "$0") [--help] [--output OUTPUT] [--height HEIGHT] [--width WIDTH] [--fps FPS] path"
+  echo "usage: $SCRIPT_DIR [--help] [--output OUTPUT] [--height HEIGHT] [--width WIDTH] [--fps FPS] path"
   echo
   echo "Animated sticker for Telegram (*.tgs) to animated $OUTPUT_EXTENSION converter"
   echo
@@ -76,7 +77,7 @@ fi
 PNG_PATH=${OUTPUT}.tmp
 mkdir $PNG_PATH
 
-$SCRIPT_DIR/bin/tgs_to_png --width $WIDTH --height $HEIGHT --fps $FPS --output $PNG_PATH $TGS_PATH
+$SCRIPT_DIR/tgs_to_png --width $WIDTH --height $HEIGHT --fps $FPS --output $PNG_PATH $TGS_PATH
 
 PNG_FILES=$(find $PNG_PATH -type f -name '*.png' | sort -k1)
 
