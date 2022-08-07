@@ -30,7 +30,7 @@ RUN cmake CMakeLists.txt && make
 
 FROM alpine
 
-RUN apk --no-cache add libwebp-tools
+RUN apk --no-cache add ffmpeg libwebp-tools
 
 COPY --from=builder-gifski /usr/local/cargo/bin/gifski /usr/bin/gifski
 COPY --from=builder-tgs-to-png /application/bin/tgs_to_png /usr/bin/tgs_to_png

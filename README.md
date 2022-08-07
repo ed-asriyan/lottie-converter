@@ -1,4 +1,4 @@
-# Animated stickers for Telegram (*.tgs) to GIF/PNG/WEBP converter [![CircleCI](https://circleci.com/gh/ed-asriyan/tgs-to-gif/tree/master.svg?style=svg)](https://circleci.com/gh/ed-asriyan/tgs-to-gif/tree/master)
+# Animated stickers for Telegram (*.tgs) to GIF/PNG/APNG/WEBP converter [![CircleCI](https://circleci.com/gh/ed-asriyan/tgs-to-gif/tree/master.svg?style=svg)](https://circleci.com/gh/ed-asriyan/tgs-to-gif/tree/master)
 
 <hr/>
 <h3 align="center">
@@ -24,6 +24,10 @@ There are several ways:
      ```bash
      docker run -e FORMAT=png --platform linux/x86_64 --rm -v <path to directory with stickers>:/source tgs-to-gif
      ```
+   - Convert to APNG:
+     ```bash
+     docker run -e FORMAT=apng --platform linux/x86_64 --rm -v <path to directory with stickers>:/source tgs-to-gif
+     ```
    - Convert to WEBP:
      ```bash
      docker run -e FORMAT=webp --platform linux/x86_64 --rm -v <path to directory with stickers>:/source tgs-to-gif
@@ -35,6 +39,7 @@ There are several ways:
     1. Make sure you have **C++17 compiler**, **make**, **[cmake](https://cmake.org)** and **[conan](https://conan.io)** tools installed; otherwise install them
     2. Make sure you have the tools installed:
        - **[gifski](https://gif.ski)** if you want to convert to GIF
+       - **[ffmpeg](https://ffmpeg.org)** if you want to convert to APNG
        - **[img2webp](https://developers.google.com/speed/webp/docs/img2webp)** if you want to convert to WEBP
     3. Install conan dependencies
        ```terminal
@@ -81,6 +86,10 @@ There are several ways:
    - To convert to PNG: 
      ```terminal
      ./bin/tgs_to_png.sh /home/ed/Downloads/sticker.tgs
+     ```
+   - To convert to APNG:
+     ```terminal
+     ./bin/tgs_to_apng.sh /home/ed/Downloads/sticker.tgs
      ```
    - To convert to WEBP: 
      ```terminal
