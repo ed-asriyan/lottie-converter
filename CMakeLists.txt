@@ -4,13 +4,24 @@ include(ExternalProject)
 
 set(CMAKE_CXX_STANDARD 17)
 
+if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+    # https://stackoverflow.com/a/3801032
+    set(STATIC_LINKING_DEFAULT_VALUE OFF)
+else()
+    set(STATIC_LINKING_DEFAULT_VALUE ON)
+endif()
+
+option(TGS_TO_PNG_STATIC_LINKING "Build using static linking" ${STATIC_LINKING_DEFAULT_VALUE})
+
 include(conanbuildinfo.cmake)
 conan_basic_setup()
 
-# enable static linking https://stackoverflow.com/a/24671474
-set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
-set(BUILD_SHARED_LIBS OFF)
-set(CMAKE_EXE_LINKER_FLAGS "-static")
+if (TGS_TO_PNG_STATIC_LINKING)
+    # enable static linking https://stackoverflow.com/a/24671474
+    set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
+    set(BUILD_SHARED_LIBS OFF)
+    set(CMAKE_EXE_LINKER_FLAGS "-static")
+endif()
 
 add_executable(
         ${PROJECT_NAME}

@@ -41,6 +41,14 @@ There are several ways:
    cmake CMakeLists.txt && make
    ```
    <details>
+       <summary>CMake options</summary>
+       <code>TGS_TO_PNG_STATIC_LINKING</code>: enable static linking. Default value: <code>OFF</code> if OS is darwin; otherwise <code>ON</code>
+
+       cmake -DTGS_TO_PNG_STATIC_LINKING=ON CMakeLists.txt && make
+       
+       cmake -DTGS_TO_PNG_STATIC_LINKING=OFF CMakeLists.txt && make
+   </details>
+   <details>
        <summary>ARM troubleshooting (including Apple M1)</summary>
        Run the following command and try again:
    
