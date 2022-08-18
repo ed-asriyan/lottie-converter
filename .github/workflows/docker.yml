@@ -4,7 +4,7 @@ on:
   push:
   workflow_dispatch:
 env:
-  TAG: ${{ secrets.DOCKERHUB_USERNAME }}/tgs-to-gif:latest
+  IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/tgs-to-gif
 
 jobs:
   docker:
@@ -21,17 +21,24 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           load: true
-          tags: ${{ env.TAG }}
+          tags: ${{ env.IMAGE }}
       - name: Test
         run: |
-          docker run --rm -e FORMAT=gif -v $(pwd)/stickers:/source ${{ env.TAG }}
-          docker run --rm -e FORMAT=png -v $(pwd)/stickers:/source ${{ env.TAG }}
-          docker run --rm -e FORMAT=apng -v $(pwd)/stickers:/source ${{ env.TAG }}
-          docker run --rm -e FORMAT=webp -v $(pwd)/stickers:/source ${{ env.TAG }}
-      - name: Build and push
+          docker run --rm -e FORMAT=gif -v $(pwd)/stickers:/source ${{ env.IMAGE }}
+          docker run --rm -e FORMAT=png -v $(pwd)/stickers:/source ${{ env.IMAGE }}
+          docker run --rm -e FORMAT=apng -v $(pwd)/stickers:/source ${{ env.IMAGE }}
+          docker run --rm -e FORMAT=webp -v $(pwd)/stickers:/source ${{ env.IMAGE }}
+      - name: Build and push latest
         if: github.ref == 'refs/heads/master'
         uses: docker/build-push-action@v3
         with:
           platforms: linux/x86_64
           push: true
-          tags: ${{ env.TAG }}
+          tags: ${{ env.IMAGE }}:latest
+      - name: Build and push tag
+        if: github.ref_type == 'tag'
+        uses: docker/build-push-action@v3
+        with:
+          platforms: linux/x86_64
+          push: true
+          tags: ${{ env.IMAGE }}:${{ github.ref_name }}
