@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+  pull_request:
 env:
   TAG: ${{ secrets.DOCKERHUB_USERNAME }}/tgs-to-gif:latest
 
@@ -30,6 +31,7 @@ jobs:
           docker run --rm -e FORMAT=apng -v $(pwd)/stickers:/source ${{ env.TAG }}
           docker run --rm -e FORMAT=webp -v $(pwd)/stickers:/source ${{ env.TAG }}
       - name: Build and push
+        if: github.event_name == 'push'
         uses: docker/build-push-action@v3
         with:
           platforms: linux/x86_64
