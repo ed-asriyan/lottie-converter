@@ -1,4 +1,4 @@
-# Animated stickers for Telegram (*.tgs) to GIF/PNG/APNG/WEBP converter [![CircleCI](https://circleci.com/gh/ed-asriyan/tgs-to-gif/tree/master.svg?style=svg)](https://circleci.com/gh/ed-asriyan/tgs-to-gif/tree/master)
+# Animated stickers for Telegram (*.tgs) to GIF/PNG/APNG/WEBP converter ![docker workflow](https://github.com/ed-asriyan/docs/actions/workflows/docker.yml/badge.svg)
 
 <hr/>
 <h3 align="center">
@@ -10,29 +10,25 @@ To easily convert stickers to GIFs you can use Telegram Bot</br></br>👉 https:
 There are several ways:
 
 ### Using [Docker](https://www.docker.com/)
-1. Build the image:
-    ```bash
-    docker build --platform linux/x86_64 -t tgs-to-gif .
-    ```
+Pass directory with stickers and run:
+- Convert to GIF:
+  ```bash
+  docker run -e FORMAT=gif --platform linux/x86_64 --rm -v <path to directory with stickers>:/source edasriyan/tgs-to-gif
+  ```
+- Convert to PNG:
+  ```bash
+  docker run -e FORMAT=png --platform linux/x86_64 --rm -v <path to directory with stickers>:/source edasriyan/tgs-to-gif
+  ```
+- Convert to APNG:
+  ```bash
+  docker run -e FORMAT=apng --platform linux/x86_64 --rm -v <path to directory with stickers>:/source edasriyan/tgs-to-gif
+  ```
+- Convert to WEBP:
+  ```bash
+  docker run -e FORMAT=webp --platform linux/x86_64 --rm -v <path to directory with stickers>:/source edasriyan/tgs-to-gif
+  ```
 
-2. Convert! Pass directory with stickers and run:
-   - Convert to GIF:
-     ```bash
-     docker run -e FORMAT=gif --platform linux/x86_64 --rm -v <path to directory with stickers>:/source tgs-to-gif
-     ```
-   - Convert to PNG:
-     ```bash
-     docker run -e FORMAT=png --platform linux/x86_64 --rm -v <path to directory with stickers>:/source tgs-to-gif
-     ```
-   - Convert to APNG:
-     ```bash
-     docker run -e FORMAT=apng --platform linux/x86_64 --rm -v <path to directory with stickers>:/source tgs-to-gif
-     ```
-   - Convert to WEBP:
-     ```bash
-     docker run -e FORMAT=webp --platform linux/x86_64 --rm -v <path to directory with stickers>:/source tgs-to-gif
-     ```
-   Results will be saved next to each source sticker file in the same directory.
+Results will be saved next to each source sticker file in the same directory.
 
 ### Building from sources
 1. Install dependencies
