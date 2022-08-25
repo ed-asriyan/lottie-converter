@@ -13,19 +13,19 @@ There are several ways:
 Pass directory with stickers and run:
 - Convert to GIF:
   ```bash
-  docker run -e FORMAT=gif --platform linux/x86_64 --rm -v <path to directory with stickers>:/source edasriyan/tgs-to-gif
+  docker run -e FORMAT=gif --rm -v <path to directory with stickers>:/source edasriyan/tgs-to-gif
   ```
 - Convert to PNG:
   ```bash
-  docker run -e FORMAT=png --platform linux/x86_64 --rm -v <path to directory with stickers>:/source edasriyan/tgs-to-gif
+  docker run -e FORMAT=png --rm -v <path to directory with stickers>:/source edasriyan/tgs-to-gif
   ```
 - Convert to APNG:
   ```bash
-  docker run -e FORMAT=apng --platform linux/x86_64 --rm -v <path to directory with stickers>:/source edasriyan/tgs-to-gif
+  docker run -e FORMAT=apng --rm -v <path to directory with stickers>:/source edasriyan/tgs-to-gif
   ```
 - Convert to WEBP:
   ```bash
-  docker run -e FORMAT=webp --platform linux/x86_64 --rm -v <path to directory with stickers>:/source edasriyan/tgs-to-gif
+  docker run -e FORMAT=webp --rm -v <path to directory with stickers>:/source edasriyan/tgs-to-gif
   ```
 
 Results will be saved next to each source sticker file in the same directory.
