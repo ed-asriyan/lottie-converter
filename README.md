@@ -1,4 +1,4 @@
-# Animated stickers for Telegram (*.tgs) to GIF/PNG/APNG/WEBP converter ![docker workflow](https://github.com/ed-asriyan/docs/actions/workflows/docker.yml/badge.svg)
+# Animated stickers for Telegram (*.tgs) to GIF/PNG/APNG/WEBP converter ![docker workflow](https://github.com/ed-asriyan/tgs-to-gif/actions/workflows/docker.yml/badge.svg)
 
 <hr/>
 <h3 align="center">
