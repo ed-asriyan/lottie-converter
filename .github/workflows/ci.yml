@@ -1,0 +1,93 @@
+name: Stickers Conversion Tests
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build tgs-to-apng
+        uses: docker/build-push-action@v3
+        with:
+          target: tgs-to-apng
+          tags: tgs-to-apng
+          load: true
+
+      - name: Run tgs-to-apng conversion
+        run: docker run --rm -v $(pwd)/stickers:/source tgs-to-apng
+
+      - name: Build tgs-to-gif
+        uses: docker/build-push-action@v3
+        with:
+          target: tgs-to-gif
+          tags: tgs-to-gif
+          load: true
+
+      - name: Run tgs-to-gif conversion
+        run: docker run --rm -v $(pwd)/stickers:/source tgs-to-gif
+
+      - name: Build tgs-to-png
+        uses: docker/build-push-action@v3
+        with:
+          target: tgs-to-png
+          tags: tgs-to-png
+          load: true
+
+      - name: Run tgs-to-png conversion
+        run: docker run --rm -v $(pwd)/stickers:/source tgs-to-png
+
+      - name: Build tgs-to-webp
+        uses: docker/build-push-action@v3
+        with:
+          target: tgs-to-webp
+          tags: tgs-to-webp
+          load: true
+
+      - name: Run tgs-to-webp conversion
+        run: docker run --rm -v $(pwd)/stickers:/source tgs-to-webp
+
+      - name: Login to DockerHub
+        if: github.ref == 'refs/heads/master'
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Push tgs-to-apng
+        if: github.ref == 'refs/heads/master'
+        uses: docker/build-push-action@v3
+        with:
+          target: tgs-to-apng
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/tgs-to-apng:latest
+          push: true
+
+      - name: Push tgs-to-gif
+        if: github.ref == 'refs/heads/master'
+        uses: docker/build-push-action@v3
+        with:
+          target: tgs-to-gif
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/tgs-to-gif:latest
+          push: true
+
+      - name: Push tgs-to-png
+        if: github.ref == 'refs/heads/master'
+        uses: docker/build-push-action@v3
+        with:
+          target: tgs-to-png
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/tgs-to-png:latest
+          push: true
+
+      - name: Push tgs-to-webp
+        if: github.ref == 'refs/heads/master'
+        uses: docker/build-push-action@v3
+        with:
+          target: tgs-to-webp
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/tgs-to-webp:latest
+          push: true

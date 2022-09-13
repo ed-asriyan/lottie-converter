@@ -14,15 +14,15 @@ function print_help() {
   echo "Animated sticker for Telegram (*.tgs) to animated $OUTPUT_EXTENSION converter"
   echo
   echo "Positional arguments:"
-  echo " path             Path to .tgs file to convert"
+  echo " path              Path to .tgs file to convert"
   echo
   echo "Optional arguments:"
-  echo " -h, --help       show this help message and exit"
-  echo " --output OUTPUT  Output file path"
-  echo " --height HEIGHT  Output image height. Default: $HEIGHT"
-  echo " --width WIDTH    Output image width. Default: $WIDTH"
-  echo " --fps FPS        Output frame rate. Default: $FPS"
-  echo " --quality FPS    Output quality. Default: $QUALITY"
+  echo " -h, --help        show this help message and exit"
+  echo " --output OUTPUT   Output file path"
+  echo " --height HEIGHT   Output image height. Default: $HEIGHT"
+  echo " --width WIDTH     Output image width. Default: $WIDTH"
+  echo " --fps FPS         Output frame rate. Default: $FPS"
+  echo " --quality QUALITY Output quality. Default: $QUALITY"
 }
 
 while [[ $# -gt 0 ]]; do

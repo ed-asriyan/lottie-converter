@@ -1,4 +1,4 @@
-# Animated stickers for Telegram (*.tgs) to GIF/PNG/APNG/WEBP converter ![docker workflow](https://github.com/ed-asriyan/tgs-to-gif/actions/workflows/docker.yml/badge.svg)
+# Animated stickers for Telegram (*.tgs) to GIF/PNG/APNG/WEBP converter ![docker workflow](https://github.com/ed-asriyan/tgs-to-gif/actions/workflows/ci.yml/badge.svg)
 
 <hr/>
 <h3 align="center">
@@ -7,30 +7,41 @@ To easily convert stickers to GIFs you can use Telegram Bot</br></br>👉 https:
 <hr/>
 
 ## How to use
-There are several ways:
+There are two options: run using [Docker](https://www.docker.com/) and run from source.
 
-### Using [Docker](https://www.docker.com/)
-Pass directory with stickers and run:
+### Using Docker
+Replace with directory with stickers and run:
 - Convert to GIF:
   ```bash
-  docker run -e FORMAT=gif --rm -v <path to directory with stickers>:/source edasriyan/tgs-to-gif
+  docker run --rm -v <path to directory with stickers>:/source edasriyan/tgs-to-gif
   ```
 - Convert to PNG:
   ```bash
-  docker run -e FORMAT=png --rm -v <path to directory with stickers>:/source edasriyan/tgs-to-gif
+  docker run --rm -v <path to directory with stickers>:/source edasriyan/tgs-to-png
   ```
 - Convert to APNG:
   ```bash
-  docker run -e FORMAT=apng --rm -v <path to directory with stickers>:/source edasriyan/tgs-to-gif
+  docker run --rm -v <path to directory with stickers>:/source edasriyan/tgs-to-apng
   ```
 - Convert to WEBP:
   ```bash
-  docker run -e FORMAT=webp --rm -v <path to directory with stickers>:/source edasriyan/tgs-to-gif
+  docker run --rm -v <path to directory with stickers>:/source edasriyan/tgs-to-webp
   ```
+
+You can provide parameters via env variables:
+* `HEIGHT`: Output image height. Default: 512
+* `WIDTH`: Output image width. Default: 512
+* `FPS`: Output frame rate. Default: apng,png,webp - 60; gif - 50
+* `QUALITY`: Output quality. Default: 90
+
+Example:
+```bash
+docker run --rm -e HEIGHT=256 -e WIDTH=256 -e FPS=30 -v /home/ed/Downloads/stickers:/source edasriyan/tgs-to-apng
+```
 
 Results will be saved next to each source sticker file in the same directory.
 
-### Building from sources
+### From source
 1. Install dependencies
     1. Make sure you have **C++17 compiler**, **make**, **[cmake](https://cmake.org)** and **[conan](https://conan.io)** tools installed; otherwise install them
     2. Make sure you have the tools installed:
@@ -109,15 +120,15 @@ usage: ./bin/tgs_to_gif.sh [--help] [--output OUTPUT] [--height HEIGHT] [--width
 Animated sticker for Telegram (*.tgs) to animated .gif converter
 
 Positional arguments:
- path             Path to .tgs file to convert
+ path              Path to .tgs file to convert
 
 Optional arguments:
- -h, --help       show this help message and exit
- --output OUTPUT  Output file path
- --height HEIGHT  Output image height. Default: 512
- --width WIDTH    Output image width. Default: 512
- --fps FPS        Output frame rate. Default: 50
- --quality FPS    Output quality. Default: 90
+ -h, --help        show this help message and exit
+ --output OUTPUT   Output file path
+ --height HEIGHT   Output image height. Default: 512
+ --width WIDTH     Output image width. Default: 512
+ --fps FPS         Output frame rate. Default: 50
+ --quality QUALITY Output quality. Default: 90
 ```
 
 ## Notices
