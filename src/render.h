@@ -12,7 +12,8 @@ void render(
 	const size_t width,
 	const size_t height,
 	const std::filesystem::path& output_directory,
-	double fps = 0
+	double fps = 0,
+	size_t threads_count = 0
 );
 
 #endif //TGS_TO_GIF_RENDER_H

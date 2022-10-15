@@ -19,7 +19,8 @@ void convert(
 	const size_t width,
 	const size_t height,
 	const std::filesystem::path& output,
-	const double fps
+	double fps,
+	const size_t threads_count
 ) {
 	std::ifstream input_file(file_path);
 	if (!input_file.is_open()) {
@@ -27,7 +28,7 @@ void convert(
 	}
 	const std::string decompressed = decompress(input_file);
 	input_file.close();
-	render(decompressed, width, height, output, fps);
+	render(decompressed, width, height, output, fps, threads_count);
 }
 
 int main(int argc, const char** argv) {
@@ -58,6 +59,11 @@ int main(int argc, const char** argv) {
 		.help("output animation FPS. If 0 use FPS from tgs animation")
 		.action([](const std::string& value) { return std::stod(value); });
 
+	program.add_argument("-t", "--threads")
+		.default_value(0)
+		.help("numbers of threads to use. If 0, number of CPUs is used")
+		.action([](const std::string& value) { return std::stoul(value); });
+
 	try {
 		program.parse_args(argc, argv);
 	} catch (const std::runtime_error& err) {
@@ -71,8 +77,9 @@ int main(int argc, const char** argv) {
 	const auto height = program.get<int>("--height");
 	const auto fps = program.get<double>("--fps");
 	const auto output = program.get<std::filesystem::path>("--output");
+	const auto threads = program.get<size_t>("--threads");
 
-	convert(file_path, width, height, output, fps);
+	convert(file_path, width, height, output, fps, threads);
 	return 0;
 }
 

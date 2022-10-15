@@ -33,6 +33,7 @@ You can provide parameters via env variables:
 * `WIDTH`: Output image width. Default: 512
 * `FPS`: Output frame rate. Default: apng,png,webp - 60; gif - 50
 * `QUALITY`: Output quality. Default: 90
+* `THREADS`: Number of threads to use. Default: number of CPUs
 
 Example:
 ```bash
@@ -115,7 +116,7 @@ Results will be saved next to each source sticker file in the same directory.
 #### CLI arguments
 ```terminal
 $ ./bin/tgs_to_gif.sh --help 
-usage: ./bin/tgs_to_gif.sh [--help] [--output OUTPUT] [--height HEIGHT] [--width WIDTH] [--fps FPS] path
+usage: ./bin/tgs_to_gif.sh [--help] [--output OUTPUT] [--height HEIGHT] [--width WIDTH] [--threads THREADS] [--fps FPS] [--quality QUALITY] path
 
 Animated sticker for Telegram (*.tgs) to animated .gif converter
 
@@ -128,6 +129,7 @@ Optional arguments:
  --height HEIGHT   Output image height. Default: 512
  --width WIDTH     Output image width. Default: 512
  --fps FPS         Output frame rate. Default: 50
+ --threads THREADS Number of threads to use. Default: number of CPUs
  --quality QUALITY Output quality. Default: 90
 ```
 

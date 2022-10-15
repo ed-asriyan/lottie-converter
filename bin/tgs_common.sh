@@ -6,10 +6,12 @@
 # $OUTPUT_EXTENSION
 # $QUALITY
 
+THREADS=0
+
 SCRIPT_DIR=$(dirname "$0")
 
 function print_help() {
-  echo "usage: $SCRIPT_DIR/$(basename "$0") [--help] [--output OUTPUT] [--height HEIGHT] [--width WIDTH] [--fps FPS] path"
+  echo "usage: $SCRIPT_DIR/$(basename "$0") [--help] [--output OUTPUT] [--height HEIGHT] [--width WIDTH] [--threads THREADS] [--fps FPS] [--quality QUALITY] path"
   echo
   echo "Animated sticker for Telegram (*.tgs) to animated $OUTPUT_EXTENSION converter"
   echo
@@ -22,6 +24,7 @@ function print_help() {
   echo " --height HEIGHT   Output image height. Default: $HEIGHT"
   echo " --width WIDTH     Output image width. Default: $WIDTH"
   echo " --fps FPS         Output frame rate. Default: $FPS"
+  echo " --threads THREADS Number of threads to use. Default: number of CPUs"
   echo " --quality QUALITY Output quality. Default: $QUALITY"
 }
 
@@ -52,6 +55,11 @@ while [[ $# -gt 0 ]]; do
       shift
       shift
       ;;
+    -t|--threads)
+      THREADS="$2"
+      shift
+      shift
+      ;;
     --help)
       print_help
       exit 1
@@ -77,7 +85,7 @@ fi
 PNG_PATH=${OUTPUT}.tmp
 mkdir $PNG_PATH
 
-$SCRIPT_DIR/tgs_to_png --width $WIDTH --height $HEIGHT --fps $FPS --output $PNG_PATH $TGS_PATH
+$SCRIPT_DIR/tgs_to_png --width $WIDTH --height $HEIGHT --fps $FPS --threads $THREADS --output $PNG_PATH $TGS_PATH
 
 PNG_FILES=$(find $PNG_PATH -type f -name '*.png' | sort -k1)
 

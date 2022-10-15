@@ -90,7 +90,8 @@ void render(
 	const size_t width,
 	const size_t height,
 	const std::filesystem::path& output_directory,
-	double fps
+	double fps,
+	size_t threads_count
 ) {
 	static unsigned int cache_counter = 0; // rlottie uses caches for internal optimizations
 	const auto cache_counter_str = std::to_string(++cache_counter);
@@ -104,7 +105,9 @@ void render(
 	const double step = player_fps / fps;
 	const double output_frame_count = fps * duration;
 
-	const auto threads_count = std::thread::hardware_concurrency();
+	if (threads_count == 0) {
+		threads_count = std::thread::hardware_concurrency();
+	}
 	auto threads = std::vector<std::thread>(threads_count);
 	for (int i = 0; i < threads_count; ++i) {
 		threads.push_back(std::thread([i, output_frame_count, step, width, height, threads_count, &output_directory, &lottie_data, cache_counter_str]() {
