@@ -82,7 +82,7 @@ if [[ -z "$OUTPUT" ]]; then
    OUTPUT=${TGS_PATH}${OUTPUT_EXTENSION}
 fi
 
-PNG_PATH=${OUTPUT}.tmp
+PNG_PATH=${OUTPUT}.$RANDOM.tmp
 mkdir $PNG_PATH
 
 $SCRIPT_DIR/tgs_to_png --width $WIDTH --height $HEIGHT --fps $FPS --threads $THREADS --output $PNG_PATH $TGS_PATH
