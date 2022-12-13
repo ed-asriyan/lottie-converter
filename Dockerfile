@@ -3,7 +3,7 @@ FROM rust:alpine as builder-gifski
 RUN apk add --no-cache musl-dev
 RUN cargo install --version 1.7.0 gifski
 
-FROM alpine as builder-tgs-to-png
+FROM alpine:3.16.2 as builder-tgs-to-png
 RUN apk update && \
     apk --no-cache add \
         build-base \
@@ -21,7 +21,7 @@ ADD CMakeLists.txt .
 ADD src src
 RUN cmake CMakeLists.txt && make
 
-FROM alpine as builder-tgs-to-some
+FROM alpine:3.16.2 as builder-tgs-to-some
 COPY --from=builder-tgs-to-png /application/bin/tgs_to_png /usr/bin/tgs_to_png
 ADD bin/* /usr/bin/
 CMD sh -c "\
