@@ -1,10 +1,8 @@
-name: Stickers Conversion Tests
+name: Converting Tests
 
 on:
   push:
-    branches: [ "master" ]
   pull_request:
-    branches: [ "master" ]
 
 jobs:
   build:
@@ -13,45 +11,45 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Build tgs-to-apng
+      - name: Build lottie-to-apng
         uses: docker/build-push-action@v3
         with:
-          target: tgs-to-apng
-          tags: tgs-to-apng
+          target: lottie-to-apng
+          tags: lottie-to-apng
           load: true
 
-      - name: Run tgs-to-apng conversion
-        run: docker run --rm -v $(pwd)/stickers:/source tgs-to-apng
+      - name: Run lottie-to-apng conversion
+        run: docker run --rm -v $(pwd)/test-files:/source lottie-to-apng
 
-      - name: Build tgs-to-gif
+      - name: Build lottie-to-gif
         uses: docker/build-push-action@v3
         with:
-          target: tgs-to-gif
-          tags: tgs-to-gif
+          target: lottie-to-gif
+          tags: lottie-to-gif
           load: true
 
-      - name: Run tgs-to-gif conversion
-        run: docker run --rm -v $(pwd)/stickers:/source tgs-to-gif
+      - name: Run lottie-to-gif conversion
+        run: docker run --rm -v $(pwd)/test-files:/source lottie-to-gif
 
-      - name: Build tgs-to-png
+      - name: Build lottie-to-png
         uses: docker/build-push-action@v3
         with:
-          target: tgs-to-png
-          tags: tgs-to-png
+          target: lottie-to-png
+          tags: lottie-to-png
           load: true
 
-      - name: Run tgs-to-png conversion
-        run: docker run --rm -v $(pwd)/stickers:/source tgs-to-png
+      - name: Run lottie-to-png conversion
+        run: docker run --rm -v $(pwd)/test-files:/source lottie-to-png
 
-      - name: Build tgs-to-webp
+      - name: Build lottie-to-webp
         uses: docker/build-push-action@v3
         with:
-          target: tgs-to-webp
-          tags: tgs-to-webp
+          target: lottie-to-webp
+          tags: lottie-to-webp
           load: true
 
-      - name: Run tgs-to-webp conversion
-        run: docker run --rm -v $(pwd)/stickers:/source tgs-to-webp
+      - name: Run lottie-to-webp conversion
+        run: docker run --rm -v $(pwd)/test-files:/source lottie-to-webp
 
       - name: Login to DockerHub
         if: github.ref == 'refs/heads/master'
@@ -60,34 +58,34 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Push tgs-to-apng
+      - name: Push lottie-to-apng
         if: github.ref == 'refs/heads/master'
         uses: docker/build-push-action@v3
         with:
-          target: tgs-to-apng
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/tgs-to-apng:latest
+          target: lottie-to-apng
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/lottie-to-apng:latest
           push: true
 
-      - name: Push tgs-to-gif
+      - name: Push lottie-to-gif
         if: github.ref == 'refs/heads/master'
         uses: docker/build-push-action@v3
         with:
-          target: tgs-to-gif
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/tgs-to-gif:latest
+          target: lottie-to-gif
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/lottie-to-gif:latest
           push: true
 
-      - name: Push tgs-to-png
+      - name: Push lottie-to-png
         if: github.ref == 'refs/heads/master'
         uses: docker/build-push-action@v3
         with:
-          target: tgs-to-png
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/tgs-to-png:latest
+          target: lottie-to-png
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/lottie-to-png:latest
           push: true
 
-      - name: Push tgs-to-webp
+      - name: Push lottie-to-webp
         if: github.ref == 'refs/heads/master'
         uses: docker/build-push-action@v3
         with:
-          target: tgs-to-webp
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/tgs-to-webp:latest
+          target: lottie-to-webp
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/lottie-to-webp:latest
           push: true

@@ -1,4 +1,4 @@
-# this is common source file used by tgs_to_gif.sh, tgs_to_webp.sh
+# this is common source file used by lottie_to_gif.sh, lottie_to_webp.sh
 # required bash variables
 # $HEIGHT
 # $WIDTH
@@ -13,10 +13,10 @@ SCRIPT_DIR=$(dirname "$0")
 function print_help() {
   echo "usage: $SCRIPT_DIR/$(basename "$0") [--help] [--output OUTPUT] [--height HEIGHT] [--width WIDTH] [--threads THREADS] [--fps FPS] [--quality QUALITY] path"
   echo
-  echo "Animated sticker for Telegram (*.tgs) to animated $OUTPUT_EXTENSION converter"
+  echo "Lottie animations (.json) and Telegram stickers for Telegram (*.tgs) to animated $OUTPUT_EXTENSION converter"
   echo
   echo "Positional arguments:"
-  echo " path              Path to .tgs file to convert"
+  echo " path              Path to .json or .tgs file to convert"
   echo
   echo "Optional arguments:"
   echo " -h, --help        show this help message and exit"
@@ -76,21 +76,27 @@ if [[ -z "$POSITIONAL_ARG" ]]; then
    exit 1
 fi
 
-TGS_PATH=$POSITIONAL_ARG
+INPUT_PATH=$POSITIONAL_ARG
 
 if [[ -z "$OUTPUT" ]]; then
-   OUTPUT=${TGS_PATH}${OUTPUT_EXTENSION}
+   OUTPUT=${INPUT_PATH}${OUTPUT_EXTENSION}
 fi
 
-PNG_PATH=${OUTPUT}.$RANDOM.tmp
-mkdir $PNG_PATH
+TMP_PATH=${OUTPUT}.$RANDOM.tmp
+mkdir $TMP_PATH
 
-$SCRIPT_DIR/tgs_to_png --width $WIDTH --height $HEIGHT --fps $FPS --threads $THREADS --output $PNG_PATH $TGS_PATH
+LOTTIE_PATH=$INPUT_PATH
+if [ "${INPUT_PATH: -4}" == ".tgs" ]; then
+  LOTTIE_PATH=$TMP_PATH/animation.json
+  gunzip -c $INPUT_PATH > $LOTTIE_PATH
+fi
 
-PNG_FILES=$(find $PNG_PATH -type f -name '*.png' | sort -k1)
+$SCRIPT_DIR/lottie_to_png --width $WIDTH --height $HEIGHT --fps $FPS --threads $THREADS --output $TMP_PATH $LOTTIE_PATH
+
+PNG_FILES=$(find $TMP_PATH -type f -name '*.png' | sort -k1)
 
 function cleanup {
-  rm -fr $PNG_PATH
+  rm -fr $TMP_PATH
 }
 trap cleanup EXIT
 trap cleanup SIGINT

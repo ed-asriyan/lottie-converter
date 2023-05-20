@@ -1,5 +1,5 @@
-#ifndef TGS_TO_GIF_RENDER_H
-#define TGS_TO_GIF_RENDER_H
+#ifndef LOTTIE_TO_GIF_RENDER_H
+#define LOTTIE_TO_GIF_RENDER_H
 
 #include <cmath>
 #include <filesystem>
@@ -16,4 +16,4 @@ void render(
 	size_t threads_count = 0
 );
 
-#endif //TGS_TO_GIF_RENDER_H
+#endif //LOTTIE_TO_GIF_RENDER_H

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(tgs_to_png)
+project(lottie_to_png)
 include(ExternalProject)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -11,12 +11,12 @@ else()
     set(STATIC_LINKING_DEFAULT_VALUE ON)
 endif()
 
-option(TGS_TO_PNG_STATIC_LINKING "Build using static linking" ${STATIC_LINKING_DEFAULT_VALUE})
+option(LOTTIE_TO_PNG_STATIC_LINKING "Build using static linking" ${STATIC_LINKING_DEFAULT_VALUE})
 
 include(conanbuildinfo.cmake)
 conan_basic_setup()
 
-if (TGS_TO_PNG_STATIC_LINKING)
+if (LOTTIE_TO_PNG_STATIC_LINKING)
     # enable static linking https://stackoverflow.com/a/24671474
     set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
     set(BUILD_SHARED_LIBS OFF)
@@ -27,7 +27,6 @@ add_executable(
         ${PROJECT_NAME}
         src/main.cpp
         src/render.cpp src/render.h
-        src/zstr/fstream.h src/zstr/zstr.h
 )
 
 ExternalProject_Add(

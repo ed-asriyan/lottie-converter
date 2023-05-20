@@ -1,8 +1,8 @@
-# Animated stickers for Telegram (*.tgs) to GIF/PNG/APNG/WEBP converter ![docker workflow](https://github.com/ed-asriyan/tgs-to-gif/actions/workflows/ci.yml/badge.svg)
+# Lottie Animations (.json) and Telegram Stickers (*.tgs) to GIF/PNG/APNG/WEBP converter ![docker workflow](https://github.com/ed-asriyan/tgs-to-gif/actions/workflows/ci.yml/badge.svg)
 
 <hr/>
 <h3 align="center">
-To easily convert stickers to GIFs you can use Telegram Bot</br></br>👉 https://t.me/tgstogifbot 👈
+To easily convert Telegram stickers to GIFs you can use Telegram Bot</br></br>👉 https://t.me/tgstogifbot 👈
 </h3>
 <hr/>
 
@@ -10,22 +10,22 @@ To easily convert stickers to GIFs you can use Telegram Bot</br></br>👉 https:
 There are two options: run using [Docker](https://www.docker.com/) and run from source.
 
 ### Using Docker
-Replace with directory with stickers and run:
+Replace with directory with Lottie animations / Telegram stickers and run:
 - Convert to GIF:
   ```bash
-  docker run --rm -v <path to directory with stickers>:/source edasriyan/tgs-to-gif
+  docker run --rm -v <path to directory>:/source edasriyan/lottie-to-gif
   ```
 - Convert to PNG:
   ```bash
-  docker run --rm -v <path to directory with stickers>:/source edasriyan/tgs-to-png
+  docker run --rm -v <path to directory>:/source edasriyan/lottie-to-png
   ```
 - Convert to APNG:
   ```bash
-  docker run --rm -v <path to directory with stickers>:/source edasriyan/tgs-to-apng
+  docker run --rm -v <path to directory>:/source edasriyan/lottie-to-apng
   ```
 - Convert to WEBP:
   ```bash
-  docker run --rm -v <path to directory with stickers>:/source edasriyan/tgs-to-webp
+  docker run --rm -v <path to directory>:/source edasriyan/lottie-to-webp
   ```
 
 You can provide parameters via env variables:
@@ -37,10 +37,10 @@ You can provide parameters via env variables:
 
 Example:
 ```bash
-docker run --rm -e HEIGHT=256 -e WIDTH=256 -e FPS=30 -v /home/ed/Downloads/stickers:/source edasriyan/tgs-to-apng
+docker run --rm -e HEIGHT=256 -e WIDTH=256 -e FPS=30 -v /home/ed/Downloads/lottie-animations:/source edasriyan/lottie-to-apng
 ```
 
-Results will be saved next to each source sticker file in the same directory.
+Results will be saved next to each source file in the same directory.
 
 ### From source
 1. Install dependencies
@@ -59,11 +59,11 @@ Results will be saved next to each source sticker file in the same directory.
    ```
    <details>
        <summary>CMake options</summary>
-       <code>TGS_TO_PNG_STATIC_LINKING</code>: enable static linking. Default value: <code>OFF</code> if OS is darwin; otherwise <code>ON</code>
+       <code>LOTTIE_TO_PNG_STATIC_LINKING</code>: enable static linking. Default value: <code>OFF</code> if OS is darwin; otherwise <code>ON</code>
 
-       cmake -DTGS_TO_PNG_STATIC_LINKING=ON CMakeLists.txt && make
+       cmake -DLOTTIE_TO_PNG_STATIC_LINKING=ON CMakeLists.txt && make
        
-       cmake -DTGS_TO_PNG_STATIC_LINKING=OFF CMakeLists.txt && make
+       cmake -DLOTTIE_TO_PNG_STATIC_LINKING=OFF CMakeLists.txt && make
    </details>
    <details>
        <summary>ARM troubleshooting (including Apple M1)</summary>
@@ -97,31 +97,31 @@ Results will be saved next to each source sticker file in the same directory.
 3. Convert!
    - To convert to GIF: 
      ```terminal
-     ./bin/tgs_to_gif.sh /home/ed/Downloads/sticker.tgs
+     ./bin/lottie_to_gif.sh /home/ed/Downloads/animation.json
      ```
    - To convert to PNG: 
      ```terminal
-     ./bin/tgs_to_png.sh /home/ed/Downloads/sticker.tgs
+     ./bin/lottie_to_png.sh /home/ed/Downloads/animation.json
      ```
    - To convert to APNG:
      ```terminal
-     ./bin/tgs_to_apng.sh /home/ed/Downloads/sticker.tgs
+     ./bin/lottie_to_apng.sh /home/ed/Downloads/animation.json
      ```
    - To convert to WEBP: 
      ```terminal
-     ./bin/tgs_to_webp.sh /home/ed/Downloads/sticker.tgs
+     ./bin/lottie_to_webp.sh /home/ed/Downloads/animation.json
      ```
-   Results will be saved next to source sticker file in the same directory.
+   Results will be saved next to each source file in the same directory.
 
 #### CLI arguments
 ```terminal
-$ ./bin/tgs_to_gif.sh --help 
-usage: ./bin/tgs_to_gif.sh [--help] [--output OUTPUT] [--height HEIGHT] [--width WIDTH] [--threads THREADS] [--fps FPS] [--quality QUALITY] path
+$ ./bin/lottie_to_gif.sh --help 
+usage: ./bin/lottie_to_gif.sh [--help] [--output OUTPUT] [--height HEIGHT] [--width WIDTH] [--threads THREADS] [--fps FPS] [--quality QUALITY] path
 
-Animated sticker for Telegram (*.tgs) to animated .gif converter
+Lottie animations (.json) and Telegram stickers for Telegram (*.tgs) to animated .gif converter
 
 Positional arguments:
- path              Path to .tgs file to convert
+ path              Path to .json or .tgs file to convert
 
 Optional arguments:
  -h, --help        show this help message and exit
@@ -134,7 +134,8 @@ Optional arguments:
 ```
 
 ## Notices
-You can download .tgs files using [@Stickerdownloadbot](https://t.me/Stickerdownloadbot).
+* What is lottie? - https://airbnb.design/lottie/
+* You can download Telegram sticker files (.tgs) using [@Stickerdownloadbot](https://t.me/Stickerdownloadbot).
 
 |<a href="https://www.jetbrains.com/clion/" ><img src="https://resources.jetbrains.com/storage/products/company/brand/logos/CLion.png" alt="CLion logo." style="height: 100px"></a>|
 |--|

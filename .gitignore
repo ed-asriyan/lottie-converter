@@ -1,7 +1,7 @@
 .git
 .idea
 lib
-bin/tgs_to_png
+bin/lottie_to_png
 CMakeFiles
 .cmake
 conan.lock

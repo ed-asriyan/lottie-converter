@@ -6,4 +6,4 @@ QUALITY=90
 
 SCRIPT_DIR=$(dirname "$0")
 
-source $SCRIPT_DIR/tgs_common.sh && mv $PNG_PATH $OUTPUT
+source $SCRIPT_DIR/lottie_common.sh && mv $TMP_PATH $OUTPUT

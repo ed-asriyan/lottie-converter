@@ -1,18 +1,13 @@
 #include <array>
 #include <iostream>
 #include <filesystem>
+#include <fstream>
 #include <string>
 #include <filesystem>
 #include <argparse/argparse.hpp>
 #include <typeinfo>
 
-#include "zstr/zstr.h"
 #include "render.h"
-
-std::string decompress(std::istream& inputFile) {
-	zstr::istream zs(inputFile);
-	return std::string(std::istreambuf_iterator<char>(zs), std::istreambuf_iterator<char>());
-}
 
 void convert(
 	const std::filesystem::path& file_path,
@@ -23,20 +18,28 @@ void convert(
 	const size_t threads_count
 ) {
 	std::ifstream input_file(file_path);
-	if (!input_file.is_open()) {
-		throw std::runtime_error("can not open .tgs file");
+	if (!input_file.is_open())
+	{
+		throw std::runtime_error("can not open lottie file");
 	}
-	const std::string decompressed = decompress(input_file);
+	const std::string lottie_data((std::istreambuf_iterator<char>(input_file)), std::istreambuf_iterator<char>());
 	input_file.close();
-	render(decompressed, width, height, output, fps, threads_count);
+	render(
+		lottie_data,
+		width,
+		height,
+		output,
+		fps,
+		threads_count
+	);
 }
 
 int main(int argc, const char** argv) {
-	argparse::ArgumentParser program("tgs_to_png");
+	argparse::ArgumentParser program("lottie_to_png");
 
 	program.add_argument("path")
 		.required()
-		.help("path to telegram sticker file")
+		.help("path to lottie animation file")
 		.action([](const std::string& value) { return std::filesystem::path(value); });
 
 	program.add_argument("-o", "--output")
@@ -56,13 +59,13 @@ int main(int argc, const char** argv) {
 
 	program.add_argument("-f", "--fps")
 		.default_value(0.0)
-		.help("output animation FPS. If 0 use FPS from tgs animation")
+		.help("output animation FPS. If 0 use FPS from source animation")
 		.action([](const std::string& value) { return std::stod(value); });
 
 	program.add_argument("-t", "--threads")
 		.default_value(0)
 		.help("numbers of threads to use. If 0, number of CPUs is used")
-		.action([](const std::string& value) { return std::stoul(value); });
+		.action([](const std::string& value) { return std::stoi(value); });
 
 	try {
 		program.parse_args(argc, argv);
@@ -77,9 +80,8 @@ int main(int argc, const char** argv) {
 	const auto height = program.get<int>("--height");
 	const auto fps = program.get<double>("--fps");
 	const auto output = program.get<std::filesystem::path>("--output");
-	const auto threads = program.get<size_t>("--threads");
+	const auto threads = program.get<int>("--threads");
 
 	convert(file_path, width, height, output, fps, threads);
 	return 0;
 }
-
