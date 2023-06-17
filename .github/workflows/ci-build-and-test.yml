@@ -8,56 +8,54 @@ jobs:
   build:
     name: Build docker images
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        platform:
+          - amd64
+          - arm64
+    env:
+      DOCKER_BUILDKIT: 1
     steps:
       - uses: actions/checkout@v3
 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker caching
+        uses: jpribyl/action-docker-layer-caching@v0.1.1
+        continue-on-error: true
+
       - name: Build lottie-to-apng
-        uses: docker/build-push-action@v3
-        with:
-          target: lottie-to-apng
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/lottie-to-apng:latest
-          load: true
+        run: docker build -t lottie-to-apng:${{ matrix.platform }} --target lottie-to-apng --platform ${{ matrix.platform }} .
 
       - name: Upload lottie-to-apng as artifact
         uses: ishworkh/docker-image-artifact-upload@v2.0.1
         with:
-          image: ${{ secrets.DOCKERHUB_USERNAME }}/lottie-to-apng:latest
+          image: lottie-to-apng:${{ matrix.platform }}
 
       - name: Build lottie-to-gif
-        uses: docker/build-push-action@v3
-        with:
-          target: lottie-to-gif
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/lottie-to-gif:latest
-          load: true
+        run: docker build -t lottie-to-gif:${{ matrix.platform }} --target lottie-to-gif --platform ${{ matrix.platform }} .
 
       - name: Upload lottie-to-gif as artifact
         uses: ishworkh/docker-image-artifact-upload@v2.0.1
         with:
-          image: ${{ secrets.DOCKERHUB_USERNAME }}/lottie-to-gif:latest
+          image: lottie-to-gif:${{ matrix.platform }}
 
       - name: Build lottie-to-png
-        uses: docker/build-push-action@v3
-        with:
-          target: lottie-to-png
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/lottie-to-png:latest
-          load: true
+        run: docker build -t lottie-to-png:${{ matrix.platform }} --target lottie-to-png --platform ${{ matrix.platform }} .
 
       - name: Upload lottie-to-png as artifact
         uses: ishworkh/docker-image-artifact-upload@v2.0.1
         with:
-          image: ${{ secrets.DOCKERHUB_USERNAME }}/lottie-to-png:latest
+          image: lottie-to-png:${{ matrix.platform }}
 
       - name: Build lottie-to-webp
-        uses: docker/build-push-action@v3
-        with:
-          target: lottie-to-webp
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/lottie-to-webp:latest
-          load: true
+        run: docker build -t lottie-to-webp:${{ matrix.platform }} --target lottie-to-webp --platform ${{ matrix.platform }} .
 
       - name: Upload lottie-to-webp as artifact
         uses: ishworkh/docker-image-artifact-upload@v2.0.1
         with:
-          image: ${{ secrets.DOCKERHUB_USERNAME }}/lottie-to-webp:latest
+          image: lottie-to-webp:${{ matrix.platform }}
 
   test:
     name: Run tests
@@ -70,13 +68,19 @@ jobs:
           - lottie-to-gif
           - lottie-to-png
           - lottie-to-webp
+        platform:
+          - amd64
+          - arm64
     steps:
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
       - name: Download ${{ matrix.image }} image as artefact
         uses: ishworkh/docker-image-artifact-download@v2.0.1
         with:
-          image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.image }}:latest
+          image: ${{ matrix.image }}:${{ matrix.platform }}
 
       - uses: actions/checkout@v3
 
       - name: Run ${{ matrix.image }} tests
-        run: docker run --rm -v $(pwd)/test-files:/source ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.image }}:latest
+        run: docker run --rm -v $(pwd)/test-files:/source --platform ${{ matrix.platform }} ${{ matrix.image }}:${{ matrix.platform }}

@@ -52,9 +52,14 @@ Results will be saved next to each source file in the same directory.
        - **[ffmpeg](https://ffmpeg.org)** if you want to convert to APNG
        - **[img2webp](https://developers.google.com/speed/webp/docs/img2webp)** if you want to convert to WEBP
     3. Install conan dependencies
-       ```terminal
-       conan install .
-       ```
+       - If you run on AMD:
+          ```terminal
+          conan install .
+          ```
+       - If you run on ARM:
+          ```terminal
+          conan install --build=libpng --build=zlib .
+          ```
 2. Build
    ```terminal
    cmake CMakeLists.txt && make
@@ -68,7 +73,7 @@ Results will be saved next to each source file in the same directory.
        cmake -DLOTTIE_TO_PNG_STATIC_LINKING=OFF CMakeLists.txt && make
    </details>
    <details>
-       <summary>ARM troubleshooting (including Apple M1)</summary>
+       <summary>M1 troubleshooting</summary>
        Run the following command and try again:
    
        echo '#if defined(__ARM_NEON__)
