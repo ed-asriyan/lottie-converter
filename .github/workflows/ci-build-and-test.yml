@@ -1,0 +1,82 @@
+name: CI | Build & Test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    name: Build docker images
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build lottie-to-apng
+        uses: docker/build-push-action@v3
+        with:
+          target: lottie-to-apng
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/lottie-to-apng:latest
+          load: true
+
+      - name: Upload lottie-to-apng as artifact
+        uses: ishworkh/docker-image-artifact-upload@v2.0.1
+        with:
+          image: ${{ secrets.DOCKERHUB_USERNAME }}/lottie-to-apng:latest
+
+      - name: Build lottie-to-gif
+        uses: docker/build-push-action@v3
+        with:
+          target: lottie-to-gif
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/lottie-to-gif:latest
+          load: true
+
+      - name: Upload lottie-to-gif as artifact
+        uses: ishworkh/docker-image-artifact-upload@v2.0.1
+        with:
+          image: ${{ secrets.DOCKERHUB_USERNAME }}/lottie-to-gif:latest
+
+      - name: Build lottie-to-png
+        uses: docker/build-push-action@v3
+        with:
+          target: lottie-to-png
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/lottie-to-png:latest
+          load: true
+
+      - name: Upload lottie-to-png as artifact
+        uses: ishworkh/docker-image-artifact-upload@v2.0.1
+        with:
+          image: ${{ secrets.DOCKERHUB_USERNAME }}/lottie-to-png:latest
+
+      - name: Build lottie-to-webp
+        uses: docker/build-push-action@v3
+        with:
+          target: lottie-to-webp
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/lottie-to-webp:latest
+          load: true
+
+      - name: Upload lottie-to-webp as artifact
+        uses: ishworkh/docker-image-artifact-upload@v2.0.1
+        with:
+          image: ${{ secrets.DOCKERHUB_USERNAME }}/lottie-to-webp:latest
+
+  test:
+    name: Run tests
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        image:
+          - lottie-to-apng
+          - lottie-to-gif
+          - lottie-to-png
+          - lottie-to-webp
+    steps:
+      - name: Download ${{ matrix.image }} image as artefact
+        uses: ishworkh/docker-image-artifact-download@v2.0.1
+        with:
+          image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.image }}:latest
+
+      - uses: actions/checkout@v3
+
+      - name: Run ${{ matrix.image }} tests
+        run: docker run --rm -v $(pwd)/test-files:/source ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.image }}:latest

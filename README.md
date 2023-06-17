@@ -1,4 +1,6 @@
-# Lottie Animations (.json) and Telegram Stickers (*.tgs) to GIF/PNG/APNG/WEBP converter ![docker workflow](https://github.com/ed-asriyan/tgs-to-gif/actions/workflows/ci.yml/badge.svg)
+# Lottie Animations (.json) and Telegram Stickers (*.tgs) to GIF/PNG/APNG/WEBP converter
+[![CI | Build & Test](https://github.com/ed-asriyan/tgs-to-gif/actions/workflows/ci-build-and-test.yml/badge.svg)](https://github.com/ed-asriyan/tgs-to-gif/actions/workflows/ci-build-and-test.yml)
+[![CD | Push to DockerHub](https://github.com/ed-asriyan/tgs-to-gif/actions/workflows/cd-push-dockerhub.yml/badge.svg)](https://github.com/ed-asriyan/tgs-to-gif/actions/workflows/cd-push-dockerhub.yml)
 
 <hr/>
 <h3 align="center">

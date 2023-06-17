@@ -1,0 +1,43 @@
+name: CD | Push to DockerHub
+
+on:
+  workflow_run:
+    workflows:
+      - CI | Build & Test
+    types:
+      - completed
+    branches:
+      - master
+
+jobs:
+  push:
+    name: Run tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        image:
+          - lottie-to-apng
+          - lottie-to-gif
+          - lottie-to-png
+          - lottie-to-webp
+    steps:
+      - name: Cancel if CI failed
+        uses: andymckay/cancel-action@0.3
+        if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+
+      - name: Download ${{ matrix.image }} image as artefact
+        uses: ishworkh/docker-image-artifact-download@v2.0.1
+        with:
+          workflow: CI | Build & Test
+          workflow_run_id: ${{ github.event.workflow_run.workflow.id }}
+          image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.image }}:latest
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Push ${{ matrix.image }} to DockerHub
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.image }}:latest
