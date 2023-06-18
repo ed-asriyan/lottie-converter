@@ -2,61 +2,7 @@
   "01.tgs": {
     "link": "https://t.me/addstickers/AnimatedEmojies"
   },
-  "02.tgs": {
-    "link": "https://t.me/addstickers/DaisyRomashka"
-  },
-  "03.tgs": {
-    "link": "https://t.me/addstickers/als_ohuenny"
-  },
-  "04.tgs": {
-    "link": "https://t.me/addstickers/Animanguys"
-  },
-  "05.tgs": {
-    "link": "https://t.me/addstickers/prtyparrot"
-  },
-  "06.tgs": {
-    "link": "https://t.me/addstickers/SnappyCrab"
-  },
-  "07.tgs": {
-    "link": "https://t.me/addstickers/UtyaDuck"
-  },
-  "08.tgs": {
-    "link": "https://t.me/addstickers/TextAnimated"
-  },
-  "09.tgs": {
-    "link": "https://t.me/addstickers/UtyaDuck"
-  },
-  "10.tgs": {
-    "link": "https://t.me/addstickers/DodoBird"
-  },
-  "11.json": {
+  "1.json": {
     "link": "https://lottiefiles.com/18168-stay-safe-stay-home"
-  },
-  "12.json": {
-    "link": "https://raw.githubusercontent.com/thesvbd/Lottie-examples/master/assets/animations/skip-forward.json"
-  },
-  "13.json": {
-    "link": "https://lottiefiles.com/144103-e-v-e"
-  },
-  "14.json": {
-    "link": "https://lottiefiles.com/144228-credit-assessment-animated"
-  },
-  "15.json": {
-    "link": "https://lottiefiles.com/144108-test-scanner"
-  },
-  "16.json": {
-    "link": "https://lottiefiles.com/144201-happy-face-loading"
-  },
-  "17.json": {
-    "link": "https://lottiefiles.com/144256-cycling-animated"
-  },
-  "18.json": {
-    "link": "https://lottiefiles.com/196-material-wave-loading"
-  },
-  "19.json": {
-    "link": "https://lottiefiles.com/4762-food-carousel"
-  },
-  "20.json": {
-    "link": "https://lottiefiles.com/48-progress-bar"
   }
 }
