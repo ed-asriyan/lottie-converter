@@ -1,6 +1,6 @@
 # Lottie Animations (.json) and Telegram Stickers (*.tgs) to GIF/PNG/APNG/WEBP converter
-[![CI | Build & Test](https://github.com/ed-asriyan/tgs-to-gif/actions/workflows/ci-build-and-test.yml/badge.svg)](https://github.com/ed-asriyan/tgs-to-gif/actions/workflows/ci-build-and-test.yml)
-[![CD | Push to DockerHub](https://github.com/ed-asriyan/tgs-to-gif/actions/workflows/cd-push-dockerhub.yml/badge.svg)](https://github.com/ed-asriyan/tgs-to-gif/actions/workflows/cd-push-dockerhub.yml)
+[![CI | Build & Test](https://github.com/ed-asriyan/lottie-converter/actions/workflows/ci-build-and-test.yml/badge.svg)](https://github.com/ed-asriyan/lottie-converter/actions/workflows/ci-build-and-test.yml)
+[![CD | Push to DockerHub](https://github.com/ed-asriyan/lottie-converter/actions/workflows/cd-push-dockerhub.yml/badge.svg)](https://github.com/ed-asriyan/lottie-converter/actions/workflows/cd-push-dockerhub.yml)
 
 <hr/>
 <h3 align="center">
@@ -144,6 +144,6 @@ Optional arguments:
 * What is lottie? - https://airbnb.design/lottie/
 * You can download Telegram sticker files (.tgs) using [@Stickerdownloadbot](https://t.me/Stickerdownloadbot).
 
-|<a href="https://www.jetbrains.com/clion/" ><img src="https://resources.jetbrains.com/storage/products/company/brand/logos/CLion.png" alt="CLion logo." style="height: 100px"></a>|
-|--|
-|Project is made with [Jetbrains](https://www.jetbrains.com) support ❤️|
+<div align="center">
+<a float="right" href="https://info.flagcounter.com/0hsy"><img src="https://s01.flagcounter.com/count2/0hsy/bg_FFFFFF/txt_000000/border_CCCCCC/columns_4/maxflags_12/viewers_0/labels_0/pageviews_1/flags_0/percent_0"/></a>
+</div>
