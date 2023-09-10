@@ -1,28 +1,20 @@
 FROM rust:buster as builder-gifski
 RUN cargo install --version 1.7.0 gifski
 
-FROM alpine:3.16.2 as builder-lottie-to-png
-RUN apk update && \
-    apk --no-cache add \
-        build-base \
-        git \
-        gcc \
-        g++ \
-        cmake \
-        libstdc++ \
-        py-pip && \
-        pip install --ignore-installed conan==1.53.0
+FROM gcc:13 as builder-lottie-to-png
+RUN apt update && \
+    apt install --assume-yes cmake python3 python3-pip && \
+    rm -rf /var/lib/apt/lists/*
+RUN pip3 install --break-system-packages conan==2.0.10
+
 WORKDIR /application
+RUN conan profile detect
 ADD conanfile.txt .
-ARG TARGETARCH
-RUN if [[ "$TARGETARCH" == arm* ]]; then \
-      conan install --build=libpng --build=zlib .; \
-    else \
-        conan install .; \
-    fi
+RUN conan install . --build=missing
+
 ADD CMakeLists.txt .
 ADD src src
-RUN cmake CMakeLists.txt && make
+RUN cmake -DCMAKE_BUILD_TYPE=Release CMakeLists.txt && cmake --build .
 
 FROM debian:buster-slim as lottie-to-gif
 COPY --from=builder-gifski /usr/local/cargo/bin/gifski /usr/bin/gifski

@@ -46,31 +46,30 @@ Results will be saved next to each source file in the same directory.
 
 ### From source
 1. Install dependencies
-    1. Make sure you have **C++17 compiler**, **make**, **[cmake](https://cmake.org)** and **[conan](https://conan.io)** tools installed; otherwise install them
-    2. Make sure you have the tools installed:
-       - **[gifski](https://gif.ski)** if you want to convert to GIF
-       - **[ffmpeg](https://ffmpeg.org)** if you want to convert to APNG
-       - **[img2webp](https://developers.google.com/speed/webp/docs/img2webp)** if you want to convert to WEBP
-    3. Install conan dependencies
-       - If you run on AMD:
-          ```terminal
-          conan install .
-          ```
-       - If you run on ARM:
-          ```terminal
-          conan install --build=libpng --build=zlib .
-          ```
+   1. Make sure you have **C++17 compiler**, **make**, **[cmake](https://cmake.org)** and **[conan](https://conan.io)** tools installed; otherwise install them
+   2. Make sure you have the tools installed:
+      - **[gifski](https://gif.ski)** if you want to convert to GIF
+      - **[ffmpeg](https://ffmpeg.org)** if you want to convert to APNG
+      - **[img2webp](https://developers.google.com/speed/webp/docs/img2webp)** if you want to convert to WEBP
+   3. Detect your conan profile
+      ```commandline
+      conan profile detect
+      ```
+   4. Install conan dependencies
+      ```commandline
+      conan install --build=missing.
+      ```
 2. Build
-   ```terminal
-   cmake CMakeLists.txt && make
+   ```commandline
+   cmake -DCMAKE_BUILD_TYPE=Release CMakeLists.txt && cmake --build .
    ```
    <details>
        <summary>CMake options</summary>
        <code>LOTTIE_TO_PNG_STATIC_LINKING</code>: enable static linking. Default value: <code>OFF</code> if OS is darwin; otherwise <code>ON</code>
 
-       cmake -DLOTTIE_TO_PNG_STATIC_LINKING=ON CMakeLists.txt && make
+       cmake -DLOTTIE_TO_PNG_STATIC_LINKING=ON -DCMAKE_BUILD_TYPE=Release CMakeLists.txt && make
        
-       cmake -DLOTTIE_TO_PNG_STATIC_LINKING=OFF CMakeLists.txt && make
+       cmake -DLOTTIE_TO_PNG_STATIC_LINKING=OFF -DCMAKE_BUILD_TYPE=Release CMakeLists.txt && make
    </details>
    <details>
        <summary>M1 troubleshooting</summary>
@@ -103,25 +102,25 @@ Results will be saved next to each source file in the same directory.
     </details>
 3. Convert!
    - To convert to GIF: 
-     ```terminal
+     ```commandline
      ./bin/lottie_to_gif.sh /home/ed/Downloads/animation.json
      ```
    - To convert to PNG: 
-     ```terminal
+     ```commandline
      ./bin/lottie_to_png.sh /home/ed/Downloads/animation.json
      ```
    - To convert to APNG:
-     ```terminal
+     ```commandline
      ./bin/lottie_to_apng.sh /home/ed/Downloads/animation.json
      ```
    - To convert to WEBP: 
-     ```terminal
+     ```commandline
      ./bin/lottie_to_webp.sh /home/ed/Downloads/animation.json
      ```
    Results will be saved next to each source file in the same directory.
 
 #### CLI arguments
-```terminal
+```text
 $ ./bin/lottie_to_gif.sh --help 
 usage: ./bin/lottie_to_gif.sh [--help] [--output OUTPUT] [--height HEIGHT] [--width WIDTH] [--threads THREADS] [--fps FPS] [--quality QUALITY] path
 

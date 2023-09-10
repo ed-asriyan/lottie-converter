@@ -1,7 +1,7 @@
 [requires]
-argparse/2.6
-libpng/1.6.37
-zlib/1.2.12
+libpng/1.6.40
+zlib/1.2.13
 
 [generators]
-cmake
+CMakeDeps
+CMakeToolchain
