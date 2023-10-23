@@ -1,0 +1,37 @@
+name: Build for Darwin
+
+on:
+  workflow_call:
+    inputs:
+      output-artifact-name:
+        description: Name of artifact as which Darwin executable to be uploaded
+        required: true
+        type: string
+
+jobs:
+  build-darwin:
+    name: Build MacOS executable
+    runs-on: macos-latest
+    steps:
+      - name: Install Conan
+        run: pip3 install conan==2.0.10
+
+      - uses: actions/checkout@v3
+
+      - name: Detect conan profile
+        run: conan profile detect
+
+      - name: Install conan dependencies
+        run: conan install . --build=missing -s build_type=Release
+
+      - name: Invoke 'conan-release' preset
+        run: cmake --preset conan-release
+
+      - name: Build the app
+        run: cmake -DCMAKE_BUILD_TYPE=Release CMakeLists.txt && cmake --build . --config Release
+
+      - name: Upload executable as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ inputs.output-artifact-name }}
+          path: bin/lottie_to_png

@@ -1,0 +1,44 @@
+name: Test in Docker
+
+on:
+  workflow_call:
+    inputs:
+      arch:
+        description: "amd64 or arm64" 
+        required: true
+        type: string
+      output-artifact-name:
+        description: Name of artifact as which Docker test results to be uploaded
+        required: true
+        type: string
+
+jobs:
+  test-docker:
+    name: Run docker tests 
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        image:
+          - apng
+          - gif
+          - png
+          - webp
+    steps:
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v2
+
+    - name: Download ${{ matrix.image }} image as artefact
+      uses: ishworkh/container-image-artifact-download@v1.0.0
+      with:
+        image: lottie-to-${{ matrix.image }}:${{ inputs.arch }}
+
+    - uses: actions/checkout@v3
+
+    - name: Run tests
+      run: docker run --rm -v $(pwd)/test-files:/source --platform ${{ inputs.arch }} lottie-to-${{ matrix.image }}:${{ inputs.arch }}
+
+    - name: Upload test results as artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ inputs.output-artifact-name }}.${{ matrix.image }}
+        path: test-files

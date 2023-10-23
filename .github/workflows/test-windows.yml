@@ -1,0 +1,53 @@
+name: Tes in Windows
+
+on:
+  workflow_call:
+    inputs:
+      input-artifact-name:
+        description: Name of artifact as which Windows executable is uploaded
+        required: true
+        type: string
+      output-artifact-name:
+        description: Name of artifact as which Windows test results to be uploaded
+        required: true
+        type: string
+
+jobs:
+  test-windows:
+    name: Test Windows
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        case:
+          - apng
+          - gif
+          - png
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install run-time dependencies
+        shell: bash
+        run: |
+          [[ "${{ matrix.case }}" == "apng" ]] && winget install ffmpeg || echo ok;
+          [[ "${{ matrix.case }}" == "gif" ]] && cargo install gifski || echo ok;
+
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ inputs.input-artifact-name }}
+          path: bin
+
+      - name: Run tests
+        shell: bash
+        run: |
+          bash -c "\
+            find test-files -type f \( -iname \*.json -o -iname \*.lottie -o -iname \*.tgs \) | while IFS=$'\n' read -r FILE; do \
+            echo Converting \${FILE}... && sh ./bin/lottie_to_${{ matrix.case }}.sh \$FILE && echo Done.; \
+            done \
+          "
+
+      - name: Upload test results as artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{inputs.output-artifact-name }}.${{ matrix.case }}
+          path: test-files

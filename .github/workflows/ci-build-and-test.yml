@@ -2,85 +2,60 @@ name: CI | Build & Test
 
 on:
   push:
+    branches:
+      - "**"
   pull_request:
 
 jobs:
-  build:
-    name: Build docker images
-    runs-on: ubuntu-latest
+  build-docker-and-linux:
+    name: Build Docker image & Linux executable
+    uses: ./.github/workflows/build-linux-and-docker.yml
     strategy:
       matrix:
-        platform:
-          - amd64
+        arch:
           - arm64
-    env:
-      DOCKER_BUILDKIT: 1
-    steps:
-      - uses: actions/checkout@v3
+          - amd64
+    with:
+      output-artifact-name: lottie-to-png.linux.${{ matrix.arch }}
+      arch: ${{ matrix.arch }}
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-
-      - name: Set up Docker caching
-        uses: jpribyl/action-docker-layer-caching@v0.1.1
-        continue-on-error: true
-
-      - name: Build lottie-to-apng
-        run: docker build -t lottie-to-apng:${{ matrix.platform }} --target lottie-to-apng --platform ${{ matrix.platform }} .
-
-      - name: Upload lottie-to-apng as artifact
-        uses: ishworkh/docker-image-artifact-upload@v2.0.1
-        with:
-          image: lottie-to-apng:${{ matrix.platform }}
-
-      - name: Build lottie-to-gif
-        run: docker build -t lottie-to-gif:${{ matrix.platform }} --target lottie-to-gif --platform ${{ matrix.platform }} .
-
-      - name: Upload lottie-to-gif as artifact
-        uses: ishworkh/docker-image-artifact-upload@v2.0.1
-        with:
-          image: lottie-to-gif:${{ matrix.platform }}
-
-      - name: Build lottie-to-png
-        run: docker build -t lottie-to-png:${{ matrix.platform }} --target lottie-to-png --platform ${{ matrix.platform }} .
-
-      - name: Upload lottie-to-png as artifact
-        uses: ishworkh/docker-image-artifact-upload@v2.0.1
-        with:
-          image: lottie-to-png:${{ matrix.platform }}
-
-      - name: Build lottie-to-webp
-        run: docker build -t lottie-to-webp:${{ matrix.platform }} --target lottie-to-webp --platform ${{ matrix.platform }} .
-
-      - name: Upload lottie-to-webp as artifact
-        uses: ishworkh/docker-image-artifact-upload@v2.0.1
-        with:
-          image: lottie-to-webp:${{ matrix.platform }}
-
-  test:
-    name: Run tests
-    needs: build
-    runs-on: ubuntu-latest
+  test-docker:
+    name: Run tests on Docker
+    needs: build-docker-and-linux
+    uses: ./.github/workflows/test-docker.yml
     strategy:
       matrix:
-        image:
-          - lottie-to-apng
-          - lottie-to-gif
-          - lottie-to-png
-          - lottie-to-webp
-        platform:
+        arch:
           - amd64
           - arm64
-    steps:
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
+    with:
+      output-artifact-name: test-results.linux.${{ matrix.arch }}
+      arch: ${{ matrix.arch }}
 
-      - name: Download ${{ matrix.image }} image as artefact
-        uses: ishworkh/docker-image-artifact-download@v2.0.1
-        with:
-          image: ${{ matrix.image }}:${{ matrix.platform }}
+  build-darwin:
+    name: Build Darwin executable
+    uses: ./.github/workflows/build-darwin.yml
+    with:
+      output-artifact-name: lottie-to-png.darwin.amd64
 
-      - uses: actions/checkout@v3
+  test-darwin:
+    name: Test on Darwin
+    needs: build-darwin
+    uses: ./.github/workflows/test-darwin.yml
+    with:
+      input-artifact-name: lottie-to-png.darwin.amd64
+      output-artifact-name: test-results.darwin
 
-      - name: Run ${{ matrix.image }} tests
-        run: docker run --rm -v $(pwd)/test-files:/source --platform ${{ matrix.platform }} ${{ matrix.image }}:${{ matrix.platform }}
+  build-windows:
+    name: Build Windows executable
+    uses: ./.github/workflows/build-windows.yml
+    with:
+      output-artifact-name: lottie-to-png.windows.amd64.exe
+
+  test-windows:
+    name: Test on Windows
+    needs: build-windows
+    uses: ./.github/workflows/test-windows.yml
+    with:
+      input-artifact-name: lottie-to-png.windows.amd64.exe
+      output-artifact-name: test-results.windows

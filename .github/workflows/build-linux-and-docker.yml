@@ -1,0 +1,73 @@
+name: Build for Linux & Docker
+
+on:
+  workflow_call:
+    inputs:
+      output-artifact-name:
+        description: Name of artifact as which Docker image to be uploaded
+        required: true
+        type: string
+      arch:
+        description: "amd64 or arm64" 
+        required: true
+        type: string
+
+jobs:
+  build-docker:
+    name: Build linux and docker images
+    runs-on: ubuntu-latest
+    env:
+      DOCKER_BUILDKIT: 1
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker caching
+        uses: jpribyl/action-docker-layer-caching@v0.1.1
+        continue-on-error: true
+
+      - name: Build lottie-to-apng
+        run: docker build -t lottie-to-apng:${{ inputs.arch }} --target lottie-to-apng --platform ${{ inputs.arch }} .
+
+      - name: Upload lottie-to-apng as artifact
+        uses: ishworkh/container-image-artifact-upload@v1.0.0
+        with:
+          image: lottie-to-apng:${{ inputs.arch }}
+
+      - name: Build lottie-to-gif
+        run: docker build -t lottie-to-gif:${{ inputs.arch }} --target lottie-to-gif --platform ${{ inputs.arch }} .
+
+      - name: Upload lottie-to-gif as artifact
+        uses: ishworkh/container-image-artifact-upload@v1.0.0
+        with:
+          image: lottie-to-gif:${{ inputs.arch }}
+
+      - name: Build lottie-to-png
+        run: docker build -t lottie-to-png:${{ inputs.arch }} --target lottie-to-png --platform ${{ inputs.arch }} .
+
+      - name: Upload lottie-to-png as artifact
+        uses: ishworkh/container-image-artifact-upload@v1.0.0
+        with:
+          image: lottie-to-png:${{ inputs.arch }}
+
+      - name: Build lottie-to-webp
+        run: docker build -t lottie-to-webp:${{ inputs.arch }} --target lottie-to-webp --platform ${{ inputs.arch }} .
+
+      - name: Upload lottie-to-webp as artifact
+        uses: ishworkh/container-image-artifact-upload@v1.0.0
+        with:
+          image: lottie-to-webp:${{ inputs.arch }}
+
+      - name: Extract executable
+        run: |
+          id=$(docker create lottie-to-png:${{ inputs.arch }}) &&
+          docker cp $id:/usr/bin/lottie_to_png bin/ &&
+          docker rm -v $id
+
+      - name: Upload executable as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ inputs.output-artifact-name }}
+          path: bin/lottie_to_png

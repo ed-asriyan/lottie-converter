@@ -1,0 +1,37 @@
+name: Build for Windows
+
+on:
+  workflow_call:
+    inputs:
+      output-artifact-name:
+        description: Name of artifact as which Windows executable to be uploaded
+        required: true
+        type: string
+
+jobs:
+  build-windows:
+    name: Build Windows executable
+    runs-on: windows-latest
+    steps:
+      - name: Install Conan
+        run: pip3 install conan==2.0.10
+
+      - uses: actions/checkout@v3
+
+      - name: Detect conan profile
+        run: conan profile detect
+
+      - name: Install conan dependencies
+        run: conan install . --build=missing -s build_type=Release
+
+      - name: Invoke 'conan-default' preset
+        run: cmake --preset conan-default
+
+      - name: Build the app
+        run: cmake -DCMAKE_BUILD_TYPE=Release CMakeLists.txt && cmake --build . --config Release
+
+      - name: Upload executable as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ inputs.output-artifact-name }}
+          path: bin/Release/lottie_to_png.exe

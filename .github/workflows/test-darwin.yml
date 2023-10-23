@@ -1,0 +1,54 @@
+name: Test on Darwin
+
+on:
+  workflow_call:
+    inputs:
+      input-artifact-name:
+        description: Name of artifact as which Darwin executable is uploaded
+        required: true
+        type: string
+      output-artifact-name:
+        description: Name of artifact as which Darwin test results to be uploaded
+        required: true
+        type: string
+
+jobs:
+  test-darwin:
+    name: Test on Darwin
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        case:
+          - apng
+          - gif
+          - png
+          - webp
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install run-time dependencies
+        run: |
+          [[ "${{ matrix.case }}" == "apng" ]] && brew install ffmpeg || echo ok;
+          [[ "${{ matrix.case }}" == "gif" ]] && brew install gifski || echo ok;
+          [[ "${{ matrix.case }}" == "webp" ]] && brew install webp || echo ok;
+
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ inputs.input-artifact-name }}
+          path: bin
+
+      - name: Run tests
+        run: |
+          chmod +x bin/lottie_to_png && \
+          bash -c "\
+            find test-files -type f \( -iname \*.json -o -iname \*.lottie -o -iname \*.tgs \) | while IFS=$'\n' read -r FILE; do \
+            echo Converting \${FILE}... && ./bin/lottie_to_${{ matrix.case }}.sh \$FILE && echo Done.; \
+            done \
+          "
+
+      - name: Upload test results as artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ inputs.output-artifact-name }}.${{ matrix.case }}
+          path: test-files
