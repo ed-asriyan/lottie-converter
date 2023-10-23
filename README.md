@@ -1,6 +1,7 @@
 # Lottie Animations (.json) and Telegram Stickers (*.tgs) to GIF/PNG/APNG/WEBP converter
 [![CI | Build & Test](https://github.com/ed-asriyan/lottie-converter/actions/workflows/ci-build-and-test.yml/badge.svg)](https://github.com/ed-asriyan/lottie-converter/actions/workflows/ci-build-and-test.yml)
-[![CD | Push to DockerHub](https://github.com/ed-asriyan/lottie-converter/actions/workflows/cd-push-dockerhub.yml/badge.svg)](https://github.com/ed-asriyan/lottie-converter/actions/workflows/cd-push-dockerhub.yml)
+[![CD | Push to DockerHub](https://github.com/ed-asriyan/lottie-converter/actions/workflows/cd-release.yml/badge.svg)](https://github.com/ed-asriyan/lottie-converter/actions/workflows/cd-release.yml)
+
 
 <hr/>
 <h3 align="center">
@@ -57,20 +58,21 @@ Results will be saved next to each source file in the same directory.
       ```
    4. Install conan dependencies
       ```commandline
-      conan install --build=missing.
+      conan install --build=missing .
       ```
+    5. Invoke conan preset
+      * Linux & MacOS
+        ```commandline
+        cmake --preset conan-release
+        ```
+      * Windows
+        ```commandline
+        cmake --preset conan-default
+        ```
 2. Build
    ```commandline
-   cmake -DCMAKE_BUILD_TYPE=Release CMakeLists.txt && cmake --build .
+   cmake -DCMAKE_BUILD_TYPE=Release CMakeLists.txt && cmake --build . --config Release
    ```
-   <details>
-       <summary>CMake options</summary>
-       <code>LOTTIE_TO_PNG_STATIC_LINKING</code>: enable static linking. Default value: <code>OFF</code> if OS is darwin; otherwise <code>ON</code>
-
-       cmake -DLOTTIE_TO_PNG_STATIC_LINKING=ON -DCMAKE_BUILD_TYPE=Release CMakeLists.txt && make
-       
-       cmake -DLOTTIE_TO_PNG_STATIC_LINKING=OFF -DCMAKE_BUILD_TYPE=Release CMakeLists.txt && make
-   </details>
    <details>
        <summary>M1 troubleshooting</summary>
        Run the following command and try again:
@@ -98,7 +100,7 @@ Results will be saved next to each source file in the same directory.
            updateColor(BlendMode::Src , color_SourceOver);
        }
        #endif
-       ' > lib/src/rlottie/src/vector/vdrawhelper_neon.cpp
+       ' > _deps/rlottie-src/src/vector/vdrawhelper_neon.cpp
     </details>
 3. Convert!
    - To convert to GIF: 

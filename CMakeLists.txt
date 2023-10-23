@@ -3,19 +3,18 @@ project(lottie_to_png)
 
 set(CMAKE_CXX_STANDARD 17)
 
-if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-    # https://stackoverflow.com/a/3801032
-    set(STATIC_LINKING_DEFAULT_VALUE OFF)
-else()
-    set(STATIC_LINKING_DEFAULT_VALUE ON)
-endif()
+# building and linking the project's internal libraries dynamically
+set(BUILD_SHARED_LIBS OFF)
 
-option(LOTTIE_TO_PNG_STATIC_LINKING "Build using static linking" ${STATIC_LINKING_DEFAULT_VALUE})
+# search for static versions of external libraries
+IF(WIN32)
+    SET(CMAKE_FIND_LIBRARY_SUFFIXES .lib .a)
+ELSE(WIN32)
+    SET(CMAKE_FIND_LIBRARY_SUFFIXES .a)
+ENDIF(WIN32)
 
-if (LOTTIE_TO_PNG_STATIC_LINKING)
-    # enable static linking https://stackoverflow.com/a/24671474
-    set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
-    set(BUILD_SHARED_LIBS OFF)
+# enable static linking of system libraries
+if(NOT CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     set(CMAKE_EXE_LINKER_FLAGS "-static")
 endif()
 
@@ -33,7 +32,7 @@ include(FetchContent)
 FetchContent_Declare(
     rlottie
     GIT_REPOSITORY https://github.com/Samsung/rlottie.git
-    GIT_TAG "875626965959d8e269ca22175c8e1ad190696c43"
+    GIT_TAG "d40008707addacb636ff435236d31c694ce2b6cf"
 )
 FetchContent_MakeAvailable(rlottie)
 
@@ -44,6 +43,16 @@ FetchContent_Declare(
 
 )
 FetchContent_MakeAvailable(argparse)
+
+#
+# rest of packages required
+#
+find_package(Threads REQUIRED)
+if (CMAKE_VERSION VERSION_LESS 3.1.0)
+    set(Threads ${CMAKE_THREAD_LIBS_INIT})
+else()
+    set(Threads Threads::Threads)
+endif()
 
 #
 # target executable
@@ -60,6 +69,6 @@ target_link_libraries(
     rlottie
     PNG::PNG
     ZLIB::ZLIB
-    pthread
+    ${Threads}
 )
 set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "bin")

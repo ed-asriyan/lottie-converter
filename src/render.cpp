@@ -70,7 +70,7 @@ void write_png(
 	}
 	png_set_rows(png_ptr, info_ptr, row_pointers);
 
-	FILE* out_file = fopen(out_file_path.c_str(), "wb");
+	FILE* out_file = fopen((const char*)out_file_path.generic_string().c_str(), "wb");
 
 	png_init_io(png_ptr, out_file);
 

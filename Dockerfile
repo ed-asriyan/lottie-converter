@@ -10,11 +10,11 @@ RUN pip3 install --break-system-packages conan==2.0.10
 WORKDIR /application
 RUN conan profile detect
 ADD conanfile.txt .
-RUN conan install . --build=missing
+RUN conan install . --build=missing -s build_type=Release
 
 ADD CMakeLists.txt .
 ADD src src
-RUN cmake -DCMAKE_BUILD_TYPE=Release CMakeLists.txt && cmake --build .
+RUN cmake -DCMAKE_BUILD_TYPE=Release CMakeLists.txt && cmake --build . --config Release
 
 FROM debian:buster-slim as lottie-to-gif
 COPY --from=builder-gifski /usr/local/cargo/bin/gifski /usr/bin/gifski
