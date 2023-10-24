@@ -1,6 +1,6 @@
 # Lottie Animations (.json) and Telegram Stickers (*.tgs) to GIF/PNG/APNG/WEBP converter
 [![CI | Build & Test](https://github.com/ed-asriyan/lottie-converter/actions/workflows/ci-build-and-test.yml/badge.svg)](https://github.com/ed-asriyan/lottie-converter/actions/workflows/ci-build-and-test.yml)
-[![CD | Push to DockerHub](https://github.com/ed-asriyan/lottie-converter/actions/workflows/cd-release.yml/badge.svg)](https://github.com/ed-asriyan/lottie-converter/actions/workflows/cd-release.yml)
+[![CD | Release & Push to Dockerhub](https://github.com/ed-asriyan/lottie-converter/actions/workflows/cd-release.yml/badge.svg)](https://github.com/ed-asriyan/lottie-converter/actions/workflows/cd-release.yml)
 
 
 <hr/>
@@ -10,7 +10,9 @@ To easily convert Telegram stickers to GIFs you can use Telegram Bot</br></br>ðŸ
 <hr/>
 
 ## How to use
-There are two options: run using [Docker](https://www.docker.com/) and run from source.
+There are 2 options:
+* Run using [Docker](https://www.docker.com/). One-line command, the option requires only Docker installed
+* Download and run compiled executable files. The option requires run-time dependecies installed
 
 ### Using Docker
 Replace with directory with Lottie animations / Telegram stickers and run:
@@ -45,22 +47,50 @@ docker run --rm -e HEIGHT=256 -e WIDTH=256 -e FPS=30 -v /home/ed/Downloads/lotti
 
 Results will be saved next to each source file in the same directory.
 
-### From source
+## Using compiled executables
+1. Install run-time dependencies. Make sure the path to them present in `PATH` variable:
+   - **[gifski](https://gif.ski)** if you want to convert to GIF
+   - **[ffmpeg](https://ffmpeg.org)** if you want to convert to APNG
+   - **[img2webp](https://developers.google.com/speed/webp/docs/img2webp)** if you want to convert to WEBP
+2. Download executable from [releases section of this repo](https://github.com/ed-asriyan/lottie-converter/releases) for your OS and arch
+3. In downloaded archive find the following executable scripts:
+   - `lottie_to_apng.sh`
+   - `lottie_to_gif.sh`
+   - `lottie_to_png.sh`
+   - `lottie_to_webp.sh`
+   
+   All of them have the same CLI:
+   ```commandline
+   $ ./bin/lottie_to_gif.sh -h                       
+   usage: ./bin/lottie_to_gif.sh [--help] [--output OUTPUT] [--height HEIGHT] [--width WIDTH] [--threads THREADS] [--fps FPS] [--quality QUALITY] path
+ 
+   Lottie animations (.json) and Telegram stickers for Telegram (*.tgs) to animated .gif converter
+
+   Positional arguments:
+   path              Path to .json or .tgs file to convert
+
+   Optional arguments:
+   -h, --help        show this help message and exit
+   --output OUTPUT   Output file path
+   --height HEIGHT   Output image height. Default: 
+   --width WIDTH     Output image width. Default: 512
+   --fps FPS         Output frame rate. Default: 50
+   --threads THREADS Number of threads to use. Default: number of CPUs
+   --quality QUALITY Output quality. Default: 90
+   ```
+
+# Build
 1. Install dependencies
    1. Make sure you have **C++17 compiler**, **make**, **[cmake](https://cmake.org)** and **[conan](https://conan.io)** tools installed; otherwise install them
-   2. Make sure you have the tools installed:
-      - **[gifski](https://gif.ski)** if you want to convert to GIF
-      - **[ffmpeg](https://ffmpeg.org)** if you want to convert to APNG
-      - **[img2webp](https://developers.google.com/speed/webp/docs/img2webp)** if you want to convert to WEBP
-   3. Detect your conan profile
+   2. Detect your conan profile
       ```commandline
       conan profile detect
       ```
-   4. Install conan dependencies
+   3. Install conan dependencies
       ```commandline
       conan install --build=missing .
       ```
-    5. Invoke conan preset
+2. Invoke conan preset
       * Linux & MacOS
         ```commandline
         cmake --preset conan-release
@@ -69,7 +99,7 @@ Results will be saved next to each source file in the same directory.
         ```commandline
         cmake --preset conan-default
         ```
-2. Build
+3. Build
    ```commandline
    cmake -DCMAKE_BUILD_TYPE=Release CMakeLists.txt && cmake --build . --config Release
    ```
@@ -102,7 +132,7 @@ Results will be saved next to each source file in the same directory.
        #endif
        ' > _deps/rlottie-src/src/vector/vdrawhelper_neon.cpp
     </details>
-3. Convert!
+4. Convert!
    - To convert to GIF: 
      ```commandline
      ./bin/lottie_to_gif.sh /home/ed/Downloads/animation.json
@@ -120,26 +150,6 @@ Results will be saved next to each source file in the same directory.
      ./bin/lottie_to_webp.sh /home/ed/Downloads/animation.json
      ```
    Results will be saved next to each source file in the same directory.
-
-#### CLI arguments
-```text
-$ ./bin/lottie_to_gif.sh --help 
-usage: ./bin/lottie_to_gif.sh [--help] [--output OUTPUT] [--height HEIGHT] [--width WIDTH] [--threads THREADS] [--fps FPS] [--quality QUALITY] path
-
-Lottie animations (.json) and Telegram stickers for Telegram (*.tgs) to animated .gif converter
-
-Positional arguments:
- path              Path to .json or .tgs file to convert
-
-Optional arguments:
- -h, --help        show this help message and exit
- --output OUTPUT   Output file path
- --height HEIGHT   Output image height. Default: 512
- --width WIDTH     Output image width. Default: 512
- --fps FPS         Output frame rate. Default: 50
- --threads THREADS Number of threads to use. Default: number of CPUs
- --quality QUALITY Output quality. Default: 90
-```
 
 ## Notices
 * What is lottie? - https://airbnb.design/lottie/

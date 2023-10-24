@@ -1,0 +1,125 @@
+name: CD | Release & Push to DockerHub
+
+on:
+  push:
+    tags: 
+      - 'v[0-9].[0-9]+.[0-9]+'
+
+jobs:
+  build-docker-and-linux:
+    name: Build Docker image & Linux executable
+    uses: ./.github/workflows/build-linux-and-docker.yml
+    strategy:
+      matrix:
+        arch:
+          - arm64
+          - amd64
+    with:
+      output-artifact-name: lottie-to-png.linux.${{ matrix.arch }}
+      arch: ${{ matrix.arch }}
+
+  build-darwin:
+    name: Build Darwin executable
+    uses: ./.github/workflows/build-darwin.yml
+    with:
+      output-artifact-name: lottie-to-png.darwin.amd64
+
+  build-windows:
+    name: Build Windows executable
+    uses: ./.github/workflows/build-windows.yml
+    with:
+      output-artifact-name: lottie-to-png.windows.amd64.exe
+
+  push-docker-image:
+    name: Push images to DockerHub
+    needs: build-docker-and-linux
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        image:
+          - lottie-to-apng
+          - lottie-to-gif
+          - lottie-to-png
+          - lottie-to-webp
+        arch:
+          - amd64
+          - arm64
+    steps:
+      - name: Download ${{ matrix.image }} image as artifact
+        uses: ishworkh/container-image-artifact-download@v1.0.0
+        with:
+          image: "${{ matrix.image }}:${{ matrix.arch }}"
+
+      - name: Tag image
+        run: docker image tag ${{ matrix.image }}:${{ matrix.arch }} ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.image }}:${{ matrix.arch }}
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Push ${{ matrix.image }} to DockerHub
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.image }}:${{ matrix.arch }}
+
+  push-docker-manifest:
+    name: Push manifest to DockerHub
+    needs: push-docker-image
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        image:
+          - lottie-to-apng
+          - lottie-to-gif
+          - lottie-to-png
+          - lottie-to-webp
+    steps:
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Create manifest
+        run: docker manifest create ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.image }}:latest --amend ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.image }}:amd64 --amend ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.image }}:arm64
+
+      - name: Push manifest
+        run: docker manifest push ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.image }}:latest
+
+  create-release:
+    name: Release executables
+    needs:
+      - build-docker-and-linux
+      - build-darwin
+      - build-windows
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        file:
+          - linux.amd64
+          - linux.arm64
+          - darwin.amd64
+          - windows.amd64.exe
+    env:
+      filename: lottie-converter.${{ matrix.file }}.zip
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: lottie-to-png.${{ matrix.file }}
+          path: bin
+
+      - name: Archive Release
+        uses: thedoctor0/zip-release@0.7.1
+        with:
+          type: 'zip'
+          path: bin
+          filename: ${{ env.filename }}
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ${{ env.filename }}
+          draft: true
