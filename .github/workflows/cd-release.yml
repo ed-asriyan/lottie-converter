@@ -68,11 +68,11 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        image:
-          - lottie-to-apng
-          - lottie-to-gif
-          - lottie-to-png
-          - lottie-to-webp
+        format:
+          - apng
+          - gif
+          - png
+          - webp
     steps:
       - name: Login to DockerHub
         uses: docker/login-action@v2
@@ -81,10 +81,41 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Create manifest
-        run: docker manifest create ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.image }}:latest --amend ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.image }}:amd64 --amend ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.image }}:arm64
+        run: docker manifest create ${{ secrets.DOCKERHUB_USERNAME }}/lottie-to-${{ matrix.format }}:latest --amend ${{ secrets.DOCKERHUB_USERNAME }}/lottie-to-${{ matrix.format }}:amd64 --amend ${{ secrets.DOCKERHUB_USERNAME }}/lottie-to-${{ matrix.format }}:arm64
 
       - name: Push manifest
-        run: docker manifest push ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.image }}:latest
+        run: docker manifest push ${{ secrets.DOCKERHUB_USERNAME }}/lottie-to-${{ matrix.format }}:latest
+
+      - name: Make format uppercase
+        id: format
+        uses: ASzc/change-string-case-action@v5
+        with:
+          string: ${{ matrix.format }}
+
+      - uses: actions/checkout@v4
+      
+      - name: Find and replace FORMAT
+        uses: jacobtomlinson/gha-find-replace@v3
+        with:
+          find: FORMAT
+          replace: ${{ steps.format.outputs.uppercase }}
+          regex: false
+
+      - name: Find and replace format
+        uses: jacobtomlinson/gha-find-replace@v3
+        with:
+          find: format
+          replace: ${{ matrix.format }}
+          regex: false
+
+      - name: Update description at DockerHub 
+        uses: peter-evans/dockerhub-description@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+          repository: ${{ secrets.DOCKERHUB_USERNAME }}/lottie-to-${{ matrix.format }}
+          short-description: Converts Lottie Animations (.json / .lottie) and Telegram stickers (*.tgs) to ${{ steps.format.outputs.uppercase }}} 
+          readme-filepath: README.dockerhub.md
 
   create-release:
     name: Release executables
