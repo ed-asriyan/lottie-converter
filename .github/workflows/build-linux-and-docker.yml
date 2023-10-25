@@ -24,20 +24,35 @@ jobs:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
 
-      - name: Set up Docker caching
-        uses: jpribyl/action-docker-layer-caching@v0.1.1
-        continue-on-error: true
+      - name: Setup Docker buildx
+        uses: docker/setup-buildx-action@v2
 
       - name: Build lottie-to-apng
-        run: docker build -t lottie-to-apng:${{ inputs.arch }} --target lottie-to-apng --platform ${{ inputs.arch }} .
-
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          tags: lottie-to-apng:${{ inputs.arch }}
+          platforms: ${{ inputs.arch }}
+          target: lottie-to-apng
+          load: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      
       - name: Upload lottie-to-apng as artifact
         uses: ishworkh/container-image-artifact-upload@v1.0.0
         with:
           image: lottie-to-apng:${{ inputs.arch }}
 
       - name: Build lottie-to-gif
-        run: docker build -t lottie-to-gif:${{ inputs.arch }} --target lottie-to-gif --platform ${{ inputs.arch }} .
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          tags: lottie-to-gif:${{ inputs.arch }}
+          platforms: ${{ inputs.arch }}
+          target: lottie-to-gif
+          load: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Upload lottie-to-gif as artifact
         uses: ishworkh/container-image-artifact-upload@v1.0.0
@@ -45,7 +60,15 @@ jobs:
           image: lottie-to-gif:${{ inputs.arch }}
 
       - name: Build lottie-to-png
-        run: docker build -t lottie-to-png:${{ inputs.arch }} --target lottie-to-png --platform ${{ inputs.arch }} .
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          tags: lottie-to-png:${{ inputs.arch }}
+          platforms: ${{ inputs.arch }}
+          target: lottie-to-png
+          load: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Upload lottie-to-png as artifact
         uses: ishworkh/container-image-artifact-upload@v1.0.0
@@ -53,7 +76,15 @@ jobs:
           image: lottie-to-png:${{ inputs.arch }}
 
       - name: Build lottie-to-webp
-        run: docker build -t lottie-to-webp:${{ inputs.arch }} --target lottie-to-webp --platform ${{ inputs.arch }} .
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          tags: lottie-to-webp:${{ inputs.arch }}
+          platforms: ${{ inputs.arch }}
+          target: lottie-to-webp
+          load: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Upload lottie-to-webp as artifact
         uses: ishworkh/container-image-artifact-upload@v1.0.0
