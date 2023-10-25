@@ -1,0 +1,27 @@
+name: Replace text in file
+
+inputs:
+  old-string:
+    description: String to replace
+    required: true
+    type: string
+  new-string:
+    description: String to replace with
+    required: true
+    type: string
+  file:
+    description: Path to file
+    required: true
+    type: string
+
+runs:
+  using: composite
+  steps:
+    - name: Replace substring
+      shell: bash
+      run: |
+         if [ "$RUNNER_OS" == "macOS" ]; then
+              sed -i '' 's/${{ inputs.old-string }}/${{ inputs.new-string }}/g' ${{ inputs.file }}
+         else
+              sed -i 's/${{ inputs.old-string }}/${{ inputs.new-string }}/g' ${{ inputs.file }}
+         fi

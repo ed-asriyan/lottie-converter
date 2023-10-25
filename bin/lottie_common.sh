@@ -19,13 +19,21 @@ function print_help() {
   echo " path              Path to .json or .tgs file to convert"
   echo
   echo "Optional arguments:"
-  echo " -h, --help        show this help message and exit"
+  echo " -h, --help        shows this help message and exits"
+  echo " -v, --version     prints version information and exits"
   echo " --output OUTPUT   Output file path"
   echo " --height HEIGHT   Output image height. Default: $HEIGHT"
   echo " --width WIDTH     Output image width. Default: $WIDTH"
   echo " --fps FPS         Output frame rate. Default: $FPS"
   echo " --threads THREADS Number of threads to use. Default: number of CPUs"
   echo " --quality QUALITY Output quality. Default: $QUALITY"
+  echo
+  echo "It's open-source project: https://github.com/ed-asriyan/lottie-converter"
+  echo "Author: Ed Asriyan <contact.lottie-converter@asriyan.me>"
+}
+
+function print_version() {
+  echo "<local-build>"
 }
 
 while [[ $# -gt 0 ]]; do
@@ -60,8 +68,12 @@ while [[ $# -gt 0 ]]; do
       shift
       shift
       ;;
-    --help)
+    -h|--help)
       print_help
+      exit 1
+      ;;
+    -v|--version)
+      print_version
       exit 1
       ;;
     *)

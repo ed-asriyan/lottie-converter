@@ -7,7 +7,10 @@ on:
         description: Name of artifact as which Windows executable to be uploaded
         required: true
         type: string
-
+      version:
+        description: Version to replace with
+        required: false
+        type: string
 jobs:
   build-windows:
     name: Build Windows executable
@@ -17,6 +20,12 @@ jobs:
         run: pip3 install conan==2.0.10
 
       - uses: actions/checkout@v3
+
+      - name: Replace version
+        if: ${{ inputs.version != '' }}
+        uses: ./.github/actions/replace-version
+        with:
+          version: ${{ inputs.version }}
 
       - name: Detect conan profile
         run: conan profile detect

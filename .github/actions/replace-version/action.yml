@@ -1,0 +1,24 @@
+name: Replace version
+
+inputs:
+  version:
+    description: Version to replace with
+    required: true
+    type: string
+
+runs:
+  using: composite
+  steps:
+    - name: Replace string in src/main.cpp
+      uses: ./.github/actions/replace-text
+      with:
+        file: src/main.cpp
+        old-string: <local-build>
+        new-string: ${{ inputs.version }}
+    
+    - name: Replace string in bin/lottie_common.sh
+      uses: ./.github/actions/replace-text
+      with:
+        file: bin/lottie_common.sh
+        old-string: <local-build>
+        new-string: ${{ inputs.version }}

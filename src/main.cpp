@@ -35,7 +35,17 @@ void convert(
 }
 
 int main(int argc, const char** argv) {
-	argparse::ArgumentParser program("lottie_to_png");
+	argparse::ArgumentParser program("lottie_to_png", "<local-build>");
+
+	program.add_description(
+		"Lottie animations (.json) to frames as .png files converter.\n"
+		"This executable is one of components of lottie-converter project and isn't supposed to be used directly."
+	);
+
+	program.add_epilog(
+		"It's open-source project: https://github.com/ed-asriyan/lottie-converter\n"
+		"Author: Ed Asriyan <contact.lottie-converter@asriyan.me>"
+	);
 
 	program.add_argument("path")
 		.required()

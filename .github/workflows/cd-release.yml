@@ -17,18 +17,21 @@ jobs:
     with:
       output-artifact-name: lottie-to-png.linux.${{ matrix.arch }}
       arch: ${{ matrix.arch }}
+      version: ${{ github.ref_name }}
 
   build-darwin:
     name: Build Darwin executable
     uses: ./.github/workflows/build-darwin.yml
     with:
       output-artifact-name: lottie-to-png.darwin.amd64
+      version: ${{ github.ref_name }}
 
   build-windows:
     name: Build Windows executable
     uses: ./.github/workflows/build-windows.yml
     with:
       output-artifact-name: lottie-to-png.windows.amd64.exe
+      version: ${{ github.ref_name }}
 
   push-docker-image:
     name: Push images to DockerHub
@@ -80,11 +83,17 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Create manifest
+      - name: Create manifest of latest tag
         run: docker manifest create ${{ secrets.DOCKERHUB_USERNAME }}/lottie-to-${{ matrix.format }}:latest --amend ${{ secrets.DOCKERHUB_USERNAME }}/lottie-to-${{ matrix.format }}:amd64 --amend ${{ secrets.DOCKERHUB_USERNAME }}/lottie-to-${{ matrix.format }}:arm64
 
-      - name: Push manifest
+      - name: Push manifest of latest tag
         run: docker manifest push ${{ secrets.DOCKERHUB_USERNAME }}/lottie-to-${{ matrix.format }}:latest
+
+      - name: Create manifest of version tag
+        run: docker manifest create ${{ secrets.DOCKERHUB_USERNAME }}/lottie-to-${{ matrix.format }}:${{ github.ref_name }} --amend ${{ secrets.DOCKERHUB_USERNAME }}/lottie-to-${{ matrix.format }}:amd64 --amend ${{ secrets.DOCKERHUB_USERNAME }}/lottie-to-${{ matrix.format }}:arm64
+
+      - name: Push manifest of version tag
+        run: docker manifest push ${{ secrets.DOCKERHUB_USERNAME }}/lottie-to-${{ matrix.format }}:${{ github.ref_name }}
 
       - name: Make format uppercase
         id: format
@@ -93,26 +102,26 @@ jobs:
           string: ${{ matrix.format }}
 
       - uses: actions/checkout@v4
-      
-      - name: Find and replace FORMAT
-        uses: jacobtomlinson/gha-find-replace@v3
-        with:
-          find: FORMAT
-          replace: ${{ steps.format.outputs.uppercase }}
-          regex: false
 
-      - name: Find and replace format
-        uses: jacobtomlinson/gha-find-replace@v3
+      - name: Find and replace FORMAT in readme for DockerHub
+        uses: ./.github/actions/replace-text
         with:
-          find: format
-          replace: ${{ matrix.format }}
-          regex: false
+          file: README.dockerhub.md
+          old-string: FORMAT
+          new-string: ${{ steps.format.outputs.uppercase }}
+
+      - name: Find and replace format in readme for DockerHub
+        uses: ./.github/actions/replace-text
+        with:
+          file: README.dockerhub.md
+          old-string: format
+          new-string: ${{ matrix.format }}
 
       - name: Update description at DockerHub 
         uses: peter-evans/dockerhub-description@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
           repository: ${{ secrets.DOCKERHUB_USERNAME }}/lottie-to-${{ matrix.format }}
           short-description: Converts Lottie Animations (.json / .lottie) and Telegram stickers (*.tgs) to ${{ steps.format.outputs.uppercase }}} 
           readme-filepath: README.dockerhub.md
@@ -135,6 +144,11 @@ jobs:
       filename: lottie-converter.${{ matrix.file }}.zip
     steps:
       - uses: actions/checkout@v3
+
+      - name: Replace version
+        uses: ./.github/actions/replace-version
+        with:
+          version: ${{ github.ref_name }}
 
       - name: Download artifact
         uses: actions/download-artifact@v3

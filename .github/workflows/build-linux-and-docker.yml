@@ -11,6 +11,10 @@ on:
         description: "amd64 or arm64" 
         required: true
         type: string
+      version:
+        description: Version to replace with
+        required: false
+        type: string
 
 jobs:
   build-docker:
@@ -27,6 +31,12 @@ jobs:
       - name: Setup Docker buildx
         uses: docker/setup-buildx-action@v2
 
+      - name: Replace version
+        if: ${{ inputs.version != '' }}
+        uses: ./.github/actions/replace-version
+        with:
+          version: ${{ inputs.version }}
+
       - name: Build lottie-to-apng
         uses: docker/build-push-action@v4
         with:
@@ -37,7 +47,7 @@ jobs:
           load: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
-      
+
       - name: Upload lottie-to-apng as artifact
         uses: ishworkh/container-image-artifact-upload@v1.0.0
         with:
