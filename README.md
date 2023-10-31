@@ -5,7 +5,7 @@
 
 <hr/>
 <h3 align="center">
-To easily convert Telegram stickers to GIFs you can use Telegram Bot</br></br>👉 https://t.me/tgstogifbot 👈
+To easily transfer Telegram stickers to WhatsApp you can use Telegram Bot</br></br>👉 https://t.me/tgtowabot 👈
 </h3>
 <hr/>
 
