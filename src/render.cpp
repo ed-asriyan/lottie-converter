@@ -11,7 +11,6 @@ void write_png(
 ) {
 	png_structp png_ptr = nullptr;
 	png_infop info_ptr = nullptr;
-	unsigned char** row_pointers;
 
 	png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
 	if (png_ptr == nullptr) {
@@ -41,32 +40,13 @@ void write_png(
 		PNG_FILTER_TYPE_DEFAULT
 	);
 
-	row_pointers = (unsigned char**)png_malloc(png_ptr, height * sizeof(png_byte*));
+	unsigned char** row_pointers = (unsigned char**)png_malloc(png_ptr, height * sizeof(png_byte*));
 	if (row_pointers == nullptr) {
 		png_destroy_write_struct(&png_ptr, &info_ptr);
 		throw std::runtime_error("PNG export failed");
 	}
 	for (unsigned int y = 0; y < height; ++y) {
-		unsigned char* row = (unsigned char*)png_malloc(png_ptr, sizeof(unsigned char) * width * lp_COLOR_BYTES);
-		if (row == nullptr) {
-			for (unsigned int yy = 0; yy < y; ++yy) {
-				png_free(png_ptr, row_pointers[yy]);
-			}
-			png_free(png_ptr, row_pointers);
-			png_destroy_write_struct(&png_ptr, &info_ptr);
-			throw std::runtime_error("PNG export failed");
-		}
-		row_pointers[y] = row;
-		for (unsigned int x = 0; x < width; ++x) {
-			unsigned char b, g, r;
-			b = *buffer++;
-			g = *buffer++;
-			r = *buffer++;
-			*row++ = r;
-			*row++ = g;
-			*row++ = b;
-			*row++ = *buffer++;
-		}
+		row_pointers[y] = buffer + width * y * lp_COLOR_BYTES;
 	}
 	png_set_rows(png_ptr, info_ptr, row_pointers);
 
@@ -74,11 +54,8 @@ void write_png(
 
 	png_init_io(png_ptr, out_file);
 
-	png_write_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, nullptr);
+	png_write_png(png_ptr, info_ptr, PNG_TRANSFORM_BGR, nullptr);
 
-	for (unsigned int y = 0; y < height; ++y) {
-		png_free(png_ptr, row_pointers[y]);
-	}
 	png_free(png_ptr, row_pointers);
 	png_destroy_write_struct(&png_ptr, &info_ptr);
 
