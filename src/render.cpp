@@ -40,6 +40,19 @@ void write_png(
 		PNG_FILTER_TYPE_DEFAULT
 	);
 
+	// remove outline on tranparent images. references:
+	// https://github.com/smohantty/ImageTest/blob/6427edb586fd9a2d92087e25a9ff0b361fc85870/imagetest.cpp#L83-L105
+	// https://github.com/Samsung/rlottie/issues/466
+	size_t total_bytes = width * height * lp_COLOR_BYTES;
+	for (size_t i = 0; i < total_bytes; i += lp_COLOR_BYTES) {
+		unsigned char a = buffer[i + 3];
+		if (a != 0 && a != 255) {
+			buffer[i] = (buffer[i] * 255) / a;
+			buffer[i + 1] = (buffer[i + 1] * 255) / a;
+			buffer[i + 2] = (buffer[i + 2] * 255) / a;
+		}
+	}
+
 	unsigned char** row_pointers = (unsigned char**)png_malloc(png_ptr, height * sizeof(png_byte*));
 	if (row_pointers == nullptr) {
 		png_destroy_write_struct(&png_ptr, &info_ptr);
