@@ -37,9 +37,14 @@ CMD sh -c "\
     done\
 "
 
-FROM builder-lottie-to-some as lottie-to-apng
+FROM builder-lottie-to-some as builder-lottie-to-ffmpegable
 RUN apk --no-cache add ffmpeg
+
+FROM builder-lottie-to-ffmpegable as lottie-to-apng
 ENV FORMAT=apng
+
+FROM builder-lottie-to-ffmpegable as lottie-to-webm
+ENV FORMAT=webm
 
 FROM builder-lottie-to-some as lottie-to-png
 ENV FORMAT=png

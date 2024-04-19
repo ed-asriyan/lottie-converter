@@ -1,4 +1,4 @@
-# Lottie Animations (.json) and Telegram Stickers (*.tgs) to GIF/PNG/APNG/WEBP converter
+# Lottie Animations (.json) and Telegram Stickers (*.tgs) to GIF/PNG/APNG/WEBP/WEBM converter
 [![CI | Build & Test](https://github.com/ed-asriyan/lottie-converter/actions/workflows/ci-build-and-test.yml/badge.svg)](https://github.com/ed-asriyan/lottie-converter/actions/workflows/ci-build-and-test.yml)
 [![CD | Release & Push to Dockerhub](https://github.com/ed-asriyan/lottie-converter/actions/workflows/cd-release.yml/badge.svg)](https://github.com/ed-asriyan/lottie-converter/actions/workflows/cd-release.yml)
 
@@ -32,6 +32,10 @@ Replace with directory with Lottie animations / Telegram stickers and run:
   ```bash
   docker run --rm -v <path to directory>:/source edasriyan/lottie-to-webp
   ```
+- Convert to WEBM:
+  ```bash
+  docker run --rm -v <path to directory>:/source edasriyan/lottie-to-webm
+  ```
 
 You can provide parameters via env variables:
 * `HEIGHT`: Output image height. Default: 512
@@ -50,7 +54,7 @@ Results will be saved next to each source file in the same directory.
 ## Using compiled executables
 1. Install run-time dependencies. Make sure the path to them present in `PATH` variable:
    - **[gifski](https://gif.ski)** if you want to convert to GIF
-   - **[ffmpeg](https://ffmpeg.org)** if you want to convert to APNG
+   - **[ffmpeg](https://ffmpeg.org)** if you want to convert to APNG or WEBM
    - **[img2webp](https://developers.google.com/speed/webp/docs/img2webp)** if you want to convert to WEBP
 2. Download executable from [releases section of this repo](https://github.com/ed-asriyan/lottie-converter/releases) for your OS and arch
 3. In downloaded archive find the following executable scripts:
@@ -58,6 +62,7 @@ Results will be saved next to each source file in the same directory.
    - `lottie_to_gif.sh`
    - `lottie_to_png.sh`
    - `lottie_to_webp.sh`
+   - `lottie_to_webm.sh`
    
    All of them have the same CLI:
    ```commandline
@@ -133,11 +138,11 @@ Results will be saved next to each source file in the same directory.
        ' > _deps/rlottie-src/src/vector/vdrawhelper_neon.cpp
     </details>
 4. Convert!
-   - To convert to GIF: 
+   - To convert to GIF:
      ```commandline
      ./bin/lottie_to_gif.sh /home/ed/Downloads/animation.json
      ```
-   - To convert to PNG: 
+   - To convert to PNG:
      ```commandline
      ./bin/lottie_to_png.sh /home/ed/Downloads/animation.json
      ```
@@ -145,9 +150,13 @@ Results will be saved next to each source file in the same directory.
      ```commandline
      ./bin/lottie_to_apng.sh /home/ed/Downloads/animation.json
      ```
-   - To convert to WEBP: 
+   - To convert to WEBP:
      ```commandline
      ./bin/lottie_to_webp.sh /home/ed/Downloads/animation.json
+     ```
+   - To convert to WEBM:
+     ```commandline
+     ./bin/lottie_to_webm.sh /home/ed/Downloads/animation.json
      ```
    Results will be saved next to each source file in the same directory.
 

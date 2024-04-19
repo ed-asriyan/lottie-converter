@@ -101,6 +101,22 @@ jobs:
         with:
           image: lottie-to-webp:${{ inputs.arch }}
 
+      - name: Build lottie-to-webm
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          tags: lottie-to-webm:${{ inputs.arch }}
+          platforms: ${{ inputs.arch }}
+          target: lottie-to-webm
+          load: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Upload lottie-to-webm as artifact
+        uses: ishworkh/container-image-artifact-upload@v1.0.0
+        with:
+          image: lottie-to-webm:${{ inputs.arch }}
+
       - name: Extract executable
         run: |
           id=$(docker create lottie-to-png:${{ inputs.arch }}) &&

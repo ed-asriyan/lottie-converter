@@ -23,6 +23,7 @@ jobs:
           - gif
           - png
           - webp
+          - webm
     steps:
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v2

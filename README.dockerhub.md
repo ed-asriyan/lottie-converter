@@ -7,7 +7,7 @@ docker run --rm -v <path to directory>:/source edasriyan/lottie-to-format
 You can provide parameters via env variables:
 * `HEIGHT`: Output image height. Default: 512
 * `WIDTH`: Output image width. Default: 512
-* `FPS`: Output frame rate. Default: apng,png,webp - 60; gif - 50
+* `FPS`: Output frame rate. Default: apng,png,webp,webm - 60; gif - 50
 * `QUALITY`: Output quality. Default: 90
 * `THREADS`: Number of threads to use. Default: number of CPUs
 

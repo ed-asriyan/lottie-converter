@@ -23,6 +23,7 @@ jobs:
           - gif
           - png
           - webp
+          - webm
     steps:
       - uses: actions/checkout@v3
 
@@ -31,6 +32,7 @@ jobs:
           [[ "${{ matrix.case }}" == "apng" ]] && brew install ffmpeg || echo ok;
           [[ "${{ matrix.case }}" == "gif" ]] && brew install gifski || echo ok;
           [[ "${{ matrix.case }}" == "webp" ]] && brew install webp || echo ok;
+          [[ "${{ matrix.case }}" == "webm" ]] && brew install ffmpeg || echo ok;
 
       - name: Download artifact
         uses: actions/download-artifact@v3
