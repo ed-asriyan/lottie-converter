@@ -106,7 +106,7 @@ Results will be saved next to each source file in the same directory.
         ```
 3. Build
    ```commandline
-   cmake -DCMAKE_BUILD_TYPE=Release CMakeLists.txt && cmake --build . --config Release
+   cmake -DCMAKE_BUILD_TYPE=Release -DLOTTIE_MODULE=OFF CMakeLists.txt && cmake --build . --config Release
    ```
 4. Convert!
    - To convert to GIF:

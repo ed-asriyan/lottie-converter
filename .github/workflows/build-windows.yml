@@ -37,7 +37,7 @@ jobs:
         run: cmake --preset conan-default
 
       - name: Build the app
-        run: cmake -DCMAKE_BUILD_TYPE=Release CMakeLists.txt && cmake --build . --config Release
+        run: cmake -DCMAKE_BUILD_TYPE=Release -DLOTTIE_MODULE=OFF CMakeLists.txt && cmake --build . --config Release
 
       - name: Upload executable as artifact
         uses: actions/upload-artifact@v3

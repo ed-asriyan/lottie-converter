@@ -14,7 +14,7 @@ RUN conan install . --build=missing -s build_type=Release
 
 COPY CMakeLists.txt .
 COPY src src
-RUN cmake -DCMAKE_BUILD_TYPE=Release CMakeLists.txt && cmake --build . --config Release
+RUN cmake -DCMAKE_BUILD_TYPE=Release -DLOTTIE_MODULE=OFF CMakeLists.txt && cmake --build . --config Release
 
 FROM debian:buster-slim as lottie-to-gif
 COPY --from=builder-gifski /usr/local/cargo/bin/gifski /usr/bin/gifski
