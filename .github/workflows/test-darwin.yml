@@ -15,7 +15,7 @@ on:
 jobs:
   test-darwin:
     name: Test on Darwin
-    runs-on: macos-latest
+    runs-on: macos-13
     strategy:
       matrix:
         case:

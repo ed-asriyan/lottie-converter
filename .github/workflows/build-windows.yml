@@ -17,7 +17,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Install Conan
-        run: pip3 install conan==2.0.10
+        run: pip3 install --break-system-packages conan==2.0.10
 
       - uses: actions/checkout@v3
 

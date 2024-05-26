@@ -15,10 +15,10 @@ on:
 jobs:
   build-darwin:
     name: Build MacOS executable
-    runs-on: macos-latest
+    runs-on: macos-13
     steps:
       - name: Install Conan
-        run: pip3 install conan==2.0.10
+        run: pip3 install --break-system-packages conan==2.0.10
 
       - uses: actions/checkout@v3
 
