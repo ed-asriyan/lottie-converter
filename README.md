@@ -108,35 +108,6 @@ Results will be saved next to each source file in the same directory.
    ```commandline
    cmake -DCMAKE_BUILD_TYPE=Release CMakeLists.txt && cmake --build . --config Release
    ```
-   <details>
-       <summary>M1 troubleshooting</summary>
-       Run the following command and try again:
-   
-       echo '#if defined(__ARM_NEON__)
-   
-       #include "vdrawhelper.h"
-    
-       void memfill32(uint32_t *dest, uint32_t value, int length)
-       {
-           memset(dest, value, length);
-       }
-   
-       static void color_SourceOver(uint32_t *dest, int length, uint32_t color, uint32_t alpha)
-       {
-           int ialpha, i;
-
-           if (alpha != 255) color = BYTE_MUL(color, alpha);
-           ialpha = 255 - vAlpha(color);
-           for (i = 0; i < length; ++i) dest[i] = color + BYTE_MUL(dest[i], ialpha);
-       }
-   
-       void RenderFuncTable::neon()
-       {
-           updateColor(BlendMode::Src , color_SourceOver);
-       }
-       #endif
-       ' > _deps/rlottie-src/src/vector/vdrawhelper_neon.cpp
-    </details>
 4. Convert!
    - To convert to GIF:
      ```commandline

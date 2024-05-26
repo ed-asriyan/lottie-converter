@@ -31,8 +31,8 @@ include(FetchContent)
 
 FetchContent_Declare(
     rlottie
-    GIT_REPOSITORY https://github.com/Samsung/rlottie.git
-    GIT_TAG "d40008707addacb636ff435236d31c694ce2b6cf"
+    GIT_REPOSITORY https://github.com/gilzoide/rlottie.git
+    GIT_TAG "24a99042591293a23ee26ead0f2130bc88f08139"
 )
 FetchContent_MakeAvailable(rlottie)
 
