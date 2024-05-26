@@ -22,8 +22,14 @@ jobs:
   build-darwin:
     name: Build Darwin executable
     uses: ./.github/workflows/build-darwin.yml
+    strategy:
+      matrix:
+        arch:
+          - amd64
+          - arm64
     with:
-      output-artifact-name: lottie-to-png.darwin.amd64
+      output-artifact-name: lottie-to-png.darwin.${{ matrix.arch }}
+      arch: ${{ matrix.arch }}
       version: ${{ github.ref_name }}
 
   build-windows:
@@ -141,6 +147,7 @@ jobs:
           - linux.amd64
           - linux.arm64
           - darwin.amd64
+          - darwin.arm64
           - windows.amd64.exe
     env:
       filename: lottie-converter.${{ matrix.file }}.zip

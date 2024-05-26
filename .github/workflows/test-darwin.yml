@@ -3,6 +3,10 @@ name: Test on Darwin
 on:
   workflow_call:
     inputs:
+      arch:
+        description: "amd64 or arm64" 
+        required: true
+        type: string
       input-artifact-name:
         description: Name of artifact as which Darwin executable is uploaded
         required: true
@@ -15,7 +19,7 @@ on:
 jobs:
   test-darwin:
     name: Test on Darwin
-    runs-on: macos-13
+    runs-on: ${{ inputs.arch == 'arm64' && 'macos-14' || 'macos-13' }}
     strategy:
       matrix:
         case:

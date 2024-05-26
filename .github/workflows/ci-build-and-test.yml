@@ -35,16 +35,28 @@ jobs:
   build-darwin:
     name: Build Darwin executable
     uses: ./.github/workflows/build-darwin.yml
+    strategy:
+      matrix:
+        arch:
+          - amd64
+          - arm64
     with:
-      output-artifact-name: lottie-to-png.darwin.amd64
+      output-artifact-name: lottie-to-png.darwin.${{ matrix.arch }}
+      arch: ${{ matrix.arch }}
 
   test-darwin:
     name: Test on Darwin
     needs: build-darwin
     uses: ./.github/workflows/test-darwin.yml
+    strategy:
+      matrix:
+        arch:
+          - amd64
+          - arm64
     with:
-      input-artifact-name: lottie-to-png.darwin.amd64
-      output-artifact-name: test-results.darwin
+      input-artifact-name: lottie-to-png.darwin.${{ matrix.arch }}
+      output-artifact-name: test-results.darwin.${{ matrix.arch }}
+      arch: ${{ matrix.arch }}
 
   build-windows:
     name: Build Windows executable

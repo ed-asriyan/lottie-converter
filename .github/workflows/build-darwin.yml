@@ -7,6 +7,10 @@ on:
         description: Name of artifact as which Darwin executable to be uploaded
         required: true
         type: string
+      arch:
+        description: "amd64 or arm64" 
+        required: true
+        type: string
       version:
         description: Version to replace with
         required: false
@@ -15,7 +19,7 @@ on:
 jobs:
   build-darwin:
     name: Build MacOS executable
-    runs-on: macos-13
+    runs-on: ${{ inputs.arch == 'arm64' && 'macos-14' || 'macos-13' }}
     steps:
       - name: Install Conan
         run: pip3 install --break-system-packages conan==2.0.10
