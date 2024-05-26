@@ -4,5 +4,8 @@
   },
   "1.json": {
     "link": "https://lottiefiles.com/18168-stay-safe-stay-home"
+  },
+  "2.json": {
+    "link": "https://github.com/ed-asriyan/lottie-converter/issues/92"
   }
 }
