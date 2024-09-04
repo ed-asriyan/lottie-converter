@@ -1,5 +1,5 @@
 FROM rust:buster as builder-gifski
-RUN cargo install --version 1.7.0 gifski
+RUN cargo install --version 1.32.0 gifski
 
 FROM gcc:13 as builder-lottie-to-png
 RUN apt update && \

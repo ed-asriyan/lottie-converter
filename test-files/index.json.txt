@@ -2,10 +2,13 @@
   "01.tgs": {
     "link": "https://t.me/addstickers/AnimatedEmojies"
   },
-  "1.json": {
+  "02.json": {
     "link": "https://lottiefiles.com/18168-stay-safe-stay-home"
   },
-  "2.json": {
+  "03.json": {
     "link": "https://github.com/ed-asriyan/lottie-converter/issues/92"
+  },
+  "04.tgs": {
+    "link": "https://github.com/ed-asriyan/lottie-converter/issues/96"
   }
 }
