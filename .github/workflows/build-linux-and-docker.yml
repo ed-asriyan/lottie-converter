@@ -124,7 +124,7 @@ jobs:
           docker rm -v $id
 
       - name: Upload executable as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4.4.0
         with:
           name: ${{ inputs.output-artifact-name }}
           path: bin/lottie_to_png

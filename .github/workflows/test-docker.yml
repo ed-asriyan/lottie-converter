@@ -39,7 +39,7 @@ jobs:
       run: docker run --rm -v $(pwd)/test-files:/source --platform ${{ inputs.arch }} lottie-to-${{ matrix.image }}:${{ inputs.arch }}
 
     - name: Upload test results as artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4.4.0
       with:
         name: ${{ inputs.output-artifact-name }}.${{ matrix.image }}
         path: test-files
