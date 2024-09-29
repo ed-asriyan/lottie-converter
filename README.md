@@ -136,5 +136,6 @@ Results will be saved next to each source file in the same directory.
 * You can download Telegram sticker files (.tgs) using [@Stickerdownloadbot](https://t.me/Stickerdownloadbot).
 
 <div align="center">
-<a float="right" href="https://info.flagcounter.com/0hsy"><img src="https://s01.flagcounter.com/count2/0hsy/bg_FFFFFF/txt_000000/border_CCCCCC/columns_4/maxflags_12/viewers_0/labels_0/pageviews_1/flags_0/percent_0"/></a>
+  <a href="https://star-history.com"><img src="https://api.star-history.com/svg?repos=ed-asriyan/lottie-converter&type=Date"/></a>
+  <a href="https://info.flagcounter.com/0hsy"><img src="https://s01.flagcounter.com/count2/0hsy/bg_FFFFFF/txt_000000/border_CCCCCC/columns_4/maxflags_12/viewers_0/labels_0/pageviews_1/flags_0/percent_0"/></a>
 </div>
