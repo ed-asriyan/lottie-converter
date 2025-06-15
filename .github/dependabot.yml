@@ -9,3 +9,9 @@ updates:
       - dependency-name: "*"
         update-types:
           - "version-update:semver-patch"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    open-pull-requests-limit: 1
+    schedule:
+      interval: "weekly"
