@@ -49,7 +49,7 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Upload lottie-to-apng as artifact
-        uses: ishworkh/container-image-artifact-upload@v1.0.0
+        uses: ishworkh/container-image-artifact-upload@v2.0.0
         with:
           image: lottie-to-apng:${{ inputs.arch }}
 
@@ -65,7 +65,7 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Upload lottie-to-gif as artifact
-        uses: ishworkh/container-image-artifact-upload@v1.0.0
+        uses: ishworkh/container-image-artifact-upload@v2.0.0
         with:
           image: lottie-to-gif:${{ inputs.arch }}
 
@@ -81,7 +81,7 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Upload lottie-to-png as artifact
-        uses: ishworkh/container-image-artifact-upload@v1.0.0
+        uses: ishworkh/container-image-artifact-upload@v2.0.0
         with:
           image: lottie-to-png:${{ inputs.arch }}
 
@@ -97,7 +97,7 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Upload lottie-to-webp as artifact
-        uses: ishworkh/container-image-artifact-upload@v1.0.0
+        uses: ishworkh/container-image-artifact-upload@v2.0.0
         with:
           image: lottie-to-webp:${{ inputs.arch }}
 
@@ -113,7 +113,7 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Upload lottie-to-webm as artifact
-        uses: ishworkh/container-image-artifact-upload@v1.0.0
+        uses: ishworkh/container-image-artifact-upload@v2.0.0
         with:
           image: lottie-to-webm:${{ inputs.arch }}
 
