@@ -5,7 +5,7 @@ FROM gcc:15 as builder-lottie-to-png
 RUN apt update && \
     apt install --assume-yes cmake python3 python3-pip && \
     rm -rf /var/lib/apt/lists/*
-RUN pip3 install --break-system-packages conan==2.0.10
+RUN pip3 install --break-system-packages conan==2.17.0
 
 WORKDIR /application
 RUN conan profile detect
