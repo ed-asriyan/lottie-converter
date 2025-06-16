@@ -28,7 +28,7 @@ CMD bash -c "\
 "
 ENV FORMAT=gif
 
-FROM alpine:3.16.2 as builder-lottie-to-some
+FROM alpine:3.22.0 as builder-lottie-to-some
 COPY --from=builder-lottie-to-png /application/bin/lottie_to_png /usr/bin/lottie_to_png
 COPY bin/* /usr/bin/
 CMD sh -c "\
