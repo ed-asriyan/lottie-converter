@@ -152,7 +152,7 @@ jobs:
     env:
       filename: lottie-converter.${{ matrix.file }}.zip
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Replace version
         uses: ./.github/actions/replace-version

@@ -33,7 +33,7 @@ jobs:
       with:
         image: lottie-to-${{ matrix.image }}:${{ inputs.arch }}
 
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Run tests
       run: docker run --rm -v $(pwd)/test-files:/source --platform ${{ inputs.arch }} lottie-to-${{ matrix.image }}:${{ inputs.arch }}
