@@ -19,7 +19,7 @@ jobs:
       - name: Install Conan
         run: pip3 install --break-system-packages conan==2.0.10
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Replace version
         if: ${{ inputs.version != '' }}
