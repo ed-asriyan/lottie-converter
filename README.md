@@ -14,7 +14,38 @@ There are 2 options:
 * Run using [Docker](https://www.docker.com/). One-line command, the option requires only Docker installed
 * Download and run compiled executable files. The option requires run-time dependecies installed
 
-### Using Docker
+### 1 Using compiled executables
+1. Install run-time dependencies. Make sure the path to them present in `PATH` variable:
+   - **[gifski](https://gif.ski)** if you want to convert to GIF
+   - **[ffmpeg](https://ffmpeg.org)** if you want to convert to APNG or WEBM
+   - **[img2webp](https://developers.google.com/speed/webp/docs/img2webp)** if you want to convert to WEBP
+   - Download executable from [releases section of this repo](https://github.com/ed-asriyan/lottie-converter/releases) for your OS and arch
+
+> [!TIP]
+> On Windows, you can use Chocolatey or Winget to install it.
+Example: 
+```
+choco webp ffmpeg-full gifski git -y
+```
+Or if you prefer you can manually install each one.
+
+Run Downloader.sh
+Paste your bot API token obtained from [botFather](https://t.me/BotFather).
+Then it will ask you which sticker pack you want to download. You can enter the name or the link. If the stickers are classic, they will be downloaded to /converted. If the stickers are animated (tgs), the templates will be downloaded to /TGSs. Then you must use ./converter.sh to convert them to webp.
+
+
+https://github.com/user-attachments/assets/c7ce3b98-7b0b-44ab-b9bf-c0f4fff7fb6d
+
+> [!TIP]
+> You can edit `converter.sh` to change the graphics settings.
+The default for `converter.sh` is
+```
+HEIGHT=200 #
+WIDTH=200 #
+FPS=40 # fluidity
+QUALITY=50 # Quality
+```
+## 2 Using Docker
 Replace with directory with Lottie animations / Telegram stickers and run:
 - Convert to GIF:
   ```bash
@@ -51,11 +82,6 @@ docker run --rm -e HEIGHT=256 -e WIDTH=256 -e FPS=30 -v /home/ed/Downloads/lotti
 
 Results will be saved next to each source file in the same directory.
 
-## Using compiled executables
-1. Install run-time dependencies. Make sure the path to them present in `PATH` variable:
-   - **[gifski](https://gif.ski)** if you want to convert to GIF
-   - **[ffmpeg](https://ffmpeg.org)** if you want to convert to APNG or WEBM
-   - **[img2webp](https://developers.google.com/speed/webp/docs/img2webp)** if you want to convert to WEBP
 2. Download executable from [releases section of this repo](https://github.com/ed-asriyan/lottie-converter/releases) for your OS and arch
 3. In downloaded archive find the following executable scripts:
    - `lottie_to_apng.sh`
