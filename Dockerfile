@@ -1,4 +1,4 @@
-FROM rust:buster as builder-gifski
+FROM rust:1.89-bookworm as builder-gifski
 RUN cargo install --version 1.32.0 gifski
 
 FROM gcc:15 as builder-lottie-to-png
@@ -16,7 +16,7 @@ COPY CMakeLists.txt .
 COPY src src
 RUN cmake -DCMAKE_BUILD_TYPE=Release -DLOTTIE_MODULE=OFF CMakeLists.txt && cmake --build . --config Release
 
-FROM debian:buster-slim as lottie-to-gif
+FROM debian:bookworm as lottie-to-gif
 COPY --from=builder-gifski /usr/local/cargo/bin/gifski /usr/bin/gifski
 COPY --from=builder-lottie-to-png /application/bin/lottie_to_png /usr/bin/lottie_to_png
 COPY bin/lottie_common.sh /usr/bin
