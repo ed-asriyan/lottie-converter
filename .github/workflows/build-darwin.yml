@@ -22,7 +22,7 @@ jobs:
     runs-on: ${{ inputs.arch == 'arm64' && 'macos-14' || 'macos-13' }}
     steps:
       - name: Install Conan
-        run: pip3 install --break-system-packages conan==2.0.10
+        run: pip3 install --break-system-packages conan==2.17.0
 
       - uses: actions/checkout@v4
 
@@ -39,7 +39,7 @@ jobs:
         run: conan install . --build=missing -s build_type=Release
 
       - name: Invoke 'conan-release' preset
-        run: cmake --preset conan-release
+        run: cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 --preset conan-release
 
       - name: Build the app
         run: cmake -DCMAKE_BUILD_TYPE=Release -DLOTTIE_MODULE=OFF CMakeLists.txt && cmake --build . --config Release
