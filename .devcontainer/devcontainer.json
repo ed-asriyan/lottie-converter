@@ -1,0 +1,8 @@
+{
+  "name": "lottie-converter",
+  "build": {
+    "dockerfile": "../Dockerfile",
+    "target": "builder-lottie-to-png",
+    "context": ".."
+  }
+}
