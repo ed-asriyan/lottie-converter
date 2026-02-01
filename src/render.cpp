@@ -51,7 +51,8 @@ void write_png(
 		
 		// Replace transparent pixels with background color if provided
 		if (background.has_value()) {
-			// rlottie outputs premultiplied alpha, so we use: result = foreground + background * (1 - alpha)
+			// rlottie outputs premultiplied alpha (color * alpha), so blend using:
+			// result = premultiplied_foreground + background * (1 - alpha)
 			float alpha = a / 255.0f;
 			float inv_alpha = 1.0f - alpha;
 			
