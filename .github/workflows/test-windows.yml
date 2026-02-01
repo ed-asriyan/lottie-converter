@@ -1,5 +1,8 @@
 name: Tes in Windows
 
+permissions:
+  contents: read
+
 on:
   workflow_call:
     inputs:
