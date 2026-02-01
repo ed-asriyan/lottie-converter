@@ -26,11 +26,21 @@ std::optional<BackgroundColor> parse_background_color(const std::string& color_s
 	// Try rgba(r,g,b,a) format
 	std::regex rgba_regex(R"(rgba?\((\d+),(\d+),(\d+)(?:,(\d+))?\))");
 	if (std::regex_match(cleaned, matches, rgba_regex)) {
+		int r = std::stoi(matches[1].str());
+		int g = std::stoi(matches[2].str());
+		int b = std::stoi(matches[3].str());
+		int a = matches[4].matched ? std::stoi(matches[4].str()) : 255;
+		
+		// Validate ranges
+		if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255 || a < 0 || a > 255) {
+			throw std::runtime_error("RGB and alpha values must be in range 0-255");
+		}
+		
 		BackgroundColor color;
-		color.r = std::stoi(matches[1].str());
-		color.g = std::stoi(matches[2].str());
-		color.b = std::stoi(matches[3].str());
-		color.a = matches[4].matched ? std::stoi(matches[4].str()) : 255;
+		color.r = static_cast<unsigned char>(r);
+		color.g = static_cast<unsigned char>(g);
+		color.b = static_cast<unsigned char>(b);
+		color.a = static_cast<unsigned char>(a);
 		return color;
 	}
 	

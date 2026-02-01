@@ -1,4 +1,5 @@
 #include "render.h"
+#include <algorithm>
 
 #define lp_COLOR_DEPTH 8
 #define lp_COLOR_BYTES 4
@@ -54,9 +55,10 @@ void write_png(
 			float alpha = a / 255.0f;
 			float inv_alpha = 1.0f - alpha;
 			
-			buffer[i] = (unsigned char)(buffer[i] + background.value().r * inv_alpha);
-			buffer[i + 1] = (unsigned char)(buffer[i + 1] + background.value().g * inv_alpha);
-			buffer[i + 2] = (unsigned char)(buffer[i + 2] + background.value().b * inv_alpha);
+			// Clamp to prevent overflow when casting to unsigned char
+			buffer[i] = (unsigned char)std::min(255.0f, buffer[i] + background.value().r * inv_alpha);
+			buffer[i + 1] = (unsigned char)std::min(255.0f, buffer[i + 1] + background.value().g * inv_alpha);
+			buffer[i + 2] = (unsigned char)std::min(255.0f, buffer[i + 2] + background.value().b * inv_alpha);
 			buffer[i + 3] = 255; // Make fully opaque after blending
 		} else if (a != 0 && a != 255) {
 			buffer[i] = (buffer[i] * 255) / a;
@@ -113,7 +115,7 @@ void render(
 	}
 	auto threads = std::vector<std::thread>(threads_count);
 	for (int i = 0; i < threads_count; ++i) {
-		threads.push_back(std::thread([i, output_frame_count, step, width, height, threads_count, &output_directory, &lottie_data, cache_counter_str, background]() {
+		threads.push_back(std::thread([i, output_frame_count, step, width, height, threads_count, &output_directory, &lottie_data, cache_counter_str, &background]() {
 			auto local_player = rlottie::Animation::loadFromData(lottie_data, cache_counter_str);
 			char file_name[8];
 			uint32_t* const buffer = new uint32_t[width * height];
