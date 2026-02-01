@@ -10,6 +10,7 @@ You can provide parameters via env variables:
 * `FPS`: Output frame rate. Default: apng,png,webp,webm - 60; gif - 50
 * `QUALITY`: Output quality. Default: 90
 * `THREADS`: Number of threads to use. Default: number of CPUs
+* `BACKGROUND`: Background color to replace transparent pixels. Formats: `rgb(r,g,b)`, `rgba(r,g,b,a)`, `#RRGGBB`, `#RRGGBBAA`
 
 Example:
 ```bash

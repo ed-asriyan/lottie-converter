@@ -11,7 +11,7 @@ THREADS=0
 SCRIPT_DIR=$(dirname "$0")
 
 function print_help() {
-  echo "usage: $SCRIPT_DIR/$(basename "$0") [--help] [--output OUTPUT] [--height HEIGHT] [--width WIDTH] [--threads THREADS] [--fps FPS] [--quality QUALITY] path"
+  echo "usage: $SCRIPT_DIR/$(basename "$0") [--help] [--output OUTPUT] [--height HEIGHT] [--width WIDTH] [--threads THREADS] [--fps FPS] [--quality QUALITY] [--background BACKGROUND] path"
   echo
   echo "Lottie animations (.json) and Telegram stickers for Telegram (*.tgs) to animated $OUTPUT_EXTENSION converter"
   echo
@@ -27,6 +27,7 @@ function print_help() {
   echo " --fps FPS         Output frame rate. Default: $FPS"
   echo " --threads THREADS Number of threads to use. Default: number of CPUs"
   echo " --quality QUALITY Output quality. Default: $QUALITY"
+  echo " --background BACKGROUND Background color to replace transparent pixels. Formats: rgb(r,g,b), rgba(r,g,b,a), #RRGGBB, #RRGGBBAA"
   echo
   echo "It's open-source project: https://github.com/ed-asriyan/lottie-converter"
   echo "Author: Ed Asriyan <contact.lottie-converter@asriyan.me>"
@@ -68,6 +69,11 @@ while [[ $# -gt 0 ]]; do
       shift
       shift
       ;;
+    -b|--background)
+      BACKGROUND="$2"
+      shift
+      shift
+      ;;
     -h|--help)
       print_help
       exit 1
@@ -103,7 +109,7 @@ if [ "${INPUT_PATH: -4}" == ".tgs" ]; then
   gunzip -c $INPUT_PATH > $LOTTIE_PATH
 fi
 
-$SCRIPT_DIR/lottie_to_png --width $WIDTH --height $HEIGHT --fps $FPS --threads $THREADS --output $TMP_PATH $LOTTIE_PATH
+$SCRIPT_DIR/lottie_to_png --width $WIDTH --height $HEIGHT --fps $FPS --threads $THREADS ${BACKGROUND:+--background "$BACKGROUND"} --output $TMP_PATH $LOTTIE_PATH
 
 PNG_FILES=$(find $TMP_PATH -type f -name '*.png' | sort -k1)
 

@@ -23,7 +23,7 @@ COPY bin/lottie_common.sh /usr/bin
 COPY bin/lottie_to_gif.sh /usr/bin
 CMD bash -c "\
     find /source -type f \( -iname \*.json -o -iname \*.lottie -o -iname \*.tgs \) | while IFS=$'\n' read -r FILE; do \
-        echo Converting \${FILE}... && lottie_to_\${FORMAT}.sh \${WIDTH:+--width \$WIDTH} \${HEIGHT:+--height \$HEIGHT} \${FPS:+--fps \$FPS} \${QUALITY:+--quality \$QUALITY} \$FILE && echo Done.; \
+        echo Converting \${FILE}... && lottie_to_\${FORMAT}.sh \${WIDTH:+--width \$WIDTH} \${HEIGHT:+--height \$HEIGHT} \${FPS:+--fps \$FPS} \${QUALITY:+--quality \$QUALITY} \${BACKGROUND:+--background \"\$BACKGROUND\"} \$FILE && echo Done.; \
     done\
 "
 ENV FORMAT=gif
@@ -33,7 +33,7 @@ COPY --from=builder-lottie-to-png /application/bin/lottie_to_png /usr/bin/lottie
 COPY bin/* /usr/bin/
 CMD sh -c "\
     find /source -type f \( -iname \*.json -o -iname \*.lottie -o -iname \*.tgs \) | while IFS=$'\n' read -r FILE; do \
-        echo Converting \${FILE}... && lottie_to_\${FORMAT}.sh \${WIDTH:+--width \$WIDTH} \${HEIGHT:+--height \$HEIGHT} \${FPS:+--fps \$FPS} \${QUALITY:+--quality \$QUALITY} \$FILE && echo Done.; \
+        echo Converting \${FILE}... && lottie_to_\${FORMAT}.sh \${WIDTH:+--width \$WIDTH} \${HEIGHT:+--height \$HEIGHT} \${FPS:+--fps \$FPS} \${QUALITY:+--quality \$QUALITY} \${BACKGROUND:+--background \"\$BACKGROUND\"} \$FILE && echo Done.; \
     done\
 "
 

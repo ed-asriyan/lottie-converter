@@ -1,0 +1,27 @@
+name: 'Generate Background Suffix'
+description: 'Sanitizes background color string for use in artifact names'
+
+inputs:
+  background:
+    description: 'Background color value (e.g., rgb(255,255,255), #FF0000, rgba(0,0,255,128))'
+    required: true
+
+outputs:
+  suffix:
+    description: 'Sanitized suffix for artifact naming (empty if no background, or .bg-sanitized-value)'
+    value: ${{ steps.generate.outputs.suffix }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Generate suffix
+      id: generate
+      shell: bash
+      run: |
+        if [ -z "${{ inputs.background }}" ]; then
+          echo "suffix=" >> $GITHUB_OUTPUT
+        else
+          # Sanitize background value for artifact name
+          SUFFIX=$(echo "${{ inputs.background }}" | sed 's/[^a-zA-Z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-//' | sed 's/-$//')
+          echo "suffix=.bg-${SUFFIX}" >> $GITHUB_OUTPUT
+        fi

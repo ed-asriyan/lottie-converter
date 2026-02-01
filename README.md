@@ -43,6 +43,7 @@ You can provide parameters via env variables:
 * `FPS`: Output frame rate. Default: apng,png,webp - 60; gif - 50
 * `QUALITY`: Output quality. Default: 90
 * `THREADS`: Number of threads to use. Default: number of CPUs
+* `BACKGROUND`: Background color to replace transparent pixels. Formats: `rgb(r,g,b)`, `rgba(r,g,b,a)`, `#RRGGBB`, `#RRGGBBAA`
 
 Example:
 ```bash
@@ -67,7 +68,7 @@ Results will be saved next to each source file in the same directory.
    All of them have the same CLI:
    ```commandline
    $ ./bin/lottie_to_gif.sh -h                       
-   usage: ./bin/lottie_to_gif.sh [--help] [--output OUTPUT] [--height HEIGHT] [--width WIDTH] [--threads THREADS] [--fps FPS] [--quality QUALITY] path
+   usage: ./bin/lottie_to_gif.sh [--help] [--output OUTPUT] [--height HEIGHT] [--width WIDTH] [--threads THREADS] [--fps FPS] [--quality QUALITY] [--background BACKGROUND] path
  
    Lottie animations (.json) and Telegram stickers for Telegram (*.tgs) to animated .gif converter
 
@@ -82,6 +83,7 @@ Results will be saved next to each source file in the same directory.
    --fps FPS         Output frame rate. Default: 50
    --threads THREADS Number of threads to use. Default: number of CPUs
    --quality QUALITY Output quality. Default: 90
+   --background BACKGROUND Background color to replace transparent pixels. Formats: rgb(r,g,b), rgba(r,g,b,a), #RRGGBB, #RRGGBBAA
    ```
 
 # Build

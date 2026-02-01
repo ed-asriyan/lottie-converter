@@ -23,6 +23,11 @@ jobs:
           - gif
           - png
           - webm
+        background:
+          - ""
+          - "rgb(255,255,255)"
+          - "#FF0000"
+          - "rgba(0,0,255,128)"
     steps:
       - uses: actions/checkout@v4
 
@@ -43,15 +48,25 @@ jobs:
 
       - name: Run tests
         shell: bash
+        env:
+          BACKGROUND_COLOR: ${{ matrix.background }}
         run: |
-          bash -c "\
-            find test-files -type f \( -iname \*.json -o -iname \*.lottie -o -iname \*.tgs \) | while IFS=$'\n' read -r FILE; do \
-            echo Converting \${FILE}... && sh ./bin/lottie_to_${{ matrix.case }}.sh \$FILE && echo Done.; \
-            done \
-          "
+          find test-files -type f \( -iname \*.json -o -iname \*.lottie -o -iname \*.tgs \) | while IFS=$'\n' read -r FILE; do
+            if [ -n "$BACKGROUND_COLOR" ]; then
+              echo "Converting ${FILE} with background ${BACKGROUND_COLOR}..." && sh ./bin/lottie_to_${{ matrix.case }}.sh --background "$BACKGROUND_COLOR" "$FILE" && echo Done.
+            else
+              echo "Converting ${FILE}..." && sh ./bin/lottie_to_${{ matrix.case }}.sh "$FILE" && echo Done.
+            fi
+          done
+
+      - name: Generate background suffix
+        id: bg-suffix
+        uses: ./.github/actions/background-suffix
+        with:
+          background: ${{ matrix.background }}
 
       - name: Upload test results as artifacts
         uses: actions/upload-artifact@v4.6.2
         with:
-          name: ${{inputs.output-artifact-name }}.${{ matrix.case }}
+          name: ${{inputs.output-artifact-name }}.${{ matrix.case }}${{ steps.bg-suffix.outputs.suffix }}
           path: test-files

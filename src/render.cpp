@@ -1,4 +1,5 @@
 #include "render.h"
+#include <algorithm>
 
 #define lp_COLOR_DEPTH 8
 #define lp_COLOR_BYTES 4
@@ -7,7 +8,8 @@ void write_png(
 	unsigned char* buffer,
 	const size_t width,
 	const size_t height,
-	const std::filesystem::path& out_file_path
+	const std::filesystem::path& out_file_path,
+	const std::optional<BackgroundColor>& background
 ) {
 	png_structp png_ptr = nullptr;
 	png_infop info_ptr = nullptr;
@@ -46,7 +48,24 @@ void write_png(
 	size_t total_bytes = width * height * lp_COLOR_BYTES;
 	for (size_t i = 0; i < total_bytes; i += lp_COLOR_BYTES) {
 		unsigned char a = buffer[i + 3];
-		if (a != 0 && a != 255) {
+		
+		// Replace transparent pixels with background color if provided
+		if (background.has_value()) {
+			// rlottie outputs premultiplied alpha (color * alpha), so blend using:
+			// result = premultiplied_foreground + background * (1 - alpha)
+			float fg_alpha = a / 255.0f;
+			float bg_alpha = background.value().a / 255.0f;
+			float inv_fg_alpha = 1.0f - fg_alpha;
+			
+			// Blend foreground with background, respecting background alpha
+			// Clamp to prevent overflow when casting to unsigned char
+			// Buffer is in BGRA format, so buffer[i]=B, buffer[i+2]=R
+			buffer[i] = (unsigned char)std::min(255.0f, buffer[i] + background.value().b * bg_alpha * inv_fg_alpha);
+			buffer[i + 1] = (unsigned char)std::min(255.0f, buffer[i + 1] + background.value().g * bg_alpha * inv_fg_alpha);
+			buffer[i + 2] = (unsigned char)std::min(255.0f, buffer[i + 2] + background.value().r * bg_alpha * inv_fg_alpha);
+			// Compute final alpha: fg_alpha + bg_alpha * (1 - fg_alpha)
+			buffer[i + 3] = (unsigned char)std::min(255.0f, fg_alpha * 255.0f + bg_alpha * 255.0f * inv_fg_alpha);
+		} else if (a != 0 && a != 255) {
 			buffer[i] = (buffer[i] * 255) / a;
 			buffer[i + 1] = (buffer[i + 1] * 255) / a;
 			buffer[i + 2] = (buffer[i + 2] * 255) / a;
@@ -81,7 +100,8 @@ void render(
 	const size_t height,
 	const std::filesystem::path& output_directory,
 	double fps,
-	size_t threads_count
+	size_t threads_count,
+	const std::optional<BackgroundColor>& background
 ) {
 	static unsigned int cache_counter = 0; // rlottie uses caches for internal optimizations
 	const auto cache_counter_str = std::to_string(++cache_counter);
@@ -100,7 +120,7 @@ void render(
 	}
 	auto threads = std::vector<std::thread>(threads_count);
 	for (int i = 0; i < threads_count; ++i) {
-		threads.push_back(std::thread([i, output_frame_count, step, width, height, threads_count, &output_directory, &lottie_data, cache_counter_str]() {
+		threads.push_back(std::thread([i, output_frame_count, step, width, height, threads_count, &output_directory, &lottie_data, cache_counter_str, &background]() {
 			auto local_player = rlottie::Animation::loadFromData(lottie_data, cache_counter_str);
 			char file_name[8];
 			uint32_t* const buffer = new uint32_t[width * height];
@@ -113,7 +133,8 @@ void render(
 					(unsigned char *)buffer,
 					width,
 					height,
-					output_directory / std::filesystem::path(file_name)
+					output_directory / std::filesystem::path(file_name),
+					background
 				);
 			}
 			delete[] buffer;
