@@ -6,8 +6,48 @@
 #include <filesystem>
 #include <argparse/argparse.hpp>
 #include <typeinfo>
+#include <regex>
+#include <sstream>
 
 #include "render.h"
+
+std::optional<BackgroundColor> parse_background_color(const std::string& color_str) {
+	if (color_str.empty()) {
+		return std::nullopt;
+	}
+	
+	// Remove spaces
+	std::string cleaned = color_str;
+	cleaned.erase(std::remove_if(cleaned.begin(), cleaned.end(), ::isspace), cleaned.end());
+	
+	// Support formats: rgb(r,g,b), rgba(r,g,b,a), #RRGGBB, #RRGGBBAA
+	std::smatch matches;
+	
+	// Try rgba(r,g,b,a) format
+	std::regex rgba_regex(R"(rgba?\((\d+),(\d+),(\d+)(?:,(\d+))?\))");
+	if (std::regex_match(cleaned, matches, rgba_regex)) {
+		BackgroundColor color;
+		color.r = std::stoi(matches[1].str());
+		color.g = std::stoi(matches[2].str());
+		color.b = std::stoi(matches[3].str());
+		color.a = matches[4].matched ? std::stoi(matches[4].str()) : 255;
+		return color;
+	}
+	
+	// Try hex format #RRGGBB or #RRGGBBAA
+	std::regex hex_regex(R"(#?([0-9a-fA-F]{6}|[0-9a-fA-F]{8}))");
+	if (std::regex_match(cleaned, matches, hex_regex)) {
+		std::string hex = matches[1].str();
+		BackgroundColor color;
+		color.r = std::stoi(hex.substr(0, 2), nullptr, 16);
+		color.g = std::stoi(hex.substr(2, 2), nullptr, 16);
+		color.b = std::stoi(hex.substr(4, 2), nullptr, 16);
+		color.a = hex.length() == 8 ? std::stoi(hex.substr(6, 2), nullptr, 16) : 255;
+		return color;
+	}
+	
+	throw std::runtime_error("Invalid background color format. Use rgb(r,g,b), rgba(r,g,b,a), #RRGGBB, or #RRGGBBAA");
+}
 
 void convert(
 	const std::filesystem::path& file_path,
@@ -15,7 +55,8 @@ void convert(
 	const size_t height,
 	const std::filesystem::path& output,
 	double fps,
-	const size_t threads_count
+	const size_t threads_count,
+	const std::optional<BackgroundColor>& background
 ) {
 	std::ifstream input_file(file_path);
 	if (!input_file.is_open())
@@ -30,7 +71,8 @@ void convert(
 		height,
 		output,
 		fps,
-		threads_count
+		threads_count,
+		background
 	);
 }
 
@@ -77,6 +119,10 @@ int main(int argc, const char** argv) {
 		.help("numbers of threads to use. If 0, number of CPUs is used")
 		.action([](const std::string& value) { return std::stoi(value); });
 
+	program.add_argument("-b", "--background")
+		.default_value(std::string(""))
+		.help("background color to replace transparent pixels. Formats: rgb(r,g,b), rgba(r,g,b,a), #RRGGBB, #RRGGBBAA");
+
 	try {
 		program.parse_args(argc, argv);
 	} catch (const std::runtime_error& err) {
@@ -91,7 +137,9 @@ int main(int argc, const char** argv) {
 	const auto fps = program.get<double>("--fps");
 	const auto output = program.get<std::filesystem::path>("--output");
 	const auto threads = program.get<int>("--threads");
+	const auto background_str = program.get<std::string>("--background");
+	const auto background = parse_background_color(background_str);
 
-	convert(file_path, width, height, output, fps, threads);
+	convert(file_path, width, height, output, fps, threads, background);
 	return 0;
 }

@@ -7,7 +7,8 @@ void write_png(
 	unsigned char* buffer,
 	const size_t width,
 	const size_t height,
-	const std::filesystem::path& out_file_path
+	const std::filesystem::path& out_file_path,
+	const std::optional<BackgroundColor>& background = std::nullopt
 ) {
 	png_structp png_ptr = nullptr;
 	png_infop info_ptr = nullptr;
@@ -46,7 +47,18 @@ void write_png(
 	size_t total_bytes = width * height * lp_COLOR_BYTES;
 	for (size_t i = 0; i < total_bytes; i += lp_COLOR_BYTES) {
 		unsigned char a = buffer[i + 3];
-		if (a != 0 && a != 255) {
+		
+		// Replace transparent pixels with background color if provided
+		if (background.has_value()) {
+			// Blend the pixel with the background color based on alpha
+			float alpha = a / 255.0f;
+			float inv_alpha = 1.0f - alpha;
+			
+			buffer[i] = (unsigned char)(buffer[i] * alpha + background.value().r * inv_alpha);
+			buffer[i + 1] = (unsigned char)(buffer[i + 1] * alpha + background.value().g * inv_alpha);
+			buffer[i + 2] = (unsigned char)(buffer[i + 2] * alpha + background.value().b * inv_alpha);
+			buffer[i + 3] = 255; // Make fully opaque after blending
+		} else if (a != 0 && a != 255) {
 			buffer[i] = (buffer[i] * 255) / a;
 			buffer[i + 1] = (buffer[i + 1] * 255) / a;
 			buffer[i + 2] = (buffer[i + 2] * 255) / a;
@@ -81,7 +93,8 @@ void render(
 	const size_t height,
 	const std::filesystem::path& output_directory,
 	double fps,
-	size_t threads_count
+	size_t threads_count,
+	const std::optional<BackgroundColor>& background
 ) {
 	static unsigned int cache_counter = 0; // rlottie uses caches for internal optimizations
 	const auto cache_counter_str = std::to_string(++cache_counter);
@@ -100,7 +113,7 @@ void render(
 	}
 	auto threads = std::vector<std::thread>(threads_count);
 	for (int i = 0; i < threads_count; ++i) {
-		threads.push_back(std::thread([i, output_frame_count, step, width, height, threads_count, &output_directory, &lottie_data, cache_counter_str]() {
+		threads.push_back(std::thread([i, output_frame_count, step, width, height, threads_count, &output_directory, &lottie_data, cache_counter_str, background]() {
 			auto local_player = rlottie::Animation::loadFromData(lottie_data, cache_counter_str);
 			char file_name[8];
 			uint32_t* const buffer = new uint32_t[width * height];
@@ -113,7 +126,8 @@ void render(
 					(unsigned char *)buffer,
 					width,
 					height,
-					output_directory / std::filesystem::path(file_name)
+					output_directory / std::filesystem::path(file_name),
+					background
 				);
 			}
 			delete[] buffer;
