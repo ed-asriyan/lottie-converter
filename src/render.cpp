@@ -50,13 +50,13 @@ void write_png(
 		
 		// Replace transparent pixels with background color if provided
 		if (background.has_value()) {
-			// Blend the pixel with the background color based on alpha
+			// rlottie outputs premultiplied alpha, so we use: result = foreground + background * (1 - alpha)
 			float alpha = a / 255.0f;
 			float inv_alpha = 1.0f - alpha;
 			
-			buffer[i] = (unsigned char)(buffer[i] * alpha + background.value().r * inv_alpha);
-			buffer[i + 1] = (unsigned char)(buffer[i + 1] * alpha + background.value().g * inv_alpha);
-			buffer[i + 2] = (unsigned char)(buffer[i + 2] * alpha + background.value().b * inv_alpha);
+			buffer[i] = (unsigned char)(buffer[i] + background.value().r * inv_alpha);
+			buffer[i + 1] = (unsigned char)(buffer[i + 1] + background.value().g * inv_alpha);
+			buffer[i + 2] = (unsigned char)(buffer[i + 2] + background.value().b * inv_alpha);
 			buffer[i + 3] = 255; // Make fully opaque after blending
 		} else if (a != 0 && a != 255) {
 			buffer[i] = (buffer[i] * 255) / a;
