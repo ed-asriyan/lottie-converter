@@ -17,11 +17,6 @@ Example:
 docker run --rm -e HEIGHT=256 -e WIDTH=256 -e FPS=30 -v /home/ed/Downloads/lottie-animations:/source edasriyan/lottie-to-format
 ```
 
-Example with background color:
-```bash
-docker run --rm -e BACKGROUND="rgb(255,255,255)" -v /home/ed/Downloads/lottie-animations:/source edasriyan/lottie-to-format
-```
-
 Results will be saved next to each source file in the same directory.
 
 ## Source
