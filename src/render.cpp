@@ -53,14 +53,18 @@ void write_png(
 		if (background.has_value()) {
 			// rlottie outputs premultiplied alpha (color * alpha), so blend using:
 			// result = premultiplied_foreground + background * (1 - alpha)
-			float alpha = a / 255.0f;
-			float inv_alpha = 1.0f - alpha;
+			float fg_alpha = a / 255.0f;
+			float bg_alpha = background.value().a / 255.0f;
+			float inv_fg_alpha = 1.0f - fg_alpha;
 			
+			// Blend foreground with background, respecting background alpha
 			// Clamp to prevent overflow when casting to unsigned char
-			buffer[i] = (unsigned char)std::min(255.0f, buffer[i] + background.value().r * inv_alpha);
-			buffer[i + 1] = (unsigned char)std::min(255.0f, buffer[i + 1] + background.value().g * inv_alpha);
-			buffer[i + 2] = (unsigned char)std::min(255.0f, buffer[i + 2] + background.value().b * inv_alpha);
-			buffer[i + 3] = 255; // Make fully opaque after blending
+			// Buffer is in BGRA format, so buffer[i]=B, buffer[i+2]=R
+			buffer[i] = (unsigned char)std::min(255.0f, buffer[i] + background.value().b * bg_alpha * inv_fg_alpha);
+			buffer[i + 1] = (unsigned char)std::min(255.0f, buffer[i + 1] + background.value().g * bg_alpha * inv_fg_alpha);
+			buffer[i + 2] = (unsigned char)std::min(255.0f, buffer[i + 2] + background.value().r * bg_alpha * inv_fg_alpha);
+			// Compute final alpha: fg_alpha + bg_alpha * (1 - fg_alpha)
+			buffer[i + 3] = (unsigned char)std::min(255.0f, fg_alpha * 255.0f + bg_alpha * 255.0f * inv_fg_alpha);
 		} else if (a != 0 && a != 255) {
 			buffer[i] = (buffer[i] * 255) / a;
 			buffer[i + 1] = (buffer[i + 1] * 255) / a;

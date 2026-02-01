@@ -41,7 +41,7 @@ jobs:
     - uses: actions/checkout@v4
 
     - name: Run tests
-      run: docker run --rm -v $(pwd)/test-files:/source ${{ matrix.background != '' && format('-e BACKGROUND=\"{0}\"', matrix.background) || '' }} --platform ${{ inputs.arch }} lottie-to-${{ matrix.image }}:${{ inputs.arch }}
+      run: docker run --rm -v $(pwd)/test-files:/source ${{ matrix.background != '' && format('-e BACKGROUND=''{0}''', matrix.background) || '' }} --platform ${{ inputs.arch }} lottie-to-${{ matrix.image }}:${{ inputs.arch }}
 
     - name: Generate background suffix
       id: bg-suffix
