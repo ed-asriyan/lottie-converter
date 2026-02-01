@@ -19,7 +19,7 @@ on:
 jobs:
   test-darwin:
     name: Test on Darwin
-    runs-on: ${{ inputs.arch == 'arm64' && 'macos-14' || 'macos-13' }}
+    runs-on: ${{ inputs.arch == 'arm64' && 'macos-26' || 'macos-15-intel' }}
     strategy:
       matrix:
         case:
