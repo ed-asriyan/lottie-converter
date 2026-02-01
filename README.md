@@ -43,10 +43,16 @@ You can provide parameters via env variables:
 * `FPS`: Output frame rate. Default: apng,png,webp - 60; gif - 50
 * `QUALITY`: Output quality. Default: 90
 * `THREADS`: Number of threads to use. Default: number of CPUs
+* `BACKGROUND`: Background color to replace transparent pixels. Formats: `rgb(r,g,b)`, `rgba(r,g,b,a)`, `#RRGGBB`, `#RRGGBBAA`
 
 Example:
 ```bash
 docker run --rm -e HEIGHT=256 -e WIDTH=256 -e FPS=30 -v /home/ed/Downloads/lottie-animations:/source edasriyan/lottie-to-apng
+```
+
+Example with background color:
+```bash
+docker run --rm -e BACKGROUND="rgb(255,255,255)" -v /home/ed/Downloads/lottie-animations:/source edasriyan/lottie-to-gif
 ```
 
 Results will be saved next to each source file in the same directory.
@@ -67,7 +73,7 @@ Results will be saved next to each source file in the same directory.
    All of them have the same CLI:
    ```commandline
    $ ./bin/lottie_to_gif.sh -h                       
-   usage: ./bin/lottie_to_gif.sh [--help] [--output OUTPUT] [--height HEIGHT] [--width WIDTH] [--threads THREADS] [--fps FPS] [--quality QUALITY] path
+   usage: ./bin/lottie_to_gif.sh [--help] [--output OUTPUT] [--height HEIGHT] [--width WIDTH] [--threads THREADS] [--fps FPS] [--quality QUALITY] [--background BACKGROUND] path
  
    Lottie animations (.json) and Telegram stickers for Telegram (*.tgs) to animated .gif converter
 
@@ -77,6 +83,13 @@ Results will be saved next to each source file in the same directory.
    Optional arguments:
    -h, --help        show this help message and exit
    --output OUTPUT   Output file path
+   --height HEIGHT   Output image height. Default: 
+   --width WIDTH     Output image width. Default: 512
+   --fps FPS         Output frame rate. Default: 50
+   --threads THREADS Number of threads to use. Default: number of CPUs
+   --quality QUALITY Output quality. Default: 90
+   --background BACKGROUND Background color to replace transparent pixels. Formats: rgb(r,g,b), rgba(r,g,b,a), #RRGGBB, #RRGGBBAA
+   ```
    --height HEIGHT   Output image height. Default: 
    --width WIDTH     Output image width. Default: 512
    --fps FPS         Output frame rate. Default: 50

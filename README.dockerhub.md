@@ -10,10 +10,16 @@ You can provide parameters via env variables:
 * `FPS`: Output frame rate. Default: apng,png,webp,webm - 60; gif - 50
 * `QUALITY`: Output quality. Default: 90
 * `THREADS`: Number of threads to use. Default: number of CPUs
+* `BACKGROUND`: Background color to replace transparent pixels. Formats: `rgb(r,g,b)`, `rgba(r,g,b,a)`, `#RRGGBB`, `#RRGGBBAA`
 
 Example:
 ```bash
 docker run --rm -e HEIGHT=256 -e WIDTH=256 -e FPS=30 -v /home/ed/Downloads/lottie-animations:/source edasriyan/lottie-to-format
+```
+
+Example with background color:
+```bash
+docker run --rm -e BACKGROUND="rgb(255,255,255)" -v /home/ed/Downloads/lottie-animations:/source edasriyan/lottie-to-format
 ```
 
 Results will be saved next to each source file in the same directory.
