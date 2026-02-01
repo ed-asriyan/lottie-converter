@@ -9,7 +9,7 @@ void write_png(
 	const size_t width,
 	const size_t height,
 	const std::filesystem::path& out_file_path,
-	const std::optional<BackgroundColor>& background = std::nullopt
+	const std::optional<BackgroundColor>& background
 ) {
 	png_structp png_ptr = nullptr;
 	png_infop info_ptr = nullptr;

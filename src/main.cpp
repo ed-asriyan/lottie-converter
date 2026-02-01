@@ -31,8 +31,8 @@ std::optional<BackgroundColor> parse_background_color(const std::string& color_s
 		int b = std::stoi(matches[3].str());
 		int a = matches[4].matched ? std::stoi(matches[4].str()) : 255;
 		
-		// Validate ranges
-		if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255 || a < 0 || a > 255) {
+		// Validate ranges (no need to check < 0 as regex only matches positive digits)
+		if (r > 255 || g > 255 || b > 255 || a > 255) {
 			throw std::runtime_error("RGB and alpha values must be in range 0-255");
 		}
 		
