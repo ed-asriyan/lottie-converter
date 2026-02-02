@@ -16,6 +16,8 @@ jobs:
   test-docker:
     name: Run docker tests 
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     strategy:
       matrix:
         image:
