@@ -1,5 +1,8 @@
 name: Test on Darwin
 
+permissions:
+  contents: read
+
 on:
   workflow_call:
     inputs:
