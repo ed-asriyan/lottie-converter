@@ -34,7 +34,7 @@ jobs:
           - "#FF0000"
           - "rgba(0,0,255,128)"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Install run-time dependencies
         run: |

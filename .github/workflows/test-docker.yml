@@ -38,7 +38,7 @@ jobs:
       with:
         image: lottie-to-${{ matrix.image }}:${{ inputs.arch }}
 
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
 
     - name: Run tests
       run: docker run --rm -v $(pwd)/test-files:/source ${{ matrix.background != '' && format('-e BACKGROUND=''{0}''', matrix.background) || '' }} --platform ${{ inputs.arch }} lottie-to-${{ matrix.image }}:${{ inputs.arch }}

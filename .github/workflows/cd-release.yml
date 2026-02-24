@@ -109,7 +109,7 @@ jobs:
         with:
           string: ${{ matrix.format }}
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Find and replace FORMAT in readme for DockerHub
         uses: ./.github/actions/replace-text
@@ -152,7 +152,7 @@ jobs:
     env:
       filename: lottie-converter.${{ matrix.file }}.zip
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Replace version
         uses: ./.github/actions/replace-version
