@@ -1,4 +1,4 @@
-FROM rust:1.93-bookworm as builder-gifski
+FROM rust:1.94-bookworm as builder-gifski
 RUN cargo install --version 1.32.0 gifski
 
 FROM gcc:15 as builder-lottie-to-png
