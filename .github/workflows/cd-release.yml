@@ -105,7 +105,7 @@ jobs:
 
       - name: Make format uppercase
         id: format
-        uses: ASzc/change-string-case-action@v6
+        uses: ASzc/change-string-case-action@v8
         with:
           string: ${{ matrix.format }}
 
