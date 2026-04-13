@@ -38,7 +38,7 @@ jobs:
           version: ${{ inputs.version }}
 
       - name: Build lottie-to-apng
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v7
         with:
           context: .
           tags: lottie-to-apng:${{ inputs.arch }}
@@ -54,7 +54,7 @@ jobs:
           image: lottie-to-apng:${{ inputs.arch }}
 
       - name: Build lottie-to-gif
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v7
         with:
           context: .
           tags: lottie-to-gif:${{ inputs.arch }}
@@ -70,7 +70,7 @@ jobs:
           image: lottie-to-gif:${{ inputs.arch }}
 
       - name: Build lottie-to-png
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v7
         with:
           context: .
           tags: lottie-to-png:${{ inputs.arch }}
@@ -86,7 +86,7 @@ jobs:
           image: lottie-to-png:${{ inputs.arch }}
 
       - name: Build lottie-to-webp
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v7
         with:
           context: .
           tags: lottie-to-webp:${{ inputs.arch }}
@@ -102,7 +102,7 @@ jobs:
           image: lottie-to-webp:${{ inputs.arch }}
 
       - name: Build lottie-to-webm
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v7
         with:
           context: .
           tags: lottie-to-webm:${{ inputs.arch }}
