@@ -1,7 +1,7 @@
 FROM rust:1.95-bookworm as builder-gifski
 RUN cargo install --version 1.32.0 gifski
 
-FROM gcc:15 as builder-lottie-to-png
+FROM gcc:16 as builder-lottie-to-png
 RUN apt update && \
     apt install --assume-yes cmake python3 python3-pip && \
     rm -rf /var/lib/apt/lists/*
