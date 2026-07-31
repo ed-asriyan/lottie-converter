@@ -35,6 +35,27 @@ jobs:
       - name: Detect conan profile
         run: conan profile detect
 
+      - name: Update Conan settings for Apple Clang 21
+        run: |
+          python3 << 'SCRIPT'
+          path = '.conan2/settings.yml'
+          with open(path) as f:
+              lines = f.readlines()
+          in_apple_clang = False
+          updated = []
+          for line in lines:
+              if line.strip().startswith('apple-clang:'):
+                  in_apple_clang = True
+              if in_apple_clang and 'version:' in line and '[' in line and '"21"' not in line:
+                  line = line.rstrip()
+                  if line.endswith(']'):
+                      line = line[:-1] + ', "21"]\n'
+                  in_apple_clang = False
+              updated.append(line)
+          with open(path, 'w') as f:
+              f.writelines(updated)
+          SCRIPT
+
       - name: Install conan dependencies
         run: conan install . --build=missing -s build_type=Release
 
