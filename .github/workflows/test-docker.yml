@@ -50,7 +50,7 @@ jobs:
         background: ${{ matrix.background }}
 
     - name: Upload test results as artifacts
-      uses: actions/upload-artifact@v4.6.2
+      uses: actions/upload-artifact@v7.0.1
       with:
         name: ${{ inputs.output-artifact-name }}.${{ matrix.image }}${{ steps.bg-suffix.outputs.suffix }}
         path: test-files
