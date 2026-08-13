@@ -26,7 +26,7 @@ jobs:
       - uses: actions/checkout@v6
 
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@v4
 
       - name: Setup Docker buildx
         uses: docker/setup-buildx-action@v4
@@ -48,10 +48,14 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      - name: Save lottie-to-apng image
+        run: docker save lottie-to-apng:${{ inputs.arch }} -o ${{ runner.temp }}/lottie-to-apng-${{ inputs.arch }}.tar
+
       - name: Upload lottie-to-apng as artifact
-        uses: ishworkh/container-image-artifact-upload@v2.0.0
+        uses: actions/upload-artifact@v7.0.1
         with:
-          image: lottie-to-apng:${{ inputs.arch }}
+          name: docker-image-lottie-to-apng-${{ inputs.arch }}
+          path: ${{ runner.temp }}/lottie-to-apng-${{ inputs.arch }}.tar
 
       - name: Build lottie-to-gif
         uses: docker/build-push-action@v7
@@ -64,10 +68,14 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      - name: Save lottie-to-gif image
+        run: docker save lottie-to-gif:${{ inputs.arch }} -o ${{ runner.temp }}/lottie-to-gif-${{ inputs.arch }}.tar
+
       - name: Upload lottie-to-gif as artifact
-        uses: ishworkh/container-image-artifact-upload@v2.0.0
+        uses: actions/upload-artifact@v7.0.1
         with:
-          image: lottie-to-gif:${{ inputs.arch }}
+          name: docker-image-lottie-to-gif-${{ inputs.arch }}
+          path: ${{ runner.temp }}/lottie-to-gif-${{ inputs.arch }}.tar
 
       - name: Build lottie-to-png
         uses: docker/build-push-action@v7
@@ -80,10 +88,14 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      - name: Save lottie-to-png image
+        run: docker save lottie-to-png:${{ inputs.arch }} -o ${{ runner.temp }}/lottie-to-png-${{ inputs.arch }}.tar
+
       - name: Upload lottie-to-png as artifact
-        uses: ishworkh/container-image-artifact-upload@v2.0.0
+        uses: actions/upload-artifact@v7.0.1
         with:
-          image: lottie-to-png:${{ inputs.arch }}
+          name: docker-image-lottie-to-png-${{ inputs.arch }}
+          path: ${{ runner.temp }}/lottie-to-png-${{ inputs.arch }}.tar
 
       - name: Build lottie-to-webp
         uses: docker/build-push-action@v7
@@ -96,10 +108,14 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      - name: Save lottie-to-webp image
+        run: docker save lottie-to-webp:${{ inputs.arch }} -o ${{ runner.temp }}/lottie-to-webp-${{ inputs.arch }}.tar
+
       - name: Upload lottie-to-webp as artifact
-        uses: ishworkh/container-image-artifact-upload@v2.0.0
+        uses: actions/upload-artifact@v7.0.1
         with:
-          image: lottie-to-webp:${{ inputs.arch }}
+          name: docker-image-lottie-to-webp-${{ inputs.arch }}
+          path: ${{ runner.temp }}/lottie-to-webp-${{ inputs.arch }}.tar
 
       - name: Build lottie-to-webm
         uses: docker/build-push-action@v7
@@ -112,10 +128,14 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      - name: Save lottie-to-webm image
+        run: docker save lottie-to-webm:${{ inputs.arch }} -o ${{ runner.temp }}/lottie-to-webm-${{ inputs.arch }}.tar
+
       - name: Upload lottie-to-webm as artifact
-        uses: ishworkh/container-image-artifact-upload@v2.0.0
+        uses: actions/upload-artifact@v7.0.1
         with:
-          image: lottie-to-webm:${{ inputs.arch }}
+          name: docker-image-lottie-to-webm-${{ inputs.arch }}
+          path: ${{ runner.temp }}/lottie-to-webm-${{ inputs.arch }}.tar
 
       - name: Extract executable
         run: |

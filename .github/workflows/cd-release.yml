@@ -55,10 +55,14 @@ jobs:
           - amd64
           - arm64
     steps:
-      - name: Download ${{ matrix.image }} image as artifact
-        uses: ishworkh/container-image-artifact-download@v2.1.0
+      - name: Download ${{ matrix.image }} image artifact
+        uses: actions/download-artifact@v7.0.0
         with:
-          image: "${{ matrix.image }}:${{ matrix.arch }}"
+          name: docker-image-${{ matrix.image }}-${{ matrix.arch }}
+          path: ${{ runner.temp }}
+
+      - name: Load ${{ matrix.image }} image
+        run: docker load -i ${{ runner.temp }}/${{ matrix.image }}-${{ matrix.arch }}.tar
 
       - name: Tag image
         run: docker image tag ${{ matrix.image }}:${{ matrix.arch }} ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.image }}:${{ matrix.arch }}

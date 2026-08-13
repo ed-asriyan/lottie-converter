@@ -31,12 +31,16 @@ jobs:
           - "rgba(0,0,255,128)"
     steps:
     - name: Set up QEMU
-      uses: docker/setup-qemu-action@v3
+      uses: docker/setup-qemu-action@v4
 
-    - name: Download ${{ matrix.image }} image as artifact
-      uses: ishworkh/container-image-artifact-download@v2.1.0
+    - name: Download ${{ matrix.image }} image artifact
+      uses: actions/download-artifact@v7.0.0
       with:
-        image: lottie-to-${{ matrix.image }}:${{ inputs.arch }}
+        name: docker-image-lottie-to-${{ matrix.image }}-${{ inputs.arch }}
+        path: ${{ runner.temp }}
+
+    - name: Load ${{ matrix.image }} image
+      run: docker load -i ${{ runner.temp }}/lottie-to-${{ matrix.image }}-${{ inputs.arch }}.tar
 
     - uses: actions/checkout@v6
 
