@@ -17,7 +17,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Install Conan
-        run: pip3 install --break-system-packages conan==2.17.0
+        run: pip3 install --break-system-packages conan==2.31.2
 
       - uses: actions/checkout@v6
 
@@ -43,11 +43,10 @@ jobs:
           compiler=msvc
           compiler.cppstd=17
           compiler.runtime=static
-          compiler.version=194
+          compiler.version=195
           os=Windows
           [conf]
           tools.cmake.cmaketoolchain:generator=Ninja
-          tools.microsoft.msbuild:vs_version=18
           EOF
 
       - name: Install conan dependencies

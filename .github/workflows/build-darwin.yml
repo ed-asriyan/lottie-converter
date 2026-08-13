@@ -22,7 +22,7 @@ jobs:
     runs-on: ${{ inputs.arch == 'arm64' && 'macos-26' || 'macos-15-intel' }}
     steps:
       - name: Install Conan
-        run: pip3 install --break-system-packages conan==2.17.0
+        run: pip3 install --break-system-packages conan==2.31.2
 
       - uses: actions/checkout@v6
 
@@ -33,10 +33,7 @@ jobs:
           version: ${{ inputs.version }}
 
       - name: Detect conan profile
-        run: |
-          conan profile detect --force
-          # apple-clang 21 on the runner isn't recognized by Conan's settings; pin to a supported version
-          sed -i '' 's/^compiler.version=.*/compiler.version=17/' "$(conan profile path default)"
+        run: conan profile detect
 
       - name: Install conan dependencies
         run: conan install . --build=missing -s build_type=Release
