@@ -17,7 +17,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Install Conan
-        run: pip3 install --break-system-packages conan==2.17.0
+        run: pip3 install --break-system-packages conan==2.31.2
 
       - uses: actions/checkout@v6
 
@@ -27,20 +27,41 @@ jobs:
         with:
           version: ${{ inputs.version }}
 
-      - name: Detect conan profile
-        run: conan profile detect
+      # rlottie forces the MSVC-only /MT flag on Windows, so build with MSVC (cl) instead of the runner's MinGW gcc
+      - name: Set up MSVC environment
+        uses: ilammy/msvc-dev-cmd@v1
+
+      # Force an MSVC profile: conan's auto-detect picks up MinGW gcc from PATH. Ninja avoids VS-version generator mismatch.
+      - name: Create conan profile
+        shell: bash
+        run: |
+          conan profile detect --force >/dev/null 2>&1 || true
+          cat > "$(conan profile path default)" <<'EOF'
+          [settings]
+          arch=x86_64
+          build_type=Release
+          compiler=msvc
+          compiler.cppstd=17
+          compiler.runtime=static
+          compiler.version=195
+          os=Windows
+          [conf]
+          tools.cmake.cmaketoolchain:generator=Ninja
+          EOF
 
       - name: Install conan dependencies
         run: conan install . --build=missing -s build_type=Release
 
-      - name: Invoke 'conan-default' preset
-        run: cmake --preset conan-default
+      - name: Invoke 'conan-release' preset
+        shell: bash
+        run: cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DLOTTIE_MODULE=OFF --preset conan-release
 
       - name: Build the app
-        run: cmake -DCMAKE_BUILD_TYPE=Release -DLOTTIE_MODULE=OFF CMakeLists.txt && cmake --build . --config Release
+        shell: bash
+        run: cmake --build --preset conan-release
 
       - name: Upload executable as artifact
         uses: actions/upload-artifact@v7.0.1
         with:
           name: ${{ inputs.output-artifact-name }}
-          path: bin/Release/lottie_to_png.exe
+          path: bin/lottie_to_png.exe

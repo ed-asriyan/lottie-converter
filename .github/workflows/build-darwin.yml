@@ -22,7 +22,7 @@ jobs:
     runs-on: ${{ inputs.arch == 'arm64' && 'macos-26' || 'macos-15-intel' }}
     steps:
       - name: Install Conan
-        run: pip3 install --break-system-packages conan==2.17.0
+        run: pip3 install --break-system-packages conan==2.31.2
 
       - uses: actions/checkout@v6
 
@@ -42,7 +42,7 @@ jobs:
         run: cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 --preset conan-release
 
       - name: Build the app
-        run: cmake -DCMAKE_BUILD_TYPE=Release -DLOTTIE_MODULE=OFF CMakeLists.txt && cmake --build . --config Release
+        run: cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_BUILD_TYPE=Release -DLOTTIE_MODULE=OFF CMakeLists.txt && cmake --build . --config Release
 
       - name: Upload executable as artifact
         uses: actions/upload-artifact@v7.0.1
