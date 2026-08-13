@@ -34,7 +34,7 @@ jobs:
       uses: docker/setup-qemu-action@v4
 
     - name: Download ${{ matrix.image }} image artifact
-      uses: actions/download-artifact@v7.0.0
+      uses: actions/download-artifact@v8.0.1
       with:
         name: docker-image-lottie-to-${{ matrix.image }}-${{ inputs.arch }}
         path: ${{ runner.temp }}
