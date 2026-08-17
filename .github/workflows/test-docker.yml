@@ -42,7 +42,7 @@ jobs:
     - name: Load ${{ matrix.image }} image
       run: docker load -i ${{ runner.temp }}/lottie-to-${{ matrix.image }}-${{ inputs.arch }}.tar
 
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
 
     - name: Run tests
       run: docker run --rm -v $(pwd)/test-files:/source ${{ matrix.background != '' && format('-e BACKGROUND=''{0}''', matrix.background) || '' }} --platform ${{ inputs.arch }} lottie-to-${{ matrix.image }}:${{ inputs.arch }}
