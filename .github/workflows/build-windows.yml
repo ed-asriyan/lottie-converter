@@ -11,6 +11,10 @@ on:
         description: Version to replace with
         required: false
         type: string
+
+permissions:
+  contents: read
+
 jobs:
   build-windows:
     name: Build Windows executable
