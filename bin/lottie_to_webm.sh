@@ -1,3 +1,4 @@
+#!/usr/bin/sh
 HEIGHT=512
 WIDTH=512
 FPS=60

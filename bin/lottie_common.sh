@@ -1,3 +1,4 @@
+#!/usr/bin/sh
 # this is common source file used by lottie_to_gif.sh, lottie_to_webp.sh
 # required bash variables
 # $HEIGHT
