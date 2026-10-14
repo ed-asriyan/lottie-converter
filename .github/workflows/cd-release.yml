@@ -59,7 +59,7 @@ jobs:
           - arm64
     steps:
       - name: Download ${{ matrix.image }} image artifact
-        uses: actions/download-artifact@v8.0.1
+        uses: actions/download-artifact@v8.0.2
         with:
           name: docker-image-${{ matrix.image }}-${{ matrix.arch }}
           path: ${{ runner.temp }}
@@ -169,7 +169,7 @@ jobs:
           version: ${{ github.ref_name }}
 
       - name: Download artifact
-        uses: actions/download-artifact@v8.0.1
+        uses: actions/download-artifact@v8.0.2
         with:
           name: lottie-to-png.${{ matrix.file }}
           path: bin
