@@ -47,7 +47,7 @@ jobs:
           [[ "${{ matrix.case }}" == "webm" ]] && brew install ffmpeg || echo ok;
 
       - name: Download artifact
-        uses: actions/download-artifact@v8.0.1
+        uses: actions/download-artifact@v8.0.2
         with:
           name: ${{ inputs.input-artifact-name }}
           path: bin
