@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.14)
 project(lottie_to_png)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -28,6 +28,12 @@ find_package(ZLIB REQUIRED)
 # cmake dependencies
 #
 include(FetchContent)
+
+# rlottie declares cmake_minimum_required(VERSION < 3.5), which CMake >= 4.0
+# rejects. Allow configuring it anyway unless the caller overrides the value.
+if(NOT DEFINED CMAKE_POLICY_VERSION_MINIMUM)
+    set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
+endif()
 
 FetchContent_Declare(
     rlottie
